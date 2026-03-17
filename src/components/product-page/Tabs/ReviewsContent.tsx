@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
 import {
   Select,
   SelectContent,
@@ -8,7 +7,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ReviewCard from "@/components/common/ReviewCard";
-import { reviewsData } from "@/app/page";
 import Link from "next/link";
 
 const ReviewsContent = () => {
@@ -40,11 +38,6 @@ const ReviewsContent = () => {
             Write a Review
           </Button>
         </div>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5 sm:mb-9">
-        {reviewsData.map((review) => (
-          <ReviewCard key={review.id} data={review} isAction isDate />
-        ))}
       </div>
       <div className="w-full px-4 sm:px-0 text-center">
         <Link
