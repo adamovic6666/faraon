@@ -1,8 +1,8 @@
-import React from "react";
-import Rating from "../ui/Rating";
+import { IoCartOutline } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types/product.types";
+import { Badge } from "../ui/badge";
 
 type ProductCardProps = {
   data: Product;
@@ -12,9 +12,9 @@ const ProductCard = ({ data }: ProductCardProps) => {
   return (
     <Link
       href={`/shop/product/${data.id}/${data.title.split(" ").join("-")}`}
-      className="flex flex-col items-start aspect-auto"
+      className="flex flex-col items-start aspect-auto border border-gray-200 rounded-[13px] lg:rounded-[20px] relative"
     >
-      <div className="bg-[#F0EEED] rounded-[13px] lg:rounded-[20px] w-full lg:max-w-[295px] aspect-square mb-2.5 xl:mb-4 overflow-hidden">
+      <div className="rounded-[13px] lg:rounded-[20px] w-full lg:max-w-[295px] aspect-square mb-2.5 overflow-hidden">
         <Image
           src={data.srcUrl}
           width={295}
@@ -24,58 +24,33 @@ const ProductCard = ({ data }: ProductCardProps) => {
           priority
         />
       </div>
-      <strong className="text-black xl:text-xl">{data.title}</strong>
-      <div className="flex items-end mb-1 xl:mb-2">
-        <Rating
-          initialValue={data.rating}
-          allowFraction
-          SVGclassName="inline-block"
-          emptyClassName="fill-gray-50"
-          size={19}
-          readonly
-        />
-        <span className="text-black text-xs xl:text-sm ml-[11px] xl:ml-[13px] pb-0.5 xl:pb-0">
-          {data.rating.toFixed(1)}
-          <span className="text-black/60">/5</span>
-        </span>
-      </div>
-      <div className="flex items-center space-x-[5px] xl:space-x-2.5">
-        {data.discount.percentage > 0 ? (
-          <span className="font-bold text-black text-xl xl:text-2xl">
-            {`$${Math.round(
-              data.price - (data.price * data.discount.percentage) / 100
-            )}`}
-          </span>
-        ) : data.discount.amount > 0 ? (
-          <span className="font-bold text-black text-xl xl:text-2xl">
-            {`$${data.price - data.discount.amount}`}
-          </span>
-        ) : (
-          <span className="font-bold text-black text-xl xl:text-2xl">
-            ${data.price}
-          </span>
-        )}
-        {data.discount.percentage > 0 && (
-          <span className="font-bold text-black/40 line-through text-xl xl:text-2xl">
-            ${data.price}
-          </span>
-        )}
-        {data.discount.amount > 0 && (
-          <span className="font-bold text-black/40 line-through text-xl xl:text-2xl">
-            ${data.price}
-          </span>
-        )}
-        {data.discount.percentage > 0 ? (
-          <span className="font-medium text-[10px] xl:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
-            {`-${data.discount.percentage}%`}
-          </span>
-        ) : (
-          data.discount.amount > 0 && (
-            <span className="font-medium text-[10px] xl:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
-              {`-$${data.discount.amount}`}
-            </span>
-          )
-        )}
+      <Badge
+        variant="outline"
+        className="absolute top-2 left-2 bg-brand text-white rounded-full px-2 py-1 text-xs xl:text-sm"
+      >
+        {data.discount.percentage > 0 && `-${data.discount.percentage}%`}
+      </Badge>
+      <div className="px-4 pb-4 w-full">
+        <strong className="text-black xl:text-xl text-left mb-8 block min-h-[64px]">
+          {data.title}
+        </strong>
+        <div className="flex justify-between w-full items-center">
+          <div className="flex flex-col items-start space-x-1 xl:space-x-2.5 mb-2">
+            {data.oldPrice && (
+              <span className="font-bold text-black/40 line-through text-md">
+                {data.oldPrice} RSD
+              </span>
+            )}
+            {data.price && (
+              <span className="font-bold text-black text-xl xl:text-2xl">
+                {data.price} RSD
+              </span>
+            )}
+          </div>
+          <div className="bg-gold text-amber-900 rounded-full p-2">
+            <IoCartOutline size={20} />
+          </div>
+        </div>
       </div>
     </Link>
   );

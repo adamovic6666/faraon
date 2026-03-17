@@ -5,12 +5,13 @@ import React from "react";
 
 const TopBanner = () => {
   return (
-    <div className="bg-black text-white text-center py-2 px-2 sm:px-4 xl:px-0">
+    <div className="bg-primary text-primary-foreground text-center py-2 px-2 sm:px-4 xl:px-0">
       <div className="relative max-w-frame mx-auto">
         <p className="text-xs sm:text-sm">
-          Sign up and get 20% off to your first order.{" "}
+          Besplatna dostava i piće u povratnoj ambalaži za porudžbine preko
+          12,000 rsd.{" "}
           <Link href="#" className="underline font-medium">
-            Sign Up Now
+            Saznaj više{" "}
           </Link>
         </p>
         <Button

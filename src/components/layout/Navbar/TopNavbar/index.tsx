@@ -17,54 +17,47 @@ import CartBtn from "./CartBtn";
 const data: NavMenu = [
   {
     id: 1,
-    label: "Shop",
+    label: "Prodavnica",
     type: "MenuList",
     children: [
       {
         id: 11,
-        label: "Men's clothes",
+        label: "Muška odeća",
         url: "/shop#men-clothes",
-        description: "In attractive and spectacular colors and designs",
+        description: "U atraktivnim i spektakularnim bojama i dizajnima",
       },
       {
         id: 12,
-        label: "Women's clothes",
+        label: "Ženska odeća",
         url: "/shop#women-clothes",
-        description: "Ladies, your style and tastes are important to us",
+        description: "Dame, vaš stil i ukusi su nam važni",
       },
       {
         id: 13,
-        label: "Kids clothes",
+        label: "Dečija odeća",
         url: "/shop#kids-clothes",
-        description: "For all ages, with happy and beautiful colors",
+        description: "Za sve uzraste, sa srećnim i lepim bojama",
       },
       {
         id: 14,
-        label: "Bags and Shoes",
+        label: "Torbe i obuća",
         url: "/shop#bag-shoes",
-        description: "Suitable for men, women and all tastes and styles",
+        description: "Pogodno za muškarce, žene i sve ukuse i stilove",
       },
     ],
   },
   {
     id: 2,
     type: "MenuItem",
-    label: "On Sale",
-    url: "/shop#on-sale",
+    label: "Diskonti",
+    url: "/diskonti",
     children: [],
   },
   {
     id: 3,
     type: "MenuItem",
-    label: "New Arrivals",
-    url: "/shop#new-arrivals",
-    children: [],
-  },
-  {
-    id: 4,
-    type: "MenuItem",
-    label: "Brands",
-    url: "/shop#brands",
+    label: "Kontakt",
+    url: "/kontakt",
     children: [],
   },
 ];
@@ -81,10 +74,10 @@ const TopNavbar = () => {
             href="/"
             className={cn([
               integralCF.className,
-              "text-2xl lg:text-[32px] mb-2 mr-3 lg:mr-10",
+              "text-2xl lg:text-[32px] mb-2 mr-3 lg:mr-10 text-brand",
             ])}
           >
-            SHOP.CO
+            FARAON
           </Link>
         </div>
         <NavigationMenu className="hidden md:flex mr-2 lg:mr-7">
@@ -115,7 +108,7 @@ const TopNavbar = () => {
           <InputGroup.Input
             type="search"
             name="search"
-            placeholder="Search for products..."
+            placeholder="Pretraži proizvode..."
             className="bg-transparent placeholder:text-black/40"
           />
         </InputGroup>
