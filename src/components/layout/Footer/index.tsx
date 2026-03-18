@@ -79,7 +79,7 @@ const Footer = () => {
               >
                 FARAON
               </h2>
-              <p className="text-black/80 font-light  text-md md:text-xl leading-8 mb-3 md:mb-6">
+              <p className="text-black/80 font-light text-md leading-8 mb-3 md:mb-6">
                 Sve što pijete,
                 <br />
                 Faraon donosi!
@@ -107,7 +107,7 @@ const Footer = () => {
               >
                 Kontakt
               </h3>
-              <address className="not-italic text-black/80 font-light  text-md md:text-xl leading-8">
+              <address className="not-italic text-black/80 font-light text-md leading-8">
                 STR Diskont pića Faraon PS
                 <br />
                 Karlovački put 1
@@ -145,7 +145,7 @@ const Footer = () => {
               >
                 Politika privatnosti
               </h3>
-              <ul className="text-black/80 text-md font-light md:text-xl leading-8">
+              <ul className="text-black/80 text-md font-light leading-8">
                 {privacyLinks.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -156,7 +156,7 @@ const Footer = () => {
           <Separator className="mb-6 bg-black/10" />
 
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-2">
-            <p className="text-sm text-black/70 text-center sm:text-left">
+            <p className="text-sm text-black/70 text-center sm:text-left font-light">
               © {currentYear} STR Diskont Pića Faraon PS
             </p>
 

@@ -19,7 +19,7 @@ const Header = () => {
       </div>
 
       <div className="relative z-10 max-w-frame mx-auto min-h-107.5 md:min-h-135 px-4">
-        <div className="relative z-10 h-full grid md:grid-cols-12 items-center py-10 md:py-12 min-h-[calc(100vh-72px)] md:min-h-[calc(100vh-98px)]">
+        <div className="relative z-10 h-full grid md:grid-cols-12 items-center py-10 md:py-12 min-h-[calc(100dvh-72px)] md:min-h-[calc(100dvh-98px)]">
           <section className="md:col-span-7 lg:col-span-6 flex flex-col justify-center items-start">
             <motion.h2
               initial={{ y: "100px", opacity: 0, rotate: 10 }}
@@ -70,7 +70,7 @@ const Header = () => {
             whileInView={{ y: "0", opacity: 1, rotate: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="md:col-span-5 lg:col-span-6 relative min-h-96 md:min-h-120 mt-8 md:mt-0"
+            className="md:col-span-5 lg:col-span-6 relative min-h-96 md:min-h-160"
           >
             <Image
               src="/images/faraon.webp"

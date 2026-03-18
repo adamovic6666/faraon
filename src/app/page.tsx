@@ -5,6 +5,7 @@ import StoreMapSection from "@/components/homepage/StoreMapSection";
 import { CategoryItem } from "@/types/category.types";
 import { Product } from "@/types/product.types";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
 export const newArrivalsData: Product[] = [
   {
@@ -159,11 +160,31 @@ export default function Home() {
           viewAllLink="/shop#new-arrivals"
         />
         <div className="max-w-frame mx-auto px-4 xl:px-0">
-          <Separator className="my-10 sm:my-16 bg-black/10" />
+          <div className="my-10 sm:my-16 flex items-center gap-3">
+            <Separator className="bg-black/10 flex-1" />
+            <Image
+              src="/images/ankh.svg"
+              alt="Ankh"
+              width={16}
+              height={16}
+              className="opacity-35"
+            />
+            <Separator className="bg-black/10 flex-1" />
+          </div>
         </div>
         <OnlineStoreSection title="Online prodavnica" data={categories} />
         <div className="max-w-frame mx-auto px-4 xl:px-0">
-          <Separator className="my-10 sm:my-16 bg-black/10" />
+          <div className="my-10 sm:my-16 flex items-center gap-3">
+            <Separator className="bg-black/10 flex-1" />
+            <Image
+              src="/images/ankh.svg"
+              alt="Ankh"
+              width={16}
+              height={16}
+              className="opacity-35"
+            />
+            <Separator className="bg-black/10 flex-1" />
+          </div>
         </div>
         <StoreMapSection />
       </main>

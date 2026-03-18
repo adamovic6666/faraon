@@ -40,7 +40,7 @@ const NewsLetterSection = () => {
       <p
         className={cn([
           integralCF.className,
-          "relative z-10 font-bold text-2xl md:text-4xl text-white mb-0 text-center md:text-left",
+          "relative z-10 font-bold text-2xl md:text-4xl text-white mb-0 text-center md:text-left leading-snug",
         ])}
       >
         KONTAKTIRAJTE NAS! <br />
