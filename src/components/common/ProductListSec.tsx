@@ -46,7 +46,7 @@ const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
           <div className="mt-7 flex justify-center">
             <Link
               href="/shop"
-              className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-10 py-3 font-semibold hover:brightness-95 transition-all"
+              className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-8 py-2 font-semibold hover:brightness-95 transition-all"
             >
               Vidi sve
             </Link>

@@ -40,7 +40,7 @@ const NewsLetterSection = () => {
       <p
         className={cn([
           integralCF.className,
-          "relative z-10 font-bold text-2xl md:text-4xl text-white mb-0",
+          "relative z-10 font-bold text-2xl md:text-4xl text-white mb-0 text-center md:text-left",
         ])}
       >
         KONTAKTIRAJTE NAS! <br />
@@ -48,7 +48,7 @@ const NewsLetterSection = () => {
       </p>
 
       <div className="relative z-10 flex items-center md:justify-end">
-        <div className="flex items-center gap-3 md:gap-6">
+        <div className="flex items-center gap-3 md:gap-6 w-full justify-center md:justify-end">
           {contactItems.map((item) => (
             <Link
               key={item.id}

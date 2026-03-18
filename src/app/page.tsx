@@ -158,9 +158,13 @@ export default function Home() {
           data={newArrivalsData}
           viewAllLink="/shop#new-arrivals"
         />
-        <Separator className="my-10 sm:my-16 bg-black/10 max-w-frame mx-auto" />
+        <div className="max-w-frame mx-auto px-4 xl:px-0">
+          <Separator className="my-10 sm:my-16 bg-black/10" />
+        </div>
         <OnlineStoreSection title="Online prodavnica" data={categories} />
-        <Separator className="my-10 sm:my-16 bg-black/10 max-w-frame mx-auto" />
+        <div className="max-w-frame mx-auto px-4 xl:px-0">
+          <Separator className="my-10 sm:my-16 bg-black/10" />
+        </div>
         <StoreMapSection />
       </main>
     </>

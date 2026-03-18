@@ -34,17 +34,11 @@ const OnlineStoreSection = ({
               href="/shop"
               className="group rounded-xl px-3 sm:px-4 py-4 sm:py-5 hover:shadow-sm transition-shadow bg-section border border-black/10"
             >
-              <div className="flex flex-col items-start justify-between gap-2 h-full min-h-20 sm:min-h-24">
+              <div className="flex flex-col items-start justify-between gap-6 h-full min-h-20 sm:min-h-24">
                 <div>
                   <h3 className="text-black text-lg sm:text-xl font-semibold leading-snug">
                     {item.title}
                   </h3>
-                  <Badge
-                    variant="outline"
-                    className="mt-2 text-xs sm:text-sm text-brand font-normal border-brand/30 "
-                  >
-                    {item.count} proizvoda
-                  </Badge>
                 </div>
 
                 <div className="flex items-center justify-center sm:w-20 w-16 sm:h-20 h-16 mt-auto ml-auto">
@@ -64,7 +58,7 @@ const OnlineStoreSection = ({
         <div className="mt-7 flex justify-center">
           <Link
             href="/shop"
-            className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-10 py-3 font-semibold hover:brightness-95 transition-all"
+            className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-8 py-2 font-semibold hover:brightness-95 transition-all"
           >
             Kupi odmah
           </Link>

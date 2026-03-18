@@ -32,25 +32,28 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
           className="max-w-[22px] max-h-[22px]"
         />
       </SheetTrigger>
-      <SheetContent side="left" className="overflow-y-auto">
+      <SheetContent side="left" className="overflow-y-auto b">
         <SheetHeader className="mb-8">
           <SheetTitle asChild>
             <SheetClose asChild>
               <Link
                 href="/"
-                className="text-4xl text-left font-semibold text-brand"
+                className="text-left font-semibold text-brand text-4xl"
               >
                 FARAON
               </Link>
             </SheetClose>
           </SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start justify-center h-[calc(100dvh-120px)]">
           {data.map((item) => (
             <React.Fragment key={item.id}>
               {item.type === "MenuItem" && (
                 <SheetClose asChild>
-                  <Link href={item.url ?? "/"} className="mb-4">
+                  <Link
+                    href={item.url ?? "/"}
+                    className="mb-4 text-4xl uppercase font-semibold"
+                  >
                     {item.label}
                   </Link>
                 </SheetClose>
@@ -59,7 +62,7 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
                 <div className="mb-4 w-full">
                   <Accordion type="single" collapsible>
                     <AccordionItem value={item.label} className="border-none">
-                      <AccordionTrigger className="text-left p-0 py-0.5 font-normal text-base">
+                      <AccordionTrigger className="text-left p-0 py-0.5 text-4xl font-semibold uppercase">
                         {item.label}
                       </AccordionTrigger>
                       <AccordionContent className="p-4 pb-0 border-l flex flex-col">
@@ -69,7 +72,10 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
                             asChild
                             className="w-fit py-2 text-base"
                           >
-                            <Link href={itemChild.url ?? "/"}>
+                            <Link
+                              href={itemChild.url ?? "/"}
+                              className="text-4xl uppercase font-semibold"
+                            >
                               {itemChild.label}
                             </Link>
                           </SheetClose>

@@ -41,7 +41,7 @@ const SectionTitle = ({
           viewport={{ once: true }}
           transition={{ delay: 0.1, duration: 0.6 }}
           className={cn(
-            "text-black/80 text-center text-lg sm:text-2xl max-w-3xl mx-auto leading-relaxed mt-2",
+            "text-black/80 text-center text-md sm:text-lg max-w-2xl mx-auto leading-relaxed mt-2 font-light",
             descriptionClassName,
           )}
         >
