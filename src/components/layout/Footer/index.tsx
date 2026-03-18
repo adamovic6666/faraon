@@ -1,36 +1,11 @@
 import { cn } from "@/lib/utils";
 import { integralCF } from "@/styles/fonts";
-import React from "react";
-import { PaymentBadge, SocialNetworks } from "./footer.types";
-import { FaFacebookF, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
+import { PaymentBadge } from "./footer.types";
 import Link from "next/link";
-import LinksSection from "./LinksSection";
 import Image from "next/image";
 import NewsLetterSection from "./NewsLetterSection";
 import LayoutSpacing from "./LayoutSpacing";
-
-const socialsData: SocialNetworks[] = [
-  {
-    id: 1,
-    icon: <FaTwitter />,
-    url: "https://twitter.com",
-  },
-  {
-    id: 2,
-    icon: <FaFacebookF />,
-    url: "https://facebook.com",
-  },
-  {
-    id: 3,
-    icon: <FaInstagram />,
-    url: "https://instagram.com",
-  },
-  {
-    id: 4,
-    icon: <FaGithub />,
-    url: "https://github.com/mohammadoftadeh",
-  },
-];
+import { Separator } from "@/components/ui/separator";
 
 const paymentBadgesData: PaymentBadge[] = [
   {
@@ -55,77 +30,143 @@ const paymentBadgesData: PaymentBadge[] = [
   },
 ];
 
+const socialLinks = [
+  {
+    id: 1,
+    href: "https://facebook.com",
+    icon: "/images/facebook.svg",
+    label: "Facebook",
+  },
+  {
+    id: 2,
+    href: "https://instagram.com",
+    icon: "/images/Instagram.svg",
+    label: "Instagram",
+  },
+];
+
+const privacyLinks = [
+  "Cenovnik dostave",
+  "Pravila korišćenja",
+  "Isporuka i načini plaćanja",
+  "Zamene, reklamacije i otkazivanje",
+  "Autorska prava",
+  "Zaštita podataka o ličnosti",
+  "Uslovi korišćenja platnih kartica",
+];
+
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="mt-10">
       <div className="relative">
-        <div className="absolute bottom-0 w-full h-1/2 bg-[#F0F0F0]"></div>
+        <div className="absolute bottom-0 w-full h-1/2 bg-section" />
         <div className="px-4">
           <NewsLetterSection />
         </div>
       </div>
-      <div className="pt-8 md:pt-[50px] bg-[#F0F0F0] px-4 pb-4">
+
+      <div className="pt-8 md:pt-12 bg-section px-4 pb-4">
         <div className="max-w-frame mx-auto">
-          <nav className="lg:grid lg:grid-cols-12 mb-8">
-            <div className="flex flex-col lg:col-span-3 lg:max-w-[248px]">
-              <h1
+          <nav className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mb-10">
+            <section className="flex flex-col">
+              <h2
                 className={cn([
                   integralCF.className,
-                  "text-[28px] lg:text-[32px] mb-6",
+                  "text-brand text-3xl mb-4 font-semibold",
                 ])}
               >
                 FARAON
-              </h1>
-              <p className="text-black/60 text-sm mb-9">
-                We have clothes that suits your style and which you’re proud to
-                wear. From women to men.
+              </h2>
+              <p className="text-black/80 text-md md:text-xl leading-relaxed mb-3 md:mb-6">
+                Sve što pijete,
+                <br />
+                Faraon donosi!
               </p>
-              <div className="flex items-center">
-                {socialsData.map((social) => (
-                  <Link
-                    href={social.url}
-                    key={social.id}
-                    className="bg-white hover:bg-black hover:text-white transition-all mr-3 w-7 h-7 rounded-full border border-black/20 flex items-center justify-center p-1.5"
-                  >
-                    {social.icon}
+              <div className="flex items-center gap-3">
+                {socialLinks.map((item) => (
+                  <Link key={item.id} href={item.href} aria-label={item.label}>
+                    <Image
+                      src={item.icon}
+                      alt={item.label}
+                      width={32}
+                      height={32}
+                    />
                   </Link>
                 ))}
               </div>
-            </div>
-            <div className="hidden lg:grid col-span-9 lg:grid-cols-4 lg:pl-10">
-              <LinksSection />
-            </div>
-            <div className="grid lg:hidden grid-cols-2 sm:grid-cols-4">
-              <LinksSection />
-            </div>
+            </section>
+
+            <section>
+              <h3
+                className={cn([
+                  integralCF.className,
+                  "text-black text-2xl mb-4 uppercase",
+                ])}
+              >
+                Kontakt
+              </h3>
+              <address className="not-italic text-black/80 text-md md:text-xl leading-9">
+                STR Diskont pića Faraon PS
+                <br />
+                Karlovački put 1
+                <br />
+                21132 Petrovaradin
+                <br />
+                T:{" "}
+                <Link href="tel:+381214433324" className="hover:underline">
+                  021 433 324
+                </Link>
+                <br />
+                F:{" "}
+                <Link href="tel:+381216433324" className="hover:underline">
+                  021 6433 324
+                </Link>
+                <br />
+                E:{" "}
+                <Link
+                  href="mailto:info@faraondiskonti.rs"
+                  className="hover:underline"
+                >
+                  info@faraondiskonti.rs
+                </Link>
+                <br />
+                PIB: 104032720
+              </address>
+            </section>
+
+            <section>
+              <h3
+                className={cn([
+                  integralCF.className,
+                  "text-black text-2xl mb-4 uppercase",
+                ])}
+              >
+                Politika privatnosti
+              </h3>
+              <ul className="text-black/80 text-md md:text-xl leading-9">
+                {privacyLinks.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
           </nav>
 
-          <hr className="h-[1px] border-t-black/10 mb-6" />
-          <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center mb-2">
-            <p className="text-sm text-center sm:text-left text-black/60 mb-4 sm:mb-0 sm:mr-1">
-              Shop.co © Made by{" "}
-              <Link
-                href="https://github.com/mohammadoftadeh"
-                className="text-black font-medium"
-              >
-                Mohammad Oftadeh
-              </Link>
-              {", "}
-              Designed by{" "}
-              <Link
-                href="https://www.figma.com/@hamzauix"
-                className="text-black font-medium"
-              >
-                Hamza Naeem
-              </Link>
+          <Separator className="mb-6 bg-black/10" />
+
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-2">
+            <p className="text-sm text-black/70 text-center sm:text-left">
+              © {currentYear} STR Diskont Pića Faraon PS
             </p>
+
             <div className="flex items-center">
               {paymentBadgesData.map((badge, _, arr) => (
                 <span
                   key={badge.id}
                   className={cn([
                     arr.length !== badge.id && "mr-3",
-                    "w-[46px] h-[30px] rounded-[5px] border-[#D6DCE5] bg-white flex items-center justify-center",
+                    "w-11.5 h-7.5 rounded-[5px] border-[#D6DCE5] bg-white flex items-center justify-center",
                   ])}
                 >
                   <Image
@@ -133,8 +174,8 @@ const Footer = () => {
                     src={badge.srcUrl}
                     width={33}
                     height={100}
-                    alt="user"
-                    className="max-h-[15px]"
+                    alt="Payment method"
+                    className="max-h-3.75"
                   />
                 </span>
               ))}

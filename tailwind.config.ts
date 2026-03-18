@@ -17,10 +17,10 @@ const config: Config = {
         xs: "375px",
       },
       width: {
-        frame: "77.5rem",
+        frame: "72rem",
       },
       maxWidth: {
-        frame: "77.5rem",
+        frame: "72rem",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -38,6 +38,12 @@ const config: Config = {
       },
       colors: {
         brand: "#ac0000",
+        brandDark: "#8c0000",
+        banner: "#ffb200",
+        link: "#ffb200",
+        discount: "#ac0000",
+        section: "#f0f0f0",
+        subtle: "#b3b3b3",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -49,8 +55,8 @@ const config: Config = {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#FFB200",
+          foreground: "#000000",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",

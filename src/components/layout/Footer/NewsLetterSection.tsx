@@ -1,49 +1,69 @@
-import { Button } from "@/components/ui/button";
-import InputGroup from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
 import { integralCF } from "@/styles/fonts";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+
+const contactItems = [
+  {
+    id: 1,
+    href: "tel:+381600000000",
+    icon: "/images/phone.svg",
+    label: "Pozovite nas",
+  },
+  {
+    id: 2,
+    href: "https://wa.me/381600000000",
+    icon: "/images/wa.svg",
+    label: "Pišite nam na WhatsApp",
+  },
+  {
+    id: 3,
+    href: "viber://chat?number=%2B381600000000",
+    icon: "/images/viber.svg",
+    label: "Pišite nam na Viber",
+  },
+];
 
 const NewsLetterSection = () => {
   return (
-    <div className="relative grid grid-cols-1 md:grid-cols-2 py-9 md:py-11 px-6 md:px-16 max-w-frame mx-auto bg-black rounded-[20px]">
+    <div className="relative overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 py-9 md:py-11 px-6 md:px-16 max-w-frame mx-auto bg-brand rounded-[20px]">
+      <div className="absolute inset-0 opacity-75 pointer-events-none">
+        <Image
+          src="/images/hijeroglofi.svg"
+          alt=""
+          fill
+          className="object-cover scale-150" // Povećava sliku za 50% (zumira je)
+          aria-hidden="true"
+        />
+      </div>
+
       <p
         className={cn([
           integralCF.className,
-          "font-bold text-[32px] md:text-[40px] text-white mb-9 md:mb-0",
+          "relative z-10 font-bold text-2xl md:text-4xl text-white mb-0",
         ])}
       >
-        STAY UP TO DATE ABOUT OUR LATEST OFFERS
+        KONTAKTIRAJTE NAS! <br />
+        TU SMO ZA SVA VAŠA PITANJA!
       </p>
-      <div className="flex items-center">
-        <div className="flex flex-col w-full max-w-[349px] mx-auto">
-          <InputGroup className="flex bg-white mb-[14px]">
-            <InputGroup.Text>
+
+      <div className="relative z-10 flex items-center md:justify-end">
+        <div className="flex items-center gap-3 md:gap-6">
+          {contactItems.map((item) => (
+            <Link
+              key={item.id}
+              href={item.href}
+              aria-label={item.label}
+              className="relative rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-white/10 ring-1 ring-white/20 shadow-[0_10px_22px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(0,0,0,0.4)] transition-all"
+            >
               <Image
-                priority
-                src="/icons/envelope.svg"
-                height={20}
-                width={20}
-                alt="email"
-                className="min-w-5 min-h-5"
+                src={item.icon}
+                fill={true}
+                alt={item.label}
+                className="w-6 h-6 md:w-8 md:h-8"
               />
-            </InputGroup.Text>
-            <InputGroup.Input
-              type="email"
-              name="email"
-              placeholder="Enter your email address"
-              className="bg-transparent placeholder:text-black/40 placeholder:text-sm sm:placeholder:text-base"
-            />
-          </InputGroup>
-          <Button
-            variant="secondary"
-            className="text-sm sm:text-base font-medium bg-white h-12 rounded-full px-4 py-3"
-            aria-label="Subscribe to Newsletter"
-            type="button"
-          >
-            Subscribe to Newsletter
-          </Button>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

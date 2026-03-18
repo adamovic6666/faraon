@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { PiTrashFill } from "react-icons/pi";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,7 +53,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
                   id: data.id,
                   attributes: data.attributes,
                   quantity: data.quantity,
-                })
+                }),
               )
             }
           >
@@ -72,65 +71,6 @@ const ProductCard = ({ data }: ProductCardProps) => {
           <span className="text-black/60 text-xs md:text-sm">
             {data.attributes[1]}
           </span>
-        </div>
-        <div className="flex items-center flex-wrap justify-between">
-          <div className="flex items-center space-x-[5px] xl:space-x-2.5">
-            {data.discount.percentage > 0 ? (
-              <span className="font-bold text-black text-xl xl:text-2xl">
-                {`$${Math.round(
-                  data.price - (data.price * data.discount.percentage) / 100
-                )}`}
-              </span>
-            ) : data.discount.amount > 0 ? (
-              <span className="font-bold text-black text-xl xl:text-2xl">
-                {`$${data.price - data.discount.amount}`}
-              </span>
-            ) : (
-              <span className="font-bold text-black text-xl xl:text-2xl">
-                ${data.price}
-              </span>
-            )}
-            {data.discount.percentage > 0 && (
-              <span className="font-bold text-black/40 line-through text-xl xl:text-2xl">
-                ${data.price}
-              </span>
-            )}
-            {data.discount.amount > 0 && (
-              <span className="font-bold text-black/40 line-through text-xl xl:text-2xl">
-                ${data.price}
-              </span>
-            )}
-            {data.discount.percentage > 0 ? (
-              <span className="font-medium text-[10px] xl:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
-                {`-${data.discount.percentage}%`}
-              </span>
-            ) : (
-              data.discount.amount > 0 && (
-                <span className="font-medium text-[10px] xl:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
-                  {`-$${data.discount.amount}`}
-                </span>
-              )
-            )}
-          </div>
-          <CartCounter
-            initialValue={data.quantity}
-            onAdd={() => dispatch(addToCart({ ...data, quantity: 1 }))}
-            onRemove={() =>
-              data.quantity === 1
-                ? dispatch(
-                    remove({
-                      id: data.id,
-                      attributes: data.attributes,
-                      quantity: data.quantity,
-                    })
-                  )
-                : dispatch(
-                    removeCartItem({ id: data.id, attributes: data.attributes })
-                  )
-            }
-            isZeroDelete
-            className="px-5 py-3 max-h-8 md:max-h-10 min-w-[105px] max-w-[105px] sm:max-w-32"
-          />
         </div>
       </div>
     </div>

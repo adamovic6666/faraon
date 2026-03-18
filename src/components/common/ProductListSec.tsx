@@ -1,13 +1,11 @@
-import React from "react";
 import * as motion from "framer-motion/client";
-import { cn } from "@/lib/utils";
-import { integralCF } from "@/styles/fonts";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
 import ProductCard from "./ProductCard";
+import SectionTitle from "./SectionTitle";
 import { Product } from "@/types/product.types";
 import Link from "next/link";
 
@@ -20,18 +18,7 @@ type ProductListSecProps = {
 const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
   return (
     <section className="max-w-frame mx-auto text-center">
-      <motion.h2
-        initial={{ y: "100px", opacity: 0 }}
-        whileInView={{ y: "0", opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className={cn([
-          integralCF.className,
-          "text-[32px] text-brand md:text-5xl mb-8 md:mb-14 capitalize",
-        ])}
-      >
-        {title}
-      </motion.h2>
+      <SectionTitle title={title} className="mb-8 md:mb-12" />
       <motion.div
         initial={{ y: "100px", opacity: 0 }}
         whileInView={{ y: "0", opacity: 1 }}
@@ -48,7 +35,7 @@ const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
             {data.map((product) => (
               <CarouselItem
                 key={product.id}
-                className="w-full max-w-[198px] sm:max-w-[295px] pl-0"
+                className="w-full max-w-49.5 sm:max-w-68 pl-0"
               >
                 <ProductCard data={product} />
               </CarouselItem>
@@ -56,12 +43,12 @@ const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
           </CarouselContent>
         </Carousel>
         {viewAllLink && (
-          <div className="w-full px-4 sm:px-0 text-center">
+          <div className="mt-7 flex justify-center">
             <Link
-              href={viewAllLink}
-              className="w-full inline-block sm:w-[218px] px-[54px] py-4 border rounded-full bg-primary text-primary-foreground transition-all font-medium text-sm sm:text-base border-black/10"
+              href="/shop"
+              className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-10 py-3 font-semibold hover:brightness-95 transition-all"
             >
-              Vidi sve{" "}
+              Vidi sve
             </Link>
           </div>
         )}

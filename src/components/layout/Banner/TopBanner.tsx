@@ -10,7 +10,7 @@ const TopBanner = () => {
         <p className="text-xs sm:text-sm">
           Besplatna dostava i piće u povratnoj ambalaži za porudžbine preko
           12,000 rsd.{" "}
-          <Link href="#" className="underline font-medium">
+          <Link href="#" className="underline font-medium block sm:inline">
             Saznaj više{" "}
           </Link>
         </p>

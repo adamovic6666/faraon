@@ -9,7 +9,7 @@ import React from "react";
 const AddToCartBtn = ({ data }: { data: Product & { quantity: number } }) => {
   const dispatch = useAppDispatch();
   const { sizeSelection, colorSelection } = useAppSelector(
-    (state: RootState) => state.products
+    (state: RootState) => state.products,
   );
 
   return (
@@ -24,9 +24,9 @@ const AddToCartBtn = ({ data }: { data: Product & { quantity: number } }) => {
             srcUrl: data.srcUrl,
             price: data.price,
             attributes: [sizeSelection, colorSelection.name],
-            discount: data.discount,
+            discount: data.discount ? data.discount : 0,
             quantity: data.quantity,
-          })
+          }),
         )
       }
     >

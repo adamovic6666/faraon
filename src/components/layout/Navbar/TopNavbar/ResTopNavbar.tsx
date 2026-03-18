@@ -33,10 +33,13 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
         />
       </SheetTrigger>
       <SheetContent side="left" className="overflow-y-auto">
-        <SheetHeader className="mb-10">
+        <SheetHeader className="mb-8">
           <SheetTitle asChild>
             <SheetClose asChild>
-              <Link href="/" className={cn([integralCF.className, "text-2xl"])}>
+              <Link
+                href="/"
+                className="text-4xl text-left font-semibold text-brand"
+              >
                 FARAON
               </Link>
             </SheetClose>

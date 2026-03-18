@@ -1,67 +1,86 @@
-import AnimatedCounter from "@/components/ui/AnimatedCounter";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { integralCF } from "@/styles/fonts";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import * as motion from "framer-motion/client";
 
 const Header = () => {
   return (
-    <header className="bg-brand overflow-hidden flex flex-col">
-      <div className="flex-1 md:max-w-frame w-full mx-auto grid grid-cols-1 md:grid-cols-3">
-        <section className="min-h-[calc(100vh-132px)] col-span-2 px-4 flex flex-col justify-center items-start py-10 md:py-0">
-          <motion.h2
-            initial={{ y: "100px", opacity: 0, rotate: 10 }}
+    <header className="relative bg-brand overflow-hidden">
+      <div className="absolute inset-0 opacity-75 pointer-events-none">
+        <Image
+          src="/images/hijeroglofi.svg"
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          aria-hidden="true"
+        />
+      </div>
+
+      <div className="relative z-10 max-w-frame mx-auto min-h-107.5 md:min-h-135 px-4">
+        <div className="relative z-10 h-full grid md:grid-cols-12 items-center py-10 md:py-12 min-h-[calc(100vh-120px)] md:min-h-[calc(100vh-134px)]">
+          <section className="md:col-span-7 lg:col-span-6 flex flex-col justify-center items-start">
+            <motion.h2
+              initial={{ y: "100px", opacity: 0, rotate: 10 }}
+              whileInView={{ y: "0", opacity: 1, rotate: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className={cn([
+                integralCF.className,
+                "text-5xl leading-snug sm:text-6xl md:text-7xl lg:leading-19 mb-3 md:mb-4 text-white uppercase drop-shadow-[0_4px_0_rgba(0,0,0,0.3)]",
+              ])}
+            >
+              SVE ŠTO PIJETE, <br />
+              FARAON DONOSI!
+            </motion.h2>
+            <motion.p
+              initial={{ y: "100px", opacity: 0 }}
+              whileInView={{ y: "0", opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="text-white text-sm md:text-base mb-8 lg:mb-10 max-w-140"
+            >
+              Najbrža dostava i najniže cene pića u Novom Sadu.
+            </motion.p>
+            <motion.div
+              initial={{ y: "100px", opacity: 0 }}
+              whileInView={{ y: "0", opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1, duration: 0.6 }}
+              className="flex flex-col sm:flex-row gap-3"
+            >
+              <Link
+                href="/shop"
+                className="bg-primary text-black w-full sm:w-auto text-center transition-all hover:brightness-95 font-bold text-lg px-10 py-3 rounded-full shadow-[0_4px_0_rgba(0,0,0,0.22)]"
+              >
+                Kupi odmah
+              </Link>
+              <Link
+                href="tel:+381"
+                className="w-full sm:w-auto text-center bg-primary text-black hover:brightness-95 transition-all font-bold text-lg px-10 py-3 rounded-full shadow-[0_4px_0_rgba(0,0,0,0.22)]"
+              >
+                Pozovi nas
+              </Link>
+            </motion.div>
+          </section>
+
+          <motion.section
+            initial={{ y: "80px", opacity: 0, rotate: 6 }}
             whileInView={{ y: "0", opacity: 1, rotate: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className={cn([
-              integralCF.className,
-              "text-5xl lg:text-[72px] lg:leading-[78px] mb-2 lg:mb-4 text-white",
-            ])}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="md:col-span-5 lg:col-span-6 relative min-h-70 md:min-h-125 mt-8 md:mt-0"
           >
-            SVE STO PIJETE, <br />
-            FARAON DONOSI!
-          </motion.h2>
-          <motion.p
-            initial={{ y: "100px", opacity: 0 }}
-            whileInView={{ y: "0", opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="text-white text-sm lg:text-base mb-8 lg:mb-10 max-w-[545px]"
-          >
-            Najbrža dostava i najniže cene pića u Novom Sadu.
-          </motion.p>
-          <motion.div
-            initial={{ y: "100px", opacity: 0 }}
-            whileInView={{ y: "0", opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 1, duration: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <Link
-              href="/shop"
-              className="bg-gold text-amber-900 w-full sm:w-auto text-center transition-all font-semibold px-10 py-4 rounded-full"
-            >
-              Naruči odmah
-            </Link>
-            <Link
-              href="tel:+381"
-              className="w-full sm:w-auto text-center border-2 border-gold text-amber-900 hover:bg-gold hover:text-amber-900 transition-all px-10 py-4 rounded-full"
-            >
-              Pozovi nas
-            </Link>
-          </motion.div>
-        </section>
-        <motion.section
-          initial={{ y: "100px", opacity: 0, rotate: 10 }}
-          whileInView={{ y: "0", opacity: 1, rotate: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 2.3, duration: 0.8 }}
-          // className="relative md:px-4 min-h-[45vh] md:min-h-0 bg-cover bg-top xl:bg-[center_top_-1.6rem] bg-no-repeat bg-[url('/images/header-res-homepage.png')] md:bg-[url('/images/header-homepage.png')]"
-        />
+            <Image
+              src="/images/faraon.webp"
+              alt="Faraon"
+              fill
+              priority
+              className="object-contain object-center md:object-right"
+            />
+          </motion.section>
+        </div>
       </div>
     </header>
   );

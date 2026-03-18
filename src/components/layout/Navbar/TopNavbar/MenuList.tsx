@@ -18,10 +18,10 @@ export type MenuListProps = {
 export function MenuList({ data, label }: MenuListProps) {
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger className="font-normal px-3">
+      <NavigationMenuTrigger className="px-3 font-medium">
         {label}
       </NavigationMenuTrigger>
-      <NavigationMenuContent>
+      {/* <NavigationMenuContent>
         <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
           {data.map((item) => (
             <ListItem key={item.id} title={item.label} href={item.url ?? "/"}>
@@ -29,7 +29,7 @@ export function MenuList({ data, label }: MenuListProps) {
             </ListItem>
           ))}
         </ul>
-      </NavigationMenuContent>
+      </NavigationMenuContent> */}
     </NavigationMenuItem>
   );
 }
@@ -45,7 +45,7 @@ const ListItem = React.forwardRef<
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
+            className,
           )}
           {...props}
         >

@@ -74,7 +74,7 @@ const TopNavbar = () => {
             href="/"
             className={cn([
               integralCF.className,
-              "text-2xl lg:text-[32px] mb-2 mr-3 lg:mr-10 text-brand",
+              "text-2xl font-semibold lg:text-[32px] md:mb-2 mr-3 lg:mr-10 text-brand",
             ])}
           >
             FARAON
@@ -124,16 +124,6 @@ const TopNavbar = () => {
             />
           </Link>
           <CartBtn />
-          <Link href="/#signin" className="p-1">
-            <Image
-              priority
-              src="/icons/user.svg"
-              height={100}
-              width={100}
-              alt="user"
-              className="max-w-[22px] max-h-[22px]"
-            />
-          </Link>
         </div>
       </div>
     </nav>

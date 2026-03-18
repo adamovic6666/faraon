@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="800px" height="800px" version="1.0" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 120.14 120.14"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str0 {stroke:#F0F0F0;stroke-width:1.49;stroke-miterlimit:22.9256}
+    .fil1 {fill:none}
+    .fil0 {fill:#FFB200;fill-rule:nonzero}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_2554070870880">
+   <g>
+    <path class="fil0 str0" d="M81.42 46.04l-5.05 -8.4 0.57 0c1.33,0 2.41,-1.08 2.41,-2.41 0,-1.33 -1.08,-2.41 -2.41,-2.41l-15.87 0 -8.93 -8.94c-0.94,-0.94 -2.47,-0.94 -3.41,0 -0.94,0.94 -0.94,2.47 0,3.41l5.52 5.53 -11.05 0c-1.33,0 -2.41,1.08 -2.41,2.41 0,1.33 1.08,2.41 2.41,2.41l0.56 0 -5.04 8.4c-0.22,0.38 -0.34,0.81 -0.34,1.24l0 43.38c0,0.48 0.14,0.94 0.41,1.33l4.82 7.23c0.44,0.68 1.2,1.08 2,1.08l28.92 0c0.81,0 1.56,-0.4 2.01,-1.08l4.82 -7.23c0.26,-0.39 0.4,-0.85 0.4,-1.33l0 -43.38c0,-0.44 -0.12,-0.87 -0.34,-1.24zm-32.04 -8.4l21.38 0 5.78 9.64 -32.94 0 5.78 -9.64zm-6.18 48.2l0 -33.74 22.83 0c1.18,1.96 3.51,7.42 -0.87,15.75 -4.23,8.06 -3.34,14.25 -1.91,17.99l-20.05 0zm30.04 9.64l-26.34 0 -3.21 -4.82 32.76 0 -3.21 4.82zm3.7 -9.64l-8.37 0c-1.17,-1.93 -3.52,-7.4 0.87,-15.75 4.23,-8.06 3.34,-14.25 1.91,-17.99l5.59 0 0 33.74z"/>
+    <path class="fil0 str0" d="M55.25 56.92c-3.99,0 -7.23,3.24 -7.23,7.23 0,3.99 3.24,7.23 7.23,7.23 3.99,0 7.23,-3.24 7.23,-7.23 0,-3.99 -3.24,-7.23 -7.23,-7.23zm0 9.64c-1.33,0 -2.41,-1.08 -2.41,-2.41 0,-1.33 1.08,-2.41 2.41,-2.41 1.33,0 2.41,1.08 2.41,2.41 0,1.33 -1.08,2.41 -2.41,2.41z"/>
+   </g>
+   <path class="fil0 str0" d="M50.53 76.2l-0.05 0c-1.33,0 -2.39,1.08 -2.39,2.41 0,1.33 1.11,2.41 2.44,2.41 1.33,0 2.41,-1.08 2.41,-2.41 0,-1.33 -1.08,-2.41 -2.41,-2.41z"/>
+  </g>
+  <rect class="fil1" width="120.14" height="120.14"/>
+ </g>
+</svg>

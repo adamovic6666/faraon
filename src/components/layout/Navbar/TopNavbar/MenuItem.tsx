@@ -1,5 +1,3 @@
-import * as React from "react";
-import Link from "next/link";
 import {
   NavigationMenuItem,
   NavigationMenuLink,
@@ -15,13 +13,13 @@ type MenuItemProps = {
 export function MenuItem({ label, url }: MenuItemProps) {
   return (
     <NavigationMenuItem>
-      <Link href={url ?? "/"} legacyBehavior passHref>
-        <NavigationMenuLink
-          className={cn([navigationMenuTriggerStyle(), "font-normal px-3"])}
-        >
-          {label}
-        </NavigationMenuLink>
-      </Link>
+      {/* <Link href={url ?? "/"} passHref> */}
+      <NavigationMenuLink
+        className={cn([navigationMenuTriggerStyle(), "font-medium px-3"])}
+      >
+        {label}
+      </NavigationMenuLink>
+      {/* </Link> */}
     </NavigationMenuItem>
   );
 }
