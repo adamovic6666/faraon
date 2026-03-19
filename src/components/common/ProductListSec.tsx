@@ -8,6 +8,7 @@ import ProductCard from "./ProductCard";
 import SectionTitle from "./SectionTitle";
 import { Product } from "@/types/product.types";
 import Link from "next/link";
+import PageLink from "./Link";
 
 type ProductListSecProps = {
   title: string;
@@ -35,7 +36,7 @@ const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
             {data.map((product) => (
               <CarouselItem
                 key={product.id}
-                className="w-full max-w-49.5 sm:max-w-68 pl-0"
+                className="w-full max-w-52 sm:max-w-74 pl-0"
               >
                 <ProductCard data={product} />
               </CarouselItem>
@@ -44,12 +45,7 @@ const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
         </Carousel>
         {viewAllLink && (
           <div className="mt-7 flex justify-center">
-            <Link
-              href="/shop"
-              className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-8 py-2 font-semibold hover:brightness-95 transition-all"
-            >
-              Vidi sve
-            </Link>
+            <PageLink href={"/"}>Vidi sve</PageLink>
           </div>
         )}
       </motion.div>

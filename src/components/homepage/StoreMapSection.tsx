@@ -1,17 +1,5 @@
 import SectionTitle from "../common/SectionTitle";
 
-const dummyPins = [
-  { id: 2, top: "30%", left: "33%" },
-  { id: 3, top: "38%", left: "44%" },
-  { id: 4, top: "45%", left: "29%" },
-  { id: 5, top: "53%", left: "52%" },
-  { id: 6, top: "61%", left: "36%" },
-  { id: 7, top: "66%", left: "58%" },
-  { id: 8, top: "74%", left: "24%" },
-  { id: 9, top: "28%", left: "61%" },
-  { id: 10, top: "48%", left: "67%" },
-];
-
 const StoreMapSection = () => {
   return (
     <section className="max-w-frame mx-auto px-4 xl:px-0 mt-14 sm:mt-16">
@@ -29,7 +17,7 @@ const StoreMapSection = () => {
         }
       />
 
-      <div className="rounded-[28px] bg-section p-0 sm:p-6 md:p-8">
+      <div className="rounded-[28p]">
         <div className="relative rounded-3xl overflow-hidden border border-black/10 bg-white">
           <div className="relative w-full h-96 sm:h-120">
             <iframe
@@ -41,18 +29,6 @@ const StoreMapSection = () => {
               allowFullScreen
               title="Mapa diskonta pića Faraon"
             />
-
-            <div className="absolute inset-0 pointer-events-none">
-              {dummyPins.map((pin) => (
-                <span
-                  key={pin.id}
-                  className="absolute -translate-x-1/2 -translate-y-1/2"
-                  style={{ top: pin.top, left: pin.left }}
-                >
-                  <span className="block w-4 h-4 rounded-full bg-brand border-2 border-white shadow-md" />
-                </span>
-              ))}
-            </div>
           </div>
         </div>
       </div>

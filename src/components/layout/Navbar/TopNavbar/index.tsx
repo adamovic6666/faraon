@@ -74,7 +74,7 @@ const TopNavbar = () => {
             href="/"
             className={cn([
               integralCF.className,
-              "text-2xl font-semibold lg:text-[32px] md:mb-2 mr-3 lg:mr-10 text-brand",
+              "text-2xl font-semibold lg:text-[32px] mr-3 lg:mr-10 text-brand",
             ])}
           >
             FARAON
@@ -94,7 +94,7 @@ const TopNavbar = () => {
             ))}
           </NavigationMenuList>
         </NavigationMenu>
-        <InputGroup className="hidden md:flex bg-[#F0F0F0] mr-3 lg:mr-10">
+        <InputGroup className="hidden md:flex bg-[#F0F0F0] mr-3 lg:mr-10 w-full max-w-xl ml-auto">
           <InputGroup.Text>
             <Image
               priority
@@ -112,7 +112,7 @@ const TopNavbar = () => {
             className="bg-transparent placeholder:text-black/40"
           />
         </InputGroup>
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <Link href="/search" className="block md:hidden mr-[14px] p-1">
             <Image
               priority
@@ -124,7 +124,7 @@ const TopNavbar = () => {
             />
           </Link>
           <CartBtn />
-        </div>
+        </div> */}
       </div>
     </nav>
   );

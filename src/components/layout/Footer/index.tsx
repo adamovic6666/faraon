@@ -40,7 +40,7 @@ const socialLinks = [
   {
     id: 2,
     href: "https://instagram.com",
-    icon: "/images/Instagram.svg",
+    icon: "/images/instagram.svg",
     label: "Instagram",
   },
 ];

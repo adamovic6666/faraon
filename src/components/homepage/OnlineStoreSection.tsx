@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CategoryItem } from "@/types/category.types";
-import { Badge } from "../ui/badge";
 import SectionTitle from "../common/SectionTitle";
+import PageLink from "../common/Link";
 
 const OnlineStoreSection = ({
   title,
@@ -32,21 +32,21 @@ const OnlineStoreSection = ({
             <Link
               key={item.id}
               href="/shop"
-              className="group rounded-xl px-3 sm:px-4 py-4 sm:py-5 hover:shadow-sm transition-shadow bg-section border border-black/10"
+              className="group rounded-xl hover:shadow-sm transition-shadow pl-4 pt-4 bg-section border border-black/10 min-h-48"
             >
-              <div className="flex flex-col items-start justify-between gap-6 h-full min-h-20 sm:min-h-24">
+              <div className="flex items-start justify-between gap-8 h-full min-h-20 sm:min-h-24 relative">
                 <div>
-                  <h3 className="text-black text-lg sm:text-xl font-semibold leading-snug">
+                  <h3 className="text-black text-lg sm:text-2xl font-semibold leading-snug max-w-28">
                     {item.title}
                   </h3>
                 </div>
 
-                <div className="flex items-center justify-center sm:w-20 w-16 sm:h-20 h-16 mt-auto ml-auto">
+                <div className="flex absolute items-center justify-center sm:w-32 w-24 sm:h-32 h-24 mt-auto right-0 bottom-0">
                   <Image
                     src={item.icon}
                     alt={item.title}
-                    width={56}
-                    height={56}
+                    width={64}
+                    height={64}
                     className="w-full h-full sm:w-full sm:h-full"
                   />
                 </div>
@@ -56,12 +56,7 @@ const OnlineStoreSection = ({
         </div>
 
         <div className="mt-7 flex justify-center">
-          <Link
-            href="/shop"
-            className="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-8 py-2 font-semibold hover:brightness-95 transition-all"
-          >
-            Kupi odmah
-          </Link>
+          <PageLink href="/">Kupi odmah</PageLink>
         </div>
       </div>
     </section>

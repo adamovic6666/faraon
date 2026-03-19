@@ -7,13 +7,13 @@ const contactItems = [
   {
     id: 1,
     href: "tel:+381600000000",
-    icon: "/images/phone.svg",
+    icon: "/images/mobile.svg",
     label: "Pozovite nas",
   },
   {
     id: 2,
     href: "https://wa.me/381600000000",
-    icon: "/images/wa.svg",
+    icon: "/images/whatsapp.svg",
     label: "Pišite nam na WhatsApp",
   },
   {
@@ -26,7 +26,7 @@ const contactItems = [
 
 const NewsLetterSection = () => {
   return (
-    <div className="relative overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 py-9 md:py-11 px-6 md:px-16 max-w-frame mx-auto bg-brand rounded-[20px]">
+    <div className="relative overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 py-9 md:py-16 px-6 md:px-16 max-w-frame mx-auto bg-brand rounded-[20px]">
       <div className="absolute inset-0 opacity-75 pointer-events-none">
         <Image
           src="/images/hijeroglofi.svg"

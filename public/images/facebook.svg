@@ -2,14 +2,13 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <!-- Creator: CorelDRAW -->
 <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="800px" height="800px" version="1.0" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
-viewBox="0 0 27.96 27.97"
+viewBox="0 0 4.62 4.62"
  xmlns:xlink="http://www.w3.org/1999/xlink"
  xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
  <defs>
   <style type="text/css">
    <![CDATA[
     .fil2 {fill:#7E8384;fill-rule:nonzero}
-    .fil3 {fill:#CF9000;fill-rule:nonzero}
     .fil0 {fill:#FFB200;fill-rule:nonzero}
     .fil1 {fill:white;fill-rule:nonzero}
    ]]>
@@ -17,9 +16,8 @@ viewBox="0 0 27.96 27.97"
  </defs>
  <g id="Layer_x0020_1">
   <metadata id="CorelCorpID_0Corel-Layer"/>
-  <path class="fil0" d="M0 13.98c0,-7.72 6.26,-13.98 13.98,-13.98 7.72,0 13.98,6.26 13.98,13.98 0,7.72 -6.26,13.98 -13.98,13.98 -7.72,0 -13.98,-6.26 -13.98,-13.98z"/>
-  <path class="fil1" d="M17.52 13.98l-2.32 0 0 8.27 -3.43 0 0 -8.27 -1.63 0 0 -2.91 1.63 0 0 -1.89c0,-1.35 0.64,-3.47 3.46,-3.47l2.55 0.01 0 2.83 -1.85 0c-0.3,0 -0.73,0.16 -0.73,0.8l0 1.72 2.62 0 -0.3 2.91z"/>
-  <path class="fil2" d="M13.98 27.97c-7.7,0 -13.94,-6.21 -13.98,-13.9 0.05,7.68 6.29,13.89 13.98,13.89 7.72,0 13.98,-6.26 13.98,-13.98 0,-0.02 0,-0.05 0,-0.07 0,0.03 0,0.06 0,0.09 0,7.72 -6.26,13.97 -13.98,13.97z"/>
-  <path class="fil3" d="M13.98 27.96c-7.69,0 -13.93,-6.21 -13.98,-13.89 0,-0.02 0,-0.05 0,-0.07 0,-0.22 0.01,-0.44 0.02,-0.66 0.34,7.42 6.46,13.32 13.96,13.32 7.5,0 13.62,-5.9 13.96,-13.32 0.01,0.19 0.02,0.38 0.02,0.57 0,0.02 0,0.05 0,0.07 0,7.72 -6.26,13.98 -13.98,13.98z"/>
+  <path class="fil0" d="M0 2.31c0,-1.28 1.03,-2.31 2.31,-2.31 1.28,0 2.31,1.03 2.31,2.31 0,1.28 -1.03,2.31 -2.31,2.31 -1.28,0 -2.31,-1.03 -2.31,-2.31z"/>
+  <path class="fil1" d="M2.89 2.31l-0.38 0 0 1.37 -0.57 0 0 -1.37 -0.27 0 0 -0.48 0.27 0 0 -0.31c0,-0.23 0.11,-0.58 0.58,-0.58l0.42 0.01 0 0.46 -0.31 0c-0.05,0 -0.12,0.03 -0.12,0.13l0 0.29 0.43 0 -0.05 0.48z"/>
+  <path class="fil2" d="M2.31 4.62c-1.27,0 -2.3,-1.03 -2.31,-2.29 0.01,1.26 1.04,2.29 2.31,2.29 1.28,0 2.31,-1.03 2.31,-2.31 0,0 0,-0.01 0,-0.01 0,0 0,0.01 0,0.01 0,1.28 -1.03,2.31 -2.31,2.31z"/>
  </g>
 </svg>

@@ -3,6 +3,7 @@ import { integralCF } from "@/styles/fonts";
 import Image from "next/image";
 import Link from "next/link";
 import * as motion from "framer-motion/client";
+import PageLink from "@/components/common/Link";
 
 const Header = () => {
   return (
@@ -39,7 +40,7 @@ const Header = () => {
               whileInView={{ y: "0", opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-white/80 text-md md:text-2xl mb-8 lg:mb-10 max-w-140"
+              className="text-white/80 text-md md:text-2xl mb-8 lg:mb-10 max-w-140 font-light"
             >
               Najbrža dostava i najniže cene pića u Novom Sadu.
             </motion.p>
@@ -50,18 +51,7 @@ const Header = () => {
               transition={{ delay: 1, duration: 0.6 }}
               className="flex gap-3 w-full"
             >
-              <Link
-                href="/shop"
-                className="bg-primary text-black w-auto text-center transition-all hover:brightness-95 font-semibold px-8 py-2 rounded-full shadow-[0_4px_0_rgba(0,0,0,0.22)]"
-              >
-                Kupi odmah
-              </Link>
-              <Link
-                href="tel:+381"
-                className="w-auto text-center bg-primary text-black hover:brightness-95 transition-all font-semibold px-8 py-2 rounded-full shadow-[0_4px_0_rgba(0,0,0,0.22)]"
-              >
-                Pozovi nas
-              </Link>
+              <PageLink href="/">Poruči odmah</PageLink>
             </motion.div>
           </section>
 

@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/lib/hooks/redux";
 import { addToCart } from "@/lib/features/carts/cartsSlice";
 import { IoCartOutline } from "react-icons/io5";
 import { formatPrice } from "@/utils/format-price";
+import { div } from "framer-motion/client";
 
 type ProductCardProps = {
   data: Product;
@@ -68,7 +69,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
   };
 
   return (
-    <div className="flex flex-col   rounded-[20px] border border-black/10 overflow-hidden bg-section  w-full">
+    <div className="flex flex-col rounded-[20px] border border-black/10 overflow-hidden bg-section  w-full">
       {/* Image */}
       <Link
         href={productHref}
@@ -91,28 +92,30 @@ const ProductCard = ({ data }: ProductCardProps) => {
       {/* Content */}
       <div className="flex flex-col p-4 flex-1 ">
         <Link href={productHref}>
-          <h3 className="font-semibold text-left text-black text-sm xl:text-base leading-snug mb-3 md:mb-6 line-clamp-2 min-h-10">
+          <h3 className="text-left text-black text-sm xl:text-xl leading-snug mb-2 md:mb-4 line-clamp-2 min-h-14">
             {data.title}
           </h3>
         </Link>
 
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 mt-auto">
+        <div className="flex flex-col items-start justify-between gap-2 mt-auto">
           {/* Price */}
           <div className="flex flex-col items-start">
             {hasDiscount && (
-              <span className="text-xs text-black/40 line-through mt-0.5">
+              <span className="text-md text-black/40 mt-0.5 relative">
                 {data?.oldPrice ? formatPrice(data.oldPrice) : ""}{" "}
-                <span>rsd</span>
+                <span className="text-[10px]">RSD</span>
+                {/* Line though custom */}
+                <span className="absolute inset-0 bg-black/10 h-0.5 top-1/2 transform -translate-y-1/2 z-1"></span>
               </span>
             )}
-            <span className="font-bold text-black text-md leading-none">
-              {formatPrice(data.price)} <span>rsd</span>
+            <span className="font-bold text-black text-xl md:text-2xl leading-none">
+              {formatPrice(data.price)} <span className="text-xs">RSD</span>
             </span>
           </div>
 
           {/* Quantity + Add to cart */}
-          <div className="flex w-full md:w-auto items-center gap-2 rounded-xl md:max-w-60 justify-between mt-1 md:mt-auto">
-            <div className="flex items-center justify-between rounded-xl bg-white p-1 w-24 md:w-auto">
+          <div className="flex w-full items-center gap-2 bg-white rounded-full justify-between p-1 md:mt-auto">
+            <div className="flex items-center justify-between rounded-full bg-white p-1 w-24">
               <button
                 type="button"
                 onClick={decrement}
@@ -152,10 +155,10 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="bg-primary text-white text-sm font-semibold rounded-lg  px-2.5 py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center"
+              className="bg-primary text-black/80 text-sm rounded-full uppercase px-2.5 py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center"
               aria-label="Dodaj u korpu"
             >
-              <IoCartOutline size={16} />
+              Dodaj u kopru
             </button>
           </div>
         </div>
