@@ -10,7 +10,7 @@ const CartBtn = () => {
   const { cart } = useAppSelector((state: RootState) => state.carts);
 
   return (
-    <Link href="/cart" className="relative mr-[14px] p-1">
+    <Link href="/" className="relative  p-1">
       <Image
         priority
         src="/icons/cart.svg"

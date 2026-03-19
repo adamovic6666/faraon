@@ -40,6 +40,38 @@ export const newArrivalsData: Product[] = [
     price: 10000,
     discount: 40,
   },
+  {
+    id: 5,
+    title: "Rosa Voda Negazirana 0.75L\nNepovratno Staklo",
+    srcUrl: "/images/rosa-voda.jpg",
+    oldPrice: 200,
+    price: 160,
+    discount: 20,
+  },
+  {
+    id: 6,
+    title: "Fruvita 100% Jabuka 0.75L\nPET",
+    srcUrl: "/images/fruvita-sok.jpg",
+    oldPrice: 300,
+    price: 225,
+    discount: 25,
+  },
+  {
+    id: 7,
+    title: "Pepsi Max 330mL Limenka",
+    srcUrl: "/images/pepsi-limenka.jpg",
+    oldPrice: 70,
+    price: 49,
+    discount: 30,
+  },
+  {
+    id: 8,
+    title: "Smirnoff Vodka 1L",
+    srcUrl: "/images/smirnoff-vodka.jpg",
+    oldPrice: 12000,
+    price: 10000,
+    discount: 40,
+  },
 ];
 
 export const topSellingData: Product[] = [
@@ -158,6 +190,7 @@ export default function Home() {
           title="Kraljevski popusti"
           data={newArrivalsData}
           viewAllLink="/shop#new-arrivals"
+          showArrows
         />
         <div className="max-w-frame mx-auto px-4 xl:px-0">
           <div className="my-10 sm:my-16 flex items-center gap-3">

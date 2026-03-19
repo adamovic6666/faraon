@@ -8,9 +8,15 @@ type ProductListSecProps = {
   title: string;
   data: Product[];
   viewAllLink?: string;
+  showArrows?: boolean;
 };
 
-const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
+const ProductListSec = ({
+  title,
+  data,
+  viewAllLink,
+  showArrows = false,
+}: ProductListSecProps) => {
   return (
     <section className="max-w-frame mx-auto text-center">
       <SectionTitle title={title} className="mb-8 md:mb-12" />
@@ -20,10 +26,12 @@ const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
         viewport={{ once: true }}
         transition={{ delay: 0.6, duration: 0.6 }}
       >
-        <ProductSwiper data={data} />
+        <ProductSwiper data={data} showArrows={showArrows} />
         {viewAllLink && (
           <div className="mt-7 flex justify-center">
-            <PageLink href={viewAllLink}>Vidi sve</PageLink>
+            <PageLink className="px-4 md:px-0 " href={viewAllLink}>
+              Vidi sve
+            </PageLink>
           </div>
         )}
       </motion.div>

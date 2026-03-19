@@ -9,7 +9,6 @@ import { useAppDispatch } from "@/lib/hooks/redux";
 import { addToCart } from "@/lib/features/carts/cartsSlice";
 import { IoCartOutline } from "react-icons/io5";
 import { formatPrice } from "@/utils/format-price";
-import { div } from "framer-motion/client";
 
 type ProductCardProps = {
   data: Product;
@@ -155,7 +154,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="bg-primary text-black/80 text-sm rounded-full uppercase px-2.5 py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center"
+              className="bg-primary text-black/80 text-sm rounded-full uppercase px-4 md:px-6 py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center"
               aria-label="Dodaj u korpu"
             >
               <span className="hidden md:block"> Dodaj u korpu</span>

@@ -94,7 +94,7 @@ const TopNavbar = () => {
             ))}
           </NavigationMenuList>
         </NavigationMenu>
-        <InputGroup className="md:flex bg-[#F0F0F0] w-full max-w-52 md:max-w-xl ml-auto">
+        <InputGroup className="md:flex bg-[#F0F0F0] w-full max-w-52 md:max-w-xl ml-auto mr-3  hidden">
           <InputGroup.Text>
             <Image
               priority
@@ -112,8 +112,8 @@ const TopNavbar = () => {
             className="bg-transparent placeholder:text-black/40"
           />
         </InputGroup>
-        {/* <div className="flex items-center">
-          <Link href="/search" className="block md:hidden mr-[14px] p-1">
+        <div className="flex items-center">
+          <Link href="/" className="block md:hidden mr-1  p-1">
             <Image
               priority
               src="/icons/search-black.svg"
@@ -124,7 +124,7 @@ const TopNavbar = () => {
             />
           </Link>
           <CartBtn />
-        </div> */}
+        </div>
       </div>
     </nav>
   );

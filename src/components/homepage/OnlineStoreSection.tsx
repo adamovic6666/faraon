@@ -56,8 +56,10 @@ const OnlineStoreSection = ({
           ))}
         </div>
 
-        <div className="mt-7 flex justify-center">
-          <PageLink href="/">Kupi odmah</PageLink>
+        <div className="mt-7 flex justify-center md:items-center">
+          <PageLink inCenter href="/">
+            Kupi odmah
+          </PageLink>
         </div>
       </div>
     </section>

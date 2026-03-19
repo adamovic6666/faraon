@@ -53,14 +53,14 @@ const Header = () => {
             whileInView={{ y: "0", opacity: 1, rotate: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="md:col-span-5 lg:col-span-6 relative min-h-96 md:min-h-160"
+            className="md:col-span-5 lg:col-span-6 relative min-h-104 md:min-h-140 w-full"
           >
             <Image
               src="/images/faraon.webp"
               alt="Faraon"
               fill
               priority
-              className="object-contain object-center md:object-right"
+              className="object-cover object-center md:object-right"
             />
           </motion.section>
         </div>
