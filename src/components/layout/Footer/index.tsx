@@ -79,11 +79,7 @@ const Footer = () => {
               >
                 FARAON
               </h2>
-              <p className="text-black/80 font-light text-md leading-8 mb-3 md:mb-6">
-                Sve što pijete,
-                <br />
-                Faraon donosi!
-              </p>
+
               <div className="flex items-center gap-3">
                 {socialLinks.map((item) => (
                   <Link key={item.id} href={item.href} aria-label={item.label}>

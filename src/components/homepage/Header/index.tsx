@@ -9,18 +9,11 @@ const Header = () => {
   return (
     <header className="relative bg-brand overflow-hidden">
       <div className="absolute inset-0 opacity-75 pointer-events-none">
-        <Image
-          src="/images/hijeroglofi.svg"
-          alt=""
-          fill
-          priority
-          className="object-cover"
-          aria-hidden="true"
-        />
+        <div className="h-full w-full bg-[url('/images/hijeroglofi.svg')] bg-size-[300%_auto] bg-center bg-repeat-y md:bg-cover md:bg-no-repeat" />
       </div>
 
       <div className="relative z-10 max-w-frame mx-auto min-h-107.5 md:min-h-135 px-4">
-        <div className="relative z-10 h-full grid md:grid-cols-12 items-center py-10 md:py-12 min-h-[calc(100dvh-72px)] md:min-h-[calc(100dvh-98px)]">
+        <div className="relative z-10 h-full grid md:grid-cols-12 items-center py-10 md:py-12 min-h-[calc(100dvh-72px)] md:min-h-auto">
           <section className="md:col-span-7 lg:col-span-6 flex flex-col justify-center items-start">
             <motion.h2
               initial={{ y: "100px", opacity: 0, rotate: 10 }}
@@ -29,7 +22,7 @@ const Header = () => {
               transition={{ duration: 0.6 }}
               className={cn([
                 integralCF.className,
-                "text-5xl font-bold leading-snug sm:text-6xl md:text-7xl lg:leading-19 mb-3 md:mb-4 text-white uppercase",
+                "text-[12.5vw] font-bold leading-snug sm:text-6xl md:text-7xl lg:leading-19 mb-3 md:mb-4 text-white uppercase",
               ])}
             >
               SVE ŠTO PIJETE, <br />

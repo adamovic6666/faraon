@@ -92,7 +92,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
       {/* Content */}
       <div className="flex flex-col p-4 flex-1 ">
         <Link href={productHref}>
-          <h3 className="text-left text-black text-sm xl:text-xl leading-snug mb-2 md:mb-4 line-clamp-2 min-h-14">
+          <h3 className="text-left text-black text-md xl:text-xl leading-snug mb-2 md:mb-4 line-clamp-2 min-h-14">
             {data.title}
           </h3>
         </Link>
@@ -115,7 +115,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
 
           {/* Quantity + Add to cart */}
           <div className="flex w-full items-center gap-2 bg-white rounded-full justify-between p-1 md:mt-auto">
-            <div className="flex items-center justify-between rounded-full bg-white p-1 w-24">
+            <div className="flex items-center justify-between rounded-full bg-white p-1 w-20 md:w-24">
               <button
                 type="button"
                 onClick={decrement}
@@ -158,7 +158,16 @@ const ProductCard = ({ data }: ProductCardProps) => {
               className="bg-primary text-black/80 text-sm rounded-full uppercase px-2.5 py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center"
               aria-label="Dodaj u korpu"
             >
-              Dodaj u kopru
+              <span className="hidden md:block"> Dodaj u korpu</span>
+
+              <Image
+                priority
+                src="/icons/cart.svg"
+                height={100}
+                width={100}
+                alt="cart"
+                className="w-4 h-4 md:hidden"
+              />
             </button>
           </div>
         </div>

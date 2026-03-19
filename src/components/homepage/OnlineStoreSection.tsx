@@ -17,12 +17,13 @@ const OnlineStoreSection = ({
         <SectionTitle
           title={title}
           description={
-            <>
-              Najpovoljnije cene pića u Novom Sada, najbrža isporuka do tvog
-              praga!
-              <br />
-              Poruči svoje piće i Faraon dolazi do tebe.
-            </>
+            <div className="md:flex md:flex-col items-center justify-center">
+              <span>
+                Najpovoljnije cene pića u Novom Sada, najbrža isporuka do tvog
+                praga!
+              </span>
+              <span> Poruči svoje piće i Faraon dolazi do tebe.</span>
+            </div>
           }
           className="mb-12"
         />
@@ -36,12 +37,12 @@ const OnlineStoreSection = ({
             >
               <div className="flex items-start justify-between gap-8 h-full min-h-20 sm:min-h-24 relative">
                 <div>
-                  <h3 className="text-black text-lg sm:text-2xl font-semibold leading-snug max-w-28">
+                  <h3 className="text-black text-xl sm:text-2xl font-semibold leading-snug max-w-28">
                     {item.title}
                   </h3>
                 </div>
 
-                <div className="flex absolute items-center justify-center sm:w-32 w-24 sm:h-32 h-24 mt-auto right-0 bottom-0">
+                <div className="flex absolute items-center justify-center sm:w-32 w-26 sm:h-32 h-26 mt-auto right-0 bottom-0">
                   <Image
                     src={item.icon}
                     alt={item.title}

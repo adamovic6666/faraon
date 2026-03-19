@@ -7,13 +7,16 @@ const StoreMapSection = () => {
         title="Faraon diskonti"
         className="mb-12"
         description={
-          <>
-            Sigurno smo blizu tebe - naši diskonti pića pokrivaju ceo Novi Sad,
-            u svakom komšiluku.
-            <br />
-            Pronađi najbliži Faraon diskont na mapi ispod i iskoristi najbolje
-            cene pića u gradu.
-          </>
+          <div className="md:flex md:flex-col items-center justify-center">
+            <span>
+              Sigurno smo blizu tebe - naši diskonti pića pokrivaju ceo Novi
+              Sad, u svakom komšiluku.
+            </span>
+            <span>
+              Pronađi najbliži Faraon diskont na mapi ispod i iskoristi najbolje
+              cene pića u gradu.
+            </span>
+          </div>
         }
       />
 

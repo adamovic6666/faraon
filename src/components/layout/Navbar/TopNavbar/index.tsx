@@ -64,7 +64,7 @@ const data: NavMenu = [
 
 const TopNavbar = () => {
   return (
-    <nav className="sticky top-0 bg-white z-20">
+    <nav className="sticky top-0 bg-white z-20 shadow-xs">
       <div className="flex relative max-w-frame mx-auto items-center justify-between md:justify-start py-5 md:py-6 px-4 xl:px-0">
         <div className="flex items-center">
           <div className="block md:hidden mr-4">
@@ -94,7 +94,7 @@ const TopNavbar = () => {
             ))}
           </NavigationMenuList>
         </NavigationMenu>
-        <InputGroup className="hidden md:flex bg-[#F0F0F0] mr-3 lg:mr-10 w-full max-w-xl ml-auto">
+        <InputGroup className="md:flex bg-[#F0F0F0] w-full max-w-52 md:max-w-xl ml-auto">
           <InputGroup.Text>
             <Image
               priority

@@ -54,7 +54,7 @@ const NewsLetterSection = () => {
               key={item.id}
               href={item.href}
               aria-label={item.label}
-              className="relative rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-white/10 ring-1 ring-white/20 shadow-[0_10px_22px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(0,0,0,0.4)] transition-all"
+              className="relative rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-white/10 ring-1 ring-white/20 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(0,0,0,0.4)] transition-all"
             >
               <Image
                 src={item.icon}
