@@ -92,21 +92,6 @@ const Footer = () => {
                   </Link>
                 ))}
               </div>
-
-              <div className="flex flex-col items-center justify-center bg-white rounded-full p-2 md:absolute mt-4 md:mt-0 md:left-0 md:-bottom-1 w-full max-w-58 md:max-w-64 ">
-                <div className="flex items-center gap-3">
-                  <Image
-                    src="/images/18+.svg"
-                    alt="18+"
-                    width={60}
-                    height={60}
-                    className="w-14 h-14"
-                  />
-                  <p className="text-black/80 text-sm md:text-base font-light max-w-xs">
-                    Zabranjena prodaja alkohola licima mladim od 18 godina.
-                  </p>
-                </div>
-              </div>
             </section>
 
             <section>

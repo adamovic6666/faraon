@@ -49,8 +49,8 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
         className="overflow-y-auto"
         style={{
           backgroundColor: "#f5f5f5",
-          backgroundImage:
-            "linear-gradient(rgba(245,245,245,0.99), rgba(245,245,245,0.90)), url('/images/hijeroglofi.svg')",
+          // backgroundImage:
+          //   "linear-gradient(rgba(245,245,245,0.99), rgba(245,245,245,0.90)), url('/images/hijeroglofi.svg')",
           backgroundRepeat: "repeat, repeat",
           backgroundSize: "auto, 400% auto",
         }}
