@@ -106,29 +106,6 @@ const ProductSwiper = ({ data, showArrows = false }: ProductSwiperProps) => {
           </SwiperSlide>
         ))}
       </Swiper>
-
-      {canShowArrows && (
-        <div className="flex md:hidden items-center justify-center gap-2">
-          <button
-            type="button"
-            onClick={handlePrev}
-            disabled={isBeginning}
-            aria-label="Prethodni proizvod"
-            className="h-9 w-9 rounded-full bg-primary text-black flex items-center justify-center shadow-sm hover:bg-primary/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <IoIosArrowBack size={18} aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            onClick={handleNext}
-            disabled={isEnd}
-            aria-label="Sledeci proizvod"
-            className="h-9 w-9 rounded-full bg-primary text-black flex items-center justify-center shadow-sm hover:bg-primary/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <IoIosArrowForward size={18} aria-hidden="true" />
-          </button>
-        </div>
-      )}
     </div>
   );
 };

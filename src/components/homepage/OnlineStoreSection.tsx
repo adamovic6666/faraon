@@ -32,8 +32,8 @@ const OnlineStoreSection = ({
           {data.map((item) => (
             <Link
               key={item.id}
-              href="/shop"
-              className="group rounded-xl hover:shadow-sm transition-shadow pl-4 pt-4 bg-section border border-black/10 min-h-48"
+              href="/"
+              className="group rounded-xl hover:shadow-sm transition-shadow pl-4 pt-4 bg-section border border-black/15 min-h-48"
             >
               <div className="flex items-start justify-between gap-8 h-full min-h-20 sm:min-h-24 relative">
                 <div>

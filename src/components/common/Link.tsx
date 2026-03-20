@@ -18,7 +18,7 @@ const PageLink = ({
     >
       <NextLink
         href={href}
-        className="w-full md:w-52 mb-5 md:mb-12 inline-block text-center bg-primary hover:bg-primary/85 transition-all text-black/80 px-10 py-2 md:px-14 md:py-4 rounded-full text:md md:text-lg"
+        className="w-full md:w-52 mb-5 md:mb-12 inline-block text-center bg-primary hover:bg-primary/85 transition-all text-black/80 px-10 md:px-14 py-4 rounded-full text:md md:text-lg"
       >
         {children}
       </NextLink>

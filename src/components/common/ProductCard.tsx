@@ -20,7 +20,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
 
   const hasDiscount = data.discount !== undefined && data.discount > 0;
 
-  const productHref = `/shop/product/${data.id}/${data.title.split(" ").join("-")}`;
+  const productHref = `/`;
 
   const getSafeQty = (value: string = qtyInput) => {
     const parsedQty = Number(value);
@@ -68,7 +68,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
   };
 
   return (
-    <div className="flex flex-col rounded-[20px] border border-black/10 overflow-hidden bg-section  w-full">
+    <div className="flex flex-col rounded-[20px] border border-black/15 overflow-hidden bg-section  w-full">
       {/* Image */}
       <Link
         href={productHref}
@@ -91,7 +91,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
       {/* Content */}
       <div className="flex flex-col p-4 flex-1 ">
         <Link href={productHref}>
-          <h3 className="text-left text-black text-md xl:text-xl leading-snug mb-2 md:mb-4 line-clamp-2 min-h-14">
+          <h3 className="text-left text-black text-lg xl:text-xl leading-snug mb-2 md:mb-4 line-clamp-2 min-h-14">
             {data.title}
           </h3>
         </Link>
@@ -107,7 +107,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
                 <span className="absolute inset-0 bg-black/10 h-0.5 top-1/2 transform -translate-y-1/2 z-1"></span>
               </span>
             )}
-            <span className="font-bold text-black text-xl md:text-2xl leading-none">
+            <span className="font-bold text-black text-2xl leading-none">
               {formatPrice(data.price)} <span className="text-xs">RSD</span>
             </span>
           </div>
@@ -154,7 +154,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="bg-primary text-black/80 text-sm rounded-full uppercase px-4 md:px-6 py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center"
+              className="bg-primary text-black/80 text-sm rounded-full uppercase px-6 py-1 md:py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center"
               aria-label="Dodaj u korpu"
             >
               <span className="hidden md:block"> Dodaj u korpu</span>
@@ -165,7 +165,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
                 height={100}
                 width={100}
                 alt="cart"
-                className="w-4 h-4 md:hidden"
+                className="w-4.5 h-4.5 md:hidden"
               />
             </button>
           </div>

@@ -70,11 +70,11 @@ const Footer = () => {
       <div className="pt-8 md:pt-12 bg-section px-4 pb-4">
         <div className="max-w-frame mx-auto">
           <nav className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mb-10">
-            <section className="flex flex-col">
+            <section className="flex flex-col relative h-full">
               <h2
                 className={cn([
                   integralCF.className,
-                  "text-brand text-3xl mb-4 font-semibold",
+                  "text-brand text-xl sm:text-2xl mb-4 font-semibold",
                 ])}
               >
                 FARAON
@@ -92,13 +92,28 @@ const Footer = () => {
                   </Link>
                 ))}
               </div>
+
+              <div className="flex flex-col items-center justify-center bg-white rounded-full p-2 md:absolute mt-4 md:mt-0 md:left-0 md:-bottom-1 w-full max-w-58 md:max-w-64 ">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src="/images/18+.svg"
+                    alt="18+"
+                    width={60}
+                    height={60}
+                    className="w-14 h-14"
+                  />
+                  <p className="text-black/80 text-sm md:text-base font-light max-w-xs">
+                    Zabranjena prodaja alkohola licima mladim od 18 godina.
+                  </p>
+                </div>
+              </div>
             </section>
 
             <section>
               <h3
                 className={cn([
                   integralCF.className,
-                  "text-black text-2xl mb-4 uppercase",
+                  "text-black text-xl sm:text-2xl mb-4 font-semibold uppercase",
                 ])}
               >
                 Kontakt
@@ -136,7 +151,7 @@ const Footer = () => {
               <h3
                 className={cn([
                   integralCF.className,
-                  "text-black text-2xl mb-4 uppercase",
+                  "text-black text-xl sm:text-2xl mb-4 font-semibold uppercase",
                 ])}
               >
                 Politika privatnosti

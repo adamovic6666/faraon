@@ -9,12 +9,12 @@ const Header = () => {
   return (
     <header className="relative bg-brand overflow-hidden">
       <div className="absolute inset-0 opacity-75 pointer-events-none">
-        <div className="h-full w-full bg-[url('/images/hijeroglofi.svg')] bg-size-[300%_auto] bg-center bg-repeat-y md:bg-cover md:bg-no-repeat" />
+        <div className="h-full w-full bg-[url('/images/hijeroglofi.svg')] bg-size-[300%_auto] bg-center bg-repeat-y md:bg-size-[150%_auto] lg:bg-cover lg:bg-no-repeat" />
       </div>
 
-      <div className="relative z-10 max-w-frame mx-auto min-h-107.5 md:min-h-135 px-4">
-        <div className="relative z-10 h-full grid md:grid-cols-12 items-center py-10 md:py-12 min-h-[calc(100dvh-72px)] md:min-h-auto">
-          <section className="md:col-span-7 lg:col-span-6 flex flex-col justify-center items-start">
+      <div className="relative z-10 max-w-frame mx-auto min-h-107.5 md:min-h-120 lg:min-h-135 px-4">
+        <div className="relative z-10 h-full grid md:grid-cols-2 lg:grid-cols-12 items-center py-10 md:py-8 lg:py-12 min-h-[calc(100dvh-72px)] md:min-h-[60vh] lg:min-h-auto">
+          <section className="md:col-span-1 lg:col-span-6 flex flex-col justify-center items-start">
             <motion.h2
               initial={{ y: "100px", opacity: 0, rotate: 10 }}
               whileInView={{ y: "0", opacity: 1, rotate: 0 }}
@@ -22,7 +22,7 @@ const Header = () => {
               transition={{ duration: 0.6 }}
               className={cn([
                 integralCF.className,
-                "text-[12.5vw] font-bold leading-snug sm:text-6xl md:text-7xl lg:leading-19 mb-3 md:mb-4 text-white uppercase",
+                "text-[12.5vw] font-bold leading-snug sm:text-6xl md:text-5xl lg:text-7xl lg:leading-19 mb-3 md:mb-2 lg:mb-4 text-white uppercase",
               ])}
             >
               SVE ŠTO PIJETE, <br />
@@ -33,7 +33,7 @@ const Header = () => {
               whileInView={{ y: "0", opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-white/80 text-md md:text-2xl mb-8 lg:mb-10 max-w-140 font-light"
+              className="text-white text-sm md:text-lg lg:text-2xl mb-6 md:mb-4 lg:mb-10 max-w-140 font-light"
             >
               Najbrža dostava i najniže cene pića u Novom Sadu.
             </motion.p>
@@ -53,14 +53,14 @@ const Header = () => {
             whileInView={{ y: "0", opacity: 1, rotate: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="md:col-span-5 lg:col-span-6 relative min-h-104 md:min-h-140 w-full"
+            className="md:col-span-1 lg:col-span-6 relative min-h-104 md:min-h-120 lg:min-h-140 w-full"
           >
             <Image
               src="/images/faraon.webp"
               alt="Faraon"
               fill
               priority
-              className="object-cover object-center md:object-right"
+              className="object-contain md:object-cover md:object-center lg:object-right"
             />
           </motion.section>
         </div>

@@ -36,8 +36,8 @@ export const newArrivalsData: Product[] = [
     id: 4,
     title: "Smirnoff Vodka 1L",
     srcUrl: "/images/smirnoff-vodka.jpg",
-    oldPrice: 12000,
-    price: 10000,
+    oldPrice: 2800,
+    price: 2200,
     discount: 40,
   },
   {
@@ -71,60 +71,6 @@ export const newArrivalsData: Product[] = [
     oldPrice: 12000,
     price: 10000,
     discount: 40,
-  },
-];
-
-export const topSellingData: Product[] = [
-  {
-    id: 5,
-    title: "Vertical Striped Shirt",
-    srcUrl: "/images/pic5.png",
-    price: 232,
-  },
-  {
-    id: 6,
-    title: "Courage Graphic T-shirt",
-    srcUrl: "/images/pic6.png",
-    price: 145,
-  },
-  {
-    id: 7,
-    title: "Loose Fit Bermuda Shorts",
-    srcUrl: "/images/pic7.png",
-    price: 80,
-  },
-  {
-    id: 8,
-    title: "Faded Skinny Jeans",
-    srcUrl: "/images/pic8.png",
-    price: 210,
-  },
-];
-
-export const relatedProductData: Product[] = [
-  {
-    id: 12,
-    title: "Polo with Contrast Trims",
-    srcUrl: "/images/pic12.png",
-    price: 242,
-  },
-  {
-    id: 13,
-    title: "Gradient Graphic T-shirt",
-    srcUrl: "/images/pic13.png",
-    price: 145,
-  },
-  {
-    id: 14,
-    title: "Polo with Tipping Details",
-    srcUrl: "/images/pic14.png",
-    price: 180,
-  },
-  {
-    id: 15,
-    title: "Black Striped T-shirt",
-    srcUrl: "/images/pic15.png",
-    price: 150,
   },
 ];
 
@@ -189,7 +135,7 @@ export default function Home() {
         <ProductListSec
           title="Kraljevski popusti"
           data={newArrivalsData}
-          viewAllLink="/shop#new-arrivals"
+          viewAllLink="/"
           showArrows
         />
         <div className="max-w-frame mx-auto px-4 xl:px-0">

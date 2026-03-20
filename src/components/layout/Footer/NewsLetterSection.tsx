@@ -26,7 +26,7 @@ const contactItems = [
 
 const NewsLetterSection = () => {
   return (
-    <div className="relative overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 py-9 md:py-16 px-6 md:px-16 max-w-frame mx-auto bg-brand rounded-[20px]">
+    <div className="relative overflow-hidden flex flex-col md:flex-row items-center md:justify-between  gap-6 md:gap-4 py-9 md:py-16 px-6 md:px-16 max-w-frame mx-auto bg-brand rounded-[20px]">
       <div className="absolute inset-0 opacity-75 pointer-events-none">
         <Image
           src="/images/hijeroglofi.svg"
@@ -40,11 +40,11 @@ const NewsLetterSection = () => {
       <p
         className={cn([
           integralCF.className,
-          "relative z-10 font-bold text-2xl md:text-4xl text-white mb-0 text-center md:text-left leading-snug",
+          "relative z-10 font-bold text-2xl md:text-4xl text-white mb-0 text-center md:text-left leading-snug md:flex md:flex-col",
         ])}
       >
-        KONTAKTIRAJTE NAS! <br />
-        TU SMO ZA SVA VAŠA PITANJA!
+        <span className="inline">BESPLATNA DOSTAVA I POVRATNA</span>{" "}
+        <span className="inline">AMBALAŽA PREKO 12,000 RSD! POZOVITE!</span>
       </p>
 
       <div className="relative z-10 flex items-center md:justify-end">

@@ -17,7 +17,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function CartPage() {
   const { cart, totalPrice, adjustedTotalPrice } = useAppSelector(
-    (state: RootState) => state.carts
+    (state: RootState) => state.carts,
   );
 
   return (
@@ -58,7 +58,7 @@ export default function CartPage() {
                     <span className="md:text-xl text-black/60">
                       Discount (-
                       {Math.round(
-                        ((totalPrice - adjustedTotalPrice) / totalPrice) * 100
+                        ((totalPrice - adjustedTotalPrice) / totalPrice) * 100,
                       )}
                       %)
                     </span>
@@ -114,7 +114,7 @@ export default function CartPage() {
             <TbBasketExclamation strokeWidth={1} className="text-6xl" />
             <span className="block mb-4">Your shopping cart is empty.</span>
             <Button className="rounded-full w-24" asChild>
-              <Link href="/shop">Shop</Link>
+              <Link href="/">Shop</Link>
             </Button>
           </div>
         )}
