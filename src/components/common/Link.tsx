@@ -1,16 +1,19 @@
 import React from "react";
 import NextLink from "next/link";
+import { cn } from "@/lib/utils";
 
 const PageLink = ({
   href = "/",
   children,
   className = "",
   inCenter = false,
+  variant = "primary",
 }: {
   href?: string;
   children: React.ReactNode;
   className?: string;
   inCenter?: boolean;
+  variant?: "primary" | "brand";
 }) => {
   return (
     <div
@@ -18,7 +21,12 @@ const PageLink = ({
     >
       <NextLink
         href={href}
-        className="w-full md:w-52 mb-5 md:mb-12 inline-block text-center bg-primary hover:bg-primary/85 transition-all text-black/80 px-10 md:px-14 py-4 rounded-full text:md md:text-lg"
+        className={cn(
+          "inline-block w-full rounded-full px-10 py-4 text-center transition-all md:w-52 md:px-14 md:text-lg",
+          variant === "primary" &&
+            "bg-primary text-black/80 hover:bg-primary/85",
+          variant === "brand" && "bg-brand text-white hover:bg-brand/90",
+        )}
       >
         {children}
       </NextLink>

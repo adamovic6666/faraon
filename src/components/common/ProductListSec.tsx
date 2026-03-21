@@ -5,20 +5,26 @@ import PageLink from "./Link";
 import ProductSwiper from "./ProductSwiper";
 
 type ProductListSecProps = {
+  id?: string;
   title: string;
   data: Product[];
   viewAllLink?: string;
   showArrows?: boolean;
+  className?: string;
+  viewAllVariant?: "primary" | "brand";
 };
 
 const ProductListSec = ({
+  id,
   title,
   data,
   viewAllLink,
   showArrows = false,
+  className,
+  viewAllVariant = "primary",
 }: ProductListSecProps) => {
   return (
-    <section className="max-w-frame mx-auto text-center">
+    <section id={id} className={className ?? "max-w-frame mx-auto text-center"}>
       <SectionTitle title={title} className="mb-8 md:mb-12" />
       <motion.div
         initial={{ y: "100px", opacity: 0 }}
@@ -29,7 +35,11 @@ const ProductListSec = ({
         <ProductSwiper data={data} showArrows={showArrows} />
         {viewAllLink && (
           <div className="mt-7 flex justify-center">
-            <PageLink className="px-4 md:px-0 " href={viewAllLink}>
+            <PageLink
+              className="px-4 md:px-0"
+              href={viewAllLink}
+              variant={viewAllVariant}
+            >
               Vidi sve
             </PageLink>
           </div>

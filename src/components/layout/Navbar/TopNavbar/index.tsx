@@ -1,14 +1,7 @@
 import { cn } from "@/lib/utils";
 import { integralCF } from "@/styles/fonts";
 import Link from "next/link";
-import React from "react";
 import { NavMenu } from "../navbar.types";
-import { MenuList } from "./MenuList";
-import {
-  NavigationMenu,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import { MenuItem } from "./MenuItem";
 import Image from "next/image";
 import InputGroup from "@/components/ui/input-group";
 import ResTopNavbar from "./ResTopNavbar";
@@ -17,44 +10,27 @@ import CartBtn from "./CartBtn";
 const data: NavMenu = [
   {
     id: 1,
-    label: "Prodavnica",
-    type: "MenuList",
-    children: [
-      {
-        id: 11,
-        label: "Muška odeća",
-        url: "/shop#men-clothes",
-        description: "U atraktivnim i spektakularnim bojama i dizajnima",
-      },
-      {
-        id: 12,
-        label: "Ženska odeća",
-        url: "/shop#women-clothes",
-        description: "Dame, vaš stil i ukusi su nam važni",
-      },
-      {
-        id: 13,
-        label: "Dečija odeća",
-        url: "/shop#kids-clothes",
-        description: "Za sve uzraste, sa srećnim i lepim bojama",
-      },
-      {
-        id: 14,
-        label: "Torbe i obuća",
-        url: "/shop#bag-shoes",
-        description: "Pogodno za muškarce, žene i sve ukuse i stilove",
-      },
-    ],
+    type: "MenuItem",
+    label: "Akcije",
+    url: "/#akcijske-cene",
+    children: [],
   },
   {
     id: 2,
+    type: "MenuItem",
+    label: "Online prodavnica",
+    url: "/#online-prodavnica",
+    children: [],
+  },
+  {
+    id: 3,
     type: "MenuItem",
     label: "Diskonti",
     url: "/diskonti",
     children: [],
   },
   {
-    id: 3,
+    id: 4,
     type: "MenuItem",
     label: "Kontakt",
     url: "/kontakt",
@@ -64,9 +40,9 @@ const data: NavMenu = [
 
 const TopNavbar = () => {
   return (
-    <nav className="sticky top-0 bg-white z-20 shadow-xs">
-      <div className="flex relative max-w-frame mx-auto items-center justify-between md:justify-start py-5 md:py-6 px-4 xl:px-0">
-        <div className="flex items-center">
+    <nav className="fixed inset-x-0 top-0 z-100 bg-white">
+      <div className="relative mx-auto flex min-h-18 max-w-frame items-center justify-between px-4 md:min-h-[88px] xl:px-0">
+        <div className="flex items-center w-full">
           <div className="block md:hidden mr-4">
             <ResTopNavbar data={data} />
           </div>
@@ -77,50 +53,37 @@ const TopNavbar = () => {
               "text-2xl font-semibold lg:text-[32px] mr-3 lg:mr-10 text-brand",
             ])}
           >
-            FARAON
+            FARAON DISKONTI
           </Link>
-        </div>
-        <NavigationMenu className="hidden md:flex mr-2 lg:mr-7">
-          <NavigationMenuList>
-            {data.map((item) => (
-              <React.Fragment key={item.id}>
-                {item.type === "MenuItem" && (
-                  <MenuItem label={item.label} url={item.url} />
-                )}
-                {item.type === "MenuList" && (
-                  <MenuList data={item.children} label={item.label} />
-                )}
-              </React.Fragment>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-        <InputGroup className="md:flex bg-[#F0F0F0] w-full max-w-52 md:max-w-xl ml-auto mr-3  hidden">
-          <InputGroup.Text>
-            <Image
-              priority
-              src="/icons/search.svg"
-              height={20}
-              width={20}
-              alt="search"
-              className="min-w-5 min-h-5"
+          <InputGroup className="hidden w-full max-w-52 bg-[#F0F0F0] md:ml-auto md:mr-3 md:flex md:max-w-xl lg:ml-6">
+            <InputGroup.Text>
+              <Image
+                priority
+                src="/icons/search.svg"
+                height={20}
+                width={20}
+                alt="search"
+                className="min-w-5 min-h-5"
+              />
+            </InputGroup.Text>
+            <InputGroup.Input
+              type="search"
+              name="search"
+              placeholder="Pretraži proizvode..."
+              className="bg-transparent placeholder:text-black/40"
             />
-          </InputGroup.Text>
-          <InputGroup.Input
-            type="search"
-            name="search"
-            placeholder="Pretraži proizvode..."
-            className="bg-transparent placeholder:text-black/40"
-          />
-        </InputGroup>
+          </InputGroup>
+        </div>
+
         <div className="flex items-center">
-          <Link href="/" className="block md:hidden mr-1  p-1">
+          <Link href="/" className="mr-1 block p-1 md:hidden">
             <Image
               priority
               src="/icons/search-black.svg"
               height={100}
               width={100}
               alt="search"
-              className="max-w-[22px] max-h-[22px]"
+              className="max-h-5.5 max-w-5.5"
             />
           </Link>
           <CartBtn />

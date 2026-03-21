@@ -45,6 +45,19 @@ const socialLinks = [
   },
 ];
 
+const contactLinks = [
+  {
+    id: 1,
+    label: "T: 062 801 7376",
+    href: "tel:+381628017376",
+  },
+  {
+    id: 2,
+    label: "E: info@faraondiskonti.rs",
+    href: "mailto:info@faraondiskonti.rs",
+  },
+];
+
 const privacyLinks = [
   "Cenovnik dostave",
   "Pravila korišćenja",
@@ -67,22 +80,29 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="pt-8 md:pt-12 bg-section px-4 pb-4">
+      <div className="bg-section px-4 pb-4 pt-8 md:pt-12">
         <div className="max-w-frame mx-auto">
-          <nav className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mb-10">
-            <section className="flex flex-col relative h-full">
-              <h2
-                className={cn([
-                  integralCF.className,
-                  "text-brand text-xl sm:text-2xl mb-4 font-semibold",
-                ])}
-              >
-                FARAON
-              </h2>
+          <nav className="mb-10 grid grid-cols-1 gap-8 md:grid-cols-[1.05fr_1fr_1.15fr] md:gap-10 lg:gap-16">
+            <section className="relative flex h-full flex-col">
+              <div className="mb-5 flex items-center gap-4">
+                <h2
+                  className={cn([
+                    integralCF.className,
+                    "text-brand text-xl font-semibold uppercase sm:text-2xl",
+                  ])}
+                >
+                  FARAON DISKONTI
+                </h2>
+              </div>
 
-              <div className="flex items-center gap-3">
+              <div className="mb-6 flex items-center gap-3">
                 {socialLinks.map((item) => (
-                  <Link key={item.id} href={item.href} aria-label={item.label}>
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    aria-label={item.label}
+                    className="transition-transform hover:-translate-y-0.5"
+                  >
                     <Image
                       src={item.icon}
                       alt={item.label}
@@ -92,58 +112,72 @@ const Footer = () => {
                   </Link>
                 ))}
               </div>
+
+              <div className="relative overflow-hidden rounded-xl border border-black/15 bg-white p-2 max-w-34 gap-2 flex items-center justify-center flex-col">
+                <Image
+                  src="/images/18+.webp"
+                  alt="18 plus"
+                  width={112}
+                  height={112}
+                  sizes="112px"
+                />
+                <p className="text-xs font-light text-center">
+                  Zabranjena prodaja i služenje maloletnim osobama. <br />
+                  Prekomerno konzumiranje alkoholnih pića dovodi do ozbiljnih
+                  zdravstvenih rizika.
+                </p>
+              </div>
             </section>
 
             <section>
-              <h3
-                className={cn([
-                  integralCF.className,
-                  "text-black text-xl sm:text-2xl mb-4 font-semibold uppercase",
-                ])}
-              >
-                Kontakt
-              </h3>
-              <address className="not-italic text-black/80 font-light text-md leading-8">
-                STR Diskont pića Faraon PS
-                <br />
-                Karlovački put 1
-                <br />
-                21132 Petrovaradin
-                <br />
-                T:{" "}
-                <Link href="tel:+381214433324" className="hover:underline">
-                  021 433 324
-                </Link>
-                <br />
-                F:{" "}
-                <Link href="tel:+381216433324" className="hover:underline">
-                  021 6433 324
-                </Link>
-                <br />
-                E:{" "}
-                <Link
-                  href="mailto:info@faraondiskonti.rs"
-                  className="hover:underline"
+              <div className="mb-5 flex items-center gap-4">
+                <h3
+                  className={cn([
+                    integralCF.className,
+                    "text-black text-xl font-semibold sm:text-2xl",
+                  ])}
                 >
-                  info@faraondiskonti.rs
-                </Link>
-                <br />
-                PIB: 104032720
+                  Kontakt
+                </h3>
+              </div>
+              <address className="not-italic text-md font-light leading-7 text-black/80">
+                <p>STR Diskont pića Faraon PS</p>
+                <p>Karlovački put 1</p>
+                <p>21132 Petrovaradin</p>
+                <div className="flex flex-col">
+                  {contactLinks.map((item) => (
+                    <Link
+                      key={item.id}
+                      href={item.href}
+                      className="w-fit hover:underline"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+                <p className="">PIB: 104032720</p>
               </address>
             </section>
 
             <section>
-              <h3
-                className={cn([
-                  integralCF.className,
-                  "text-black text-xl sm:text-2xl mb-4 font-semibold uppercase",
-                ])}
-              >
-                Politika privatnosti
-              </h3>
-              <ul className="text-black/80 text-md font-light leading-8">
+              <div className="mb-5 flex items-center gap-4">
+                <h3
+                  className={cn([
+                    integralCF.className,
+                    "text-black text-xl font-semibold sm:text-2xl",
+                  ])}
+                >
+                  Politika privatnosti
+                </h3>
+              </div>
+              <ul className="text-md font-light leading-7 text-black/80">
                 {privacyLinks.map((item) => (
-                  <li key={item}>{item}</li>
+                  <li
+                    key={item}
+                    className="w-fit transition-colors hover:text-brand"
+                  >
+                    <Link href="#">{item}</Link>
+                  </li>
                 ))}
               </ul>
             </section>

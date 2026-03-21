@@ -26,7 +26,7 @@ export const newArrivalsData: Product[] = [
   },
   {
     id: 3,
-    title: "Pepsi Max 330mL Limenka",
+    title: "Pepsi Max 0.33L Limenka",
     srcUrl: "/images/pepsi-limenka.jpg",
     oldPrice: 70,
     price: 49,
@@ -36,41 +36,25 @@ export const newArrivalsData: Product[] = [
     id: 4,
     title: "Smirnoff Vodka 1L",
     srcUrl: "/images/smirnoff-vodka.jpg",
-    oldPrice: 2800,
-    price: 2200,
+    oldPrice: 2000,
+    price: 1200,
     discount: 40,
   },
   {
     id: 5,
-    title: "Rosa Voda Negazirana 0.75L\nNepovratno Staklo",
-    srcUrl: "/images/rosa-voda.jpg",
-    oldPrice: 200,
-    price: 160,
-    discount: 20,
+    title: "Mr.Zox Aloe Vera Mango 0.5L Pet",
+    srcUrl: "/images/mr-zox-aloe-vera-mango.jpg",
+    oldPrice: 122,
+    price: 110,
+    discount: 10,
   },
   {
     id: 6,
-    title: "Fruvita 100% Jabuka 0.75L\nPET",
-    srcUrl: "/images/fruvita-sok.jpg",
-    oldPrice: 300,
-    price: 225,
-    discount: 25,
-  },
-  {
-    id: 7,
-    title: "Pepsi Max 330mL Limenka",
-    srcUrl: "/images/pepsi-limenka.jpg",
-    oldPrice: 70,
-    price: 49,
-    discount: 30,
-  },
-  {
-    id: 8,
-    title: "Smirnoff Vodka 1L",
-    srcUrl: "/images/smirnoff-vodka.jpg",
-    oldPrice: 12000,
-    price: 10000,
-    discount: 40,
+    title: "Budweiser Pivo 0.5L Limenka",
+    srcUrl: "/images/budweiser-pivo.jpg",
+    oldPrice: 140,
+    price: 118,
+    discount: 20,
   },
 ];
 
@@ -131,15 +115,18 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="my-12.5 sm:my-18">
+      <main className="mb-12.5 mt-8 sm:mb-18 sm:mt-12">
         <ProductListSec
-          title="Kraljevski popusti"
+          id="akcijske-cene"
+          className="max-w-frame mx-auto text-center"
+          title="Akcijske cene"
           data={newArrivalsData}
           viewAllLink="/"
+          viewAllVariant="brand"
           showArrows
         />
         <div className="max-w-frame mx-auto px-4 xl:px-0">
-          <div className="my-10 sm:my-16 flex items-center gap-3">
+          <div className="my-8 flex items-center gap-3 sm:my-10">
             <Separator className="bg-black/10 flex-1" />
             <Image
               src="/images/ankh.svg"
@@ -151,9 +138,13 @@ export default function Home() {
             <Separator className="bg-black/10 flex-1" />
           </div>
         </div>
-        <OnlineStoreSection title="Online prodavnica" data={categories} />
+        <OnlineStoreSection
+          id="online-prodavnica"
+          title="Online prodavnica"
+          data={categories}
+        />
         <div className="max-w-frame mx-auto px-4 xl:px-0">
-          <div className="my-10 sm:my-16 flex items-center gap-3">
+          <div className="my-8 flex items-center gap-3 sm:my-10">
             <Separator className="bg-black/10 flex-1" />
             <Image
               src="/images/ankh.svg"

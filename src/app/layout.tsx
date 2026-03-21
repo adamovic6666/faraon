@@ -26,7 +26,7 @@ export default function RootLayout({
         <HolyLoader color="#868686" />
         <Providers>
           <TopNavbar />
-          {children}
+          <div className="pt-18 md:pt-22">{children}</div>
           <Footer />
         </Providers>
       </body>
