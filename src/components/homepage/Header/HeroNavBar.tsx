@@ -13,18 +13,15 @@ import {
 const menuDropdownItems = [
   {
     title: "Prodavnica",
-    description: "Online prodavnica pića sa brzom dostavom",
-    href: "/#online-prodavnica",
+    href: "/",
   },
   {
     title: "Diskonti",
-    description: "Pronađi najbliži Faraon diskont u tvojoj okolini",
-    href: "/#faraon-diskonti",
+    href: "/",
   },
   {
     title: "Kontakt",
-    description: "Kontaktirajte nas za sva pitanja i porudžbine",
-    href: "/#kontakt",
+    href: "/",
   },
 ];
 
@@ -54,7 +51,7 @@ const HeroNavBar = () => {
                 <NavigationMenuTrigger
                   className={cn(
                     linkClass,
-                    "bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent h-auto",
+                    "bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent h-auto pl-0 md:pl-0",
                   )}
                 >
                   Meni
@@ -67,11 +64,8 @@ const HeroNavBar = () => {
                           href={item.href}
                           className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-black/5"
                         >
-                          <p className="text-base font-semibold text-black leading-snug">
+                          <p className="text-base text-black/80 leading-snug">
                             {item.title}
-                          </p>
-                          <p className="mt-0.5 text-sm font-light text-black/55 leading-snug">
-                            {item.description}
                           </p>
                         </Link>
                       </li>
@@ -89,6 +83,7 @@ const HeroNavBar = () => {
               className={cn(
                 "shrink-0",
                 linkClass,
+                item.label === "Led" && "pr-0 md:pr-0",
                 item.highlighted && "bg-brand text-white hover:text-white",
               )}
             >

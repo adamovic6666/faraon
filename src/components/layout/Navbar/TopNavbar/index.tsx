@@ -55,6 +55,9 @@ const TopNavbar = () => {
           >
             FARAON DISKONTI
           </Link>
+        </div>
+
+        <div className="flex items-center w-full">
           <InputGroup className="hidden w-full max-w-52 bg-[#F0F0F0] md:ml-auto md:mr-3 md:flex md:max-w-xl lg:ml-6">
             <InputGroup.Text>
               <Image
@@ -73,9 +76,6 @@ const TopNavbar = () => {
               className="bg-transparent placeholder:text-black/40"
             />
           </InputGroup>
-        </div>
-
-        <div className="flex items-center">
           <Link href="/" className="mr-1 block p-1 md:hidden">
             <Image
               priority

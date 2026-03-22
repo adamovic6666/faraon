@@ -41,7 +41,7 @@ const Header = () => {
               transition={{ duration: 0.6 }}
               className={cn([
                 integralCF.className,
-                "mb-3 text-[12.5vw] font-bold uppercase leading-[0.95] text-white sm:text-6xl md:mb-2 md:text-5xl lg:mb-4 lg:text-[86px] lg:leading-[0.94]",
+                "mb-3 text-[12.5vw] font-bold uppercase leading-[0.95] text-white sm:text-6xl md:mb-2 md:text-5xl lg:mb-4 lg:text-[86px] lg:leading-[1.05]",
               ])}
             >
               SVE ŠTO PIJETE, <br />
