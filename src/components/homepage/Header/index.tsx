@@ -3,44 +3,12 @@ import { integralCF } from "@/styles/fonts";
 import Image from "next/image";
 import * as motion from "framer-motion/client";
 import PageLink from "@/components/common/Link";
-import Link from "next/link";
-
-const heroLinks = [
-  { id: 1, label: "Meni", href: "/" },
-  { id: 2, label: "Akcije", href: "/", highlighted: true },
-  { id: 3, label: "Bezalkoholna pića", href: "/" },
-  {
-    id: 4,
-    label: "Žestoka alkoholna pića",
-    href: "/",
-  },
-  { id: 5, label: "Piva", href: "/" },
-  { id: 6, label: "Vina", href: "/" },
-  { id: 7, label: "Vode", href: "/" },
-  { id: 8, label: "Čajevi, kafe i napici", href: "/" },
-  { id: 9, label: "Sirupi i likeri", href: "/" },
-  { id: 10, label: "Led", href: "/" },
-];
+import HeroNavBar from "./HeroNavBar";
 
 const Header = () => {
   return (
     <header className="relative bg-brand overflow-hidden">
-      <div className="fixed inset-x-0 top-18 z-100 border-t border-black/10 bg-primary shadow-xs md:top-22">
-        <div className="mx-auto flex h-12 max-w-frame items-center justify-between gap-1 overflow-x-auto px-4 text-xs font-semibold text-black/80 scrollbar-none md:h-15.5 md:gap-2 md:px-4 lg:px-0">
-          {heroLinks.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              className={cn(
-                "whitespace-nowrap rounded-full px-3 py-1 transition-colors hover:text-brand md:px-4 text-lg text-black/80",
-                item.highlighted && "bg-brand text-white hover:text-white",
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      </div>
+      <HeroNavBar />
 
       <div className="absolute inset-0 opacity-75 pointer-events-none">
         <div className="h-full w-full bg-[url('/images/hijeroglofi.svg')] bg-size-[300%_auto] bg-center bg-repeat-y md:bg-size-[150%_auto] lg:bg-cover lg:bg-no-repeat" />

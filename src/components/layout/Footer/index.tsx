@@ -72,7 +72,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-10">
+    <footer>
       <div className="relative">
         <div className="absolute bottom-0 w-full h-1/2 bg-section" />
         <div className="px-4">
@@ -113,7 +113,7 @@ const Footer = () => {
                 ))}
               </div>
 
-              <div className="relative overflow-hidden rounded-xl border border-black/15 bg-white p-2 max-w-34 gap-2 flex items-center justify-center flex-col">
+              {/* <div className="relative overflow-hidden rounded-xl border border-black/15 bg-white p-2 max-w-34 gap-2 flex items-center justify-center flex-col">
                 <Image
                   src="/images/18+.webp"
                   alt="18 plus"
@@ -126,10 +126,10 @@ const Footer = () => {
                   Prekomerno konzumiranje alkoholnih pića dovodi do ozbiljnih
                   zdravstvenih rizika.
                 </p>
-              </div>
+              </div> */}
             </section>
 
-            <section>
+            <section id="kontakt">
               <div className="mb-5 flex items-center gap-4">
                 <h3
                   className={cn([

@@ -15,7 +15,7 @@ const OnlineStoreSection = ({
 }) => {
   return (
     <section id={id} className="max-w-frame mx-auto px-4 xl:px-0">
-      <div className="p-1 sm:p-2">
+      <div>
         <SectionTitle
           title={title}
           description={
@@ -35,7 +35,7 @@ const OnlineStoreSection = ({
             <Link
               key={item.id}
               href="/"
-              className="group min-h-44 rounded-xl border border-[#e4a100] bg-primary pl-4 pt-4 shadow-[0_6px_16px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0_10px_20px_rgba(0,0,0,0.12)] sm:min-h-48"
+              className="group min-h-44 rounded-xl border border-[#e4a100] bg-primary pl-4 pt-4  transition-shadow hover:shadow-[0_10px_20px_rgba(0,0,0,0.12)] sm:min-h-48"
             >
               <div className="relative flex h-full min-h-20 items-start justify-between gap-8 sm:min-h-24">
                 <div>
@@ -50,7 +50,7 @@ const OnlineStoreSection = ({
                     alt={item.title}
                     width={64}
                     height={64}
-                    className="h-full w-full brightness-0 invert sm:h-full sm:w-full"
+                    className="h-full w-full sm:h-full sm:w-full"
                   />
                 </div>
               </div>

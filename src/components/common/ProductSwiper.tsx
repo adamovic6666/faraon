@@ -15,7 +15,7 @@ type ProductSwiperProps = {
 
 const ProductSwiper = ({ data, showArrows = false }: ProductSwiperProps) => {
   const swiperRef = useRef<SwiperType | null>(null);
-  const minLoopSlides = 8;
+  const minLoopSlides = 6;
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
 

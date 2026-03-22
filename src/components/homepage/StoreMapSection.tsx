@@ -2,7 +2,7 @@ import SectionTitle from "../common/SectionTitle";
 
 const StoreMapSection = () => {
   return (
-    <section className="max-w-frame mx-auto px-4 xl:px-0 mt-14 sm:mt-16">
+    <section id="faraon-diskonti" className="max-w-frame mx-auto px-4 xl:px-0">
       <SectionTitle
         title="Faraon diskonti"
         className="mb-12"
