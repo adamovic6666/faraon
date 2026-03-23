@@ -25,7 +25,7 @@ const ProductListSec = ({
 }: ProductListSecProps) => {
   return (
     <section id={id} className={className ?? "max-w-frame mx-auto text-center"}>
-      <SectionTitle title={title} className="mb-8 md:mb-12" />
+      <SectionTitle title={title} className="mb-10 md:mb-12" />
       <motion.div
         initial={{ y: "100px", opacity: 0 }}
         whileInView={{ y: "0", opacity: 1 }}
@@ -34,7 +34,7 @@ const ProductListSec = ({
       >
         <ProductSwiper data={data} showArrows={showArrows} />
         {viewAllLink && (
-          <div className="mt-7 flex justify-center">
+          <div className="mt-9 flex justify-center">
             <PageLink
               className="px-4 md:px-0"
               href={viewAllLink}

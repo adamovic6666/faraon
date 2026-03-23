@@ -27,7 +27,7 @@ const OnlineStoreSection = ({
               <span> Poruči svoje piće i Faraon dolazi do tebe.</span>
             </div>
           }
-          className="mb-10 sm:mb-12"
+          className="mb-10 md:mb-12"
         />
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">

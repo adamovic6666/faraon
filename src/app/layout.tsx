@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={satoshi.className}>
+      <body className={satoshi.className} suppressHydrationWarning>
         <HolyLoader color="#868686" />
         <Providers>
           <TopNavbar />

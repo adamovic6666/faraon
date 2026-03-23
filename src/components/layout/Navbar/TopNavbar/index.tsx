@@ -9,31 +9,32 @@ import CartBtn from "./CartBtn";
 
 const data: NavMenu = [
   {
-    id: 1,
-    type: "MenuItem",
-    label: "Akcije",
-    url: "/#akcijske-cene",
-    children: [],
-  },
-  {
     id: 2,
-    type: "MenuItem",
+    type: "MenuList",
     label: "Online prodavnica",
-    url: "/#online-prodavnica",
-    children: [],
+    children: [
+      { id: 21, label: "Žestoka alkoholna pića", url: "/" },
+      { id: 22, label: "Vina", url: "/" },
+      { id: 23, label: "Piva", url: "/" },
+      { id: 24, label: "Sirupi i likeri", url: "/" },
+      { id: 25, label: "Bezalkoholna pića", url: "/" },
+      { id: 26, label: "Čajevi, kafe i napici", url: "/" },
+      { id: 27, label: "Vode", url: "/" },
+      { id: 28, label: "Led", url: "/" },
+    ],
   },
   {
     id: 3,
     type: "MenuItem",
     label: "Diskonti",
-    url: "/diskonti",
+    url: "/",
     children: [],
   },
   {
     id: 4,
     type: "MenuItem",
     label: "Kontakt",
-    url: "/kontakt",
+    url: "/",
     children: [],
   },
 ];
@@ -41,23 +42,23 @@ const data: NavMenu = [
 const TopNavbar = () => {
   return (
     <nav className="fixed inset-x-0 top-0 z-100 bg-white">
-      <div className="relative mx-auto flex min-h-18 max-w-frame items-center justify-between px-4 md:min-h-[88px] xl:px-0">
-        <div className="flex items-center w-full">
-          <div className="block md:hidden mr-4">
+      <div className="relative mx-auto flex min-h-18 max-w-frame items-center justify-between px-4 md:min-h-22 xl:px-0">
+        <div className="flex items-center md:w-full">
+          <div className="mr-4 block shrink-0 md:hidden">
             <ResTopNavbar data={data} />
           </div>
           <Link
             href="/"
             className={cn([
               integralCF.className,
-              "text-2xl font-semibold lg:text-[32px] mr-3 lg:mr-10 text-brand",
+              "mr-auto text-2xl font-semibold text-brand lg:text-[32px] md:mr-3 lg:mr-10",
             ])}
           >
             FARAON DISKONTI
           </Link>
         </div>
 
-        <div className="flex items-center w-full">
+        <div className="flex items-center w-auto  md:w-full">
           <InputGroup className="hidden w-full max-w-52 bg-[#F0F0F0] md:ml-auto md:mr-3 md:flex md:max-w-xl lg:ml-6">
             <InputGroup.Text>
               <Image

@@ -14,22 +14,22 @@ const Header = () => {
         <div className="h-full w-full bg-[url('/images/hijeroglofi.svg')] bg-size-[300%_auto] bg-center bg-repeat-y md:bg-size-[150%_auto] lg:bg-cover lg:bg-no-repeat" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-frame px-4 pt-12 md:pt-15.5 lg:px-0">
-        <div className="relative z-10 flex min-h-105 gap-8 md:min-h-120 lg:h-132">
+      <div className="relative z-10 mx-auto max-w-frame px-4 pt-[12dvh] md:pt-15.5 lg:px-0">
+        <div className="relative z-10 flex flex-col md:flex-row min-h-[calc(100dvh-184px)] md:min-h-120 lg:h-132">
           <motion.section
             initial={{ y: "80px", opacity: 0, rotate: -6 }}
             whileInView={{ y: "0", opacity: 1, rotate: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="relative order-2 w-full max-w-120 md:order-1"
+            // className="relative order-2 mx-auto min-h-160 w-full max-w-120 md:order-1 md:min-h-0 md:mx-0"
+            className="relative min-h-120 w-full max-w-120  order-2 md:order-1"
           >
             <Image
               src="/images/faraon.webp"
               alt="Faraon"
               fill
               priority
-              sizes="(min-width: 1024px) 34vw, (min-width: 768px) 45vw, 80vw"
-              className="object-contain object-center"
+              className="object-contain md:object-center lg:object-left"
             />
           </motion.section>
 
@@ -41,7 +41,7 @@ const Header = () => {
               transition={{ duration: 0.6 }}
               className={cn([
                 integralCF.className,
-                "mb-3 text-[12.5vw] font-bold uppercase leading-[0.95] text-white sm:text-6xl md:mb-2 md:text-5xl lg:mb-4 lg:text-[86px] lg:leading-[1.05]",
+                "mb-3 text-[12.5vw] font-bold uppercase leading-[1.1] text-white sm:text-6xl md:mb-2 md:text-5xl lg:mb-4 lg:text-[86px] lg:leading-[1.05]",
               ])}
             >
               SVE ŠTO PIJETE, <br />
@@ -52,7 +52,7 @@ const Header = () => {
               whileInView={{ y: "0", opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="mb-6 max-w-136 text-sm font-light text-white md:mb-4 md:text-lg lg:mb-8 lg:text-2xl"
+              className="mb-6 max-w-136 font-light text-white md:mb-4 text-lg lg:mb-8 lg:text-2xl"
             >
               Najbrža dostava i najniže cene pića u Novom Sadu.
             </motion.p>

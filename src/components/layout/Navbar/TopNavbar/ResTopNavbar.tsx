@@ -1,10 +1,11 @@
+"use client";
+
+import { Cross2Icon } from "@radix-ui/react-icons";
 import React from "react";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Image from "next/image";
@@ -12,6 +13,7 @@ import Link from "next/link";
 import { NavMenu } from "../navbar.types";
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
@@ -32,42 +34,43 @@ const socialLinks = [
 ];
 
 const ResTopNavbar = ({ data }: { data: NavMenu }) => {
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    document.body.dataset.mobileNavOpen = open ? "true" : "false";
+
+    return () => {
+      delete document.body.dataset.mobileNavOpen;
+    };
+  }, [open]);
+
   return (
-    <Sheet>
-      <SheetTrigger asChild className="cursor-pointer">
-        <Image
-          priority
-          src="/icons/menu.svg"
-          height={100}
-          width={100}
-          alt="menu"
-          className="max-w-5.5 max-h-5.5"
-        />
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <button
+          type="button"
+          className="flex h-5.5 w-5.5 items-center justify-center cursor-pointer p-0"
+          aria-label={open ? "Zatvori meni" : "Otvori meni"}
+        >
+          {open ? (
+            <Cross2Icon className="h-5.5 w-5.5 text-black" />
+          ) : (
+            <Image
+              priority
+              src="/icons/menu.svg"
+              height={100}
+              width={100}
+              alt="menu"
+              className="max-w-5.5 max-h-5.5"
+            />
+          )}
+        </button>
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="overflow-y-auto"
-        style={{
-          backgroundColor: "#f5f5f5",
-          // backgroundImage:
-          //   "linear-gradient(rgba(245,245,245,0.99), rgba(245,245,245,0.90)), url('/images/hijeroglofi.svg')",
-          backgroundRepeat: "repeat, repeat",
-          backgroundSize: "auto, 400% auto",
-        }}
+        className="top-17 bottom-0 z-200 h-auto! w-screen! max-w-none! border-r-0! bg-white! p-0! overflow-y-auto [&>button]:hidden"
       >
-        <div className="flex h-full flex-col">
-          <SheetHeader className="mb-8">
-            <SheetTitle asChild>
-              <SheetClose asChild>
-                <Link
-                  href="/"
-                  className="text-2xl font-semibold lg:text-[32px] mr-auto text-brand"
-                >
-                  FARAON
-                </Link>
-              </SheetClose>
-            </SheetTitle>
-          </SheetHeader>
+        <div className="flex h-full flex-col px-6 pb-6 pt-8">
           <div className="flex flex-1 flex-col">
             {data.map((item) => (
               <React.Fragment key={item.id}>
@@ -85,25 +88,27 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
                   <div className="mb-4 w-full">
                     <Accordion type="single" collapsible>
                       <AccordionItem value={item.label} className="border-none">
-                        <AccordionTrigger className="text-left p-0 py-0.5 text-xl font-medium text-black/80">
+                        <AccordionTrigger className="text-left p-0 py-0.5 text-xl font-medium text-black/80 hover:no-underline">
                           {item.label}
                         </AccordionTrigger>
-                        {/* <AccordionContent className="p-4 pb-0 border-l flex flex-col">
-                          {item.children.map((itemChild, idx) => (
-                            <SheetClose
-                              key={itemChild.id}
-                              asChild
-                              className="w-fit py-2 text-base text-black/80"
-                            >
-                              <Link
-                                href={itemChild.url ?? "/"}
-                                className="text-base"
+                        <AccordionContent className="pt-2 pb-0">
+                          <div className="flex flex-col border-l border-black/15 pl-4">
+                            {item.children.map((itemChild) => (
+                              <SheetClose
+                                key={itemChild.id}
+                                asChild
+                                className="w-fit py-1.5 text-lg text-black/75"
                               >
-                                {itemChild.label}
-                              </Link>
-                            </SheetClose>
-                          ))}
-                        </AccordionContent> */}
+                                <Link
+                                  href={itemChild.url ?? "/"}
+                                  className="text-lg"
+                                >
+                                  {itemChild.label}
+                                </Link>
+                              </SheetClose>
+                            ))}
+                          </div>
+                        </AccordionContent>
                       </AccordionItem>
                     </Accordion>
                   </div>

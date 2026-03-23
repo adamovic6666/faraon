@@ -115,7 +115,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="mb-12 mt-8 sm:mt-12">
+      <main className="mb-10 md:mb-12 mt-10 sm:mt-12">
         <ProductListSec
           id="akcijske-cene"
           className="max-w-frame mx-auto text-center"
@@ -126,7 +126,7 @@ export default function Home() {
           showArrows
         />
         <div className="max-w-frame mx-auto px-4 xl:px-0">
-          <div className="my-8 flex items-center gap-3 sm:my-12">
+          <div className="flex items-center gap-3 mt-10 md:mt-12 mb-8 md:mb-10">
             <Separator className="bg-black/10 flex-1" />
             <Image
               src="/images/ankh.svg"
@@ -144,7 +144,7 @@ export default function Home() {
           data={categories}
         />
         <div className="max-w-frame mx-auto px-4 xl:px-0">
-          <div className="my-8 flex items-center gap-3 sm:my-12">
+          <div className="flex items-center gap-3 mt-10 md:mt-12 mb-8 md:mb-10">
             <Separator className="bg-black/10 flex-1" />
             <Image
               src="/images/ankh.svg"

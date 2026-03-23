@@ -93,3 +93,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+body[data-mobile-nav-open="true"] {
+  overflow: hidden;
+}
+
+body[data-mobile-nav-open="true"] .hero-category-scroll {
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
+body[data-mobile-nav-open="true"] .hero-category-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}

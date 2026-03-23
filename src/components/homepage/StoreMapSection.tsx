@@ -5,7 +5,7 @@ const StoreMapSection = () => {
     <section id="faraon-diskonti" className="max-w-frame mx-auto px-4 xl:px-0">
       <SectionTitle
         title="Faraon diskonti"
-        className="mb-12"
+        className="mb-10 md:mb-12"
         description={
           <div className="md:flex md:flex-col items-center justify-center">
             <span>
