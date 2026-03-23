@@ -44,7 +44,7 @@ const TopNavbar = () => {
     <nav className="fixed inset-x-0 top-0 z-100 bg-white">
       <div className="relative mx-auto flex min-h-18 max-w-frame items-center justify-between px-4 md:min-h-22 xl:px-0">
         <div className="flex items-center md:w-full">
-          <div className="mr-4 block shrink-0 md:hidden">
+          <div className="mr-4 block shrink-0 pt-[2.5px] md:hidden">
             <ResTopNavbar data={data} />
           </div>
           <Link

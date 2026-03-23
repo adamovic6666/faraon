@@ -22,14 +22,14 @@ const Header = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.8 }}
             // className="relative order-2 mx-auto min-h-160 w-full max-w-120 md:order-1 md:min-h-0 md:mx-0"
-            className="relative min-h-120 w-full max-w-120  order-2 md:order-1"
+            className="relative min-h-112 md:min-h-120 w-full max-w-120 order-2 md:order-1"
           >
             <Image
               src="/images/faraon.webp"
               alt="Faraon"
               fill
               priority
-              className="object-contain md:object-center lg:object-left"
+              className="object-cover md:object-center md:object-contain lg:object-left"
             />
           </motion.section>
 

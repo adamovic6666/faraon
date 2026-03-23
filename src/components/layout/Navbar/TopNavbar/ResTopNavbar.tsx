@@ -1,6 +1,5 @@
 "use client";
 
-import { Cross2Icon } from "@radix-ui/react-icons";
 import React from "react";
 import {
   Sheet,
@@ -49,21 +48,23 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
       <SheetTrigger asChild>
         <button
           type="button"
-          className="flex h-5.5 w-5.5 items-center justify-center cursor-pointer p-0"
+          className={`group relative flex h-4.5 w-6 flex-col justify-between rounded-md p-0 text-black transition-all duration-300 ease-in-out ${open ? "open" : ""}`}
           aria-label={open ? "Zatvori meni" : "Otvori meni"}
         >
-          {open ? (
-            <Cross2Icon className="h-5.5 w-5.5 text-black" />
-          ) : (
-            <Image
-              priority
-              src="/icons/menu.svg"
-              height={100}
-              width={100}
-              alt="menu"
-              className="max-w-5.5 max-h-5.5"
-            />
-          )}
+          <span
+            aria-hidden
+            className="h-0.5 w-full rounded-full bg-current transition-all duration-300 ease-in-out origin-center group-[.open]:translate-y-2 group-[.open]:rotate-45"
+          />
+
+          <span
+            aria-hidden
+            className="h-0.5 w-full rounded-full bg-current transition-all duration-300 ease-in-out group-[.open]:opacity-0 group-[.open]:-translate-x-1.5"
+          />
+
+          <span
+            aria-hidden
+            className="h-0.5 w-full rounded-full bg-current transition-all duration-300 ease-in-out origin-center group-[.open]:-translate-y-2 group-[.open]:-rotate-45"
+          />
         </button>
       </SheetTrigger>
       <SheetContent
@@ -116,7 +117,7 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
               </React.Fragment>
             ))}
           </div>
-          <div className="pt-4">
+          <div className="absolute inset-x-0 bottom-0 px-6 py-4">
             <div className="flex items-center gap-3 pb-4">
               {socialLinks.map((item) => (
                 <SheetClose asChild key={item.id}>

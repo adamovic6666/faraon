@@ -113,7 +113,7 @@ const HeroNavBar = () => {
         {/* Right-edge fade — mobile only, fixed to the visible strip edge */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-primary via-primary/92 to-transparent md:hidden"
+          className="pointer-events-none absolute inset-y-0 right-0 w-14 bg-linear-to-l from-primary via-primary/92 to-transparent md:hidden"
         />
       </div>
     </div>
