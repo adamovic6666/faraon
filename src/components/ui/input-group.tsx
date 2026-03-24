@@ -12,7 +12,7 @@ const InputGroup = ({ className, children }: InputGroupProps) => {
   return (
     <div
       className={cn(
-        "input-group pl-4 transition-all relative flex items-center w-full rounded-full overflow-hidden",
+        "input-group pl-4 transition-all relative flex items-center w-full rounded-full ",
         className ?? "",
       )}
     >
@@ -28,7 +28,7 @@ const Input = React.forwardRef<HTMLInputElement, InputTextProps>(
     return (
       <input
         className={cn(
-          "input-control w-full py-2.5 pr-4 outline-none placeholder:font-normal placeholder:text-sm",
+          "bg-section input-control w-full py-2.5 pr-4 text-base text-black/80 placeholder:font-normal focus-visible:outline-none  placeholder:text-black/40 focus-visible:ring-1 focus-visible:ring-ring",
           className ?? "",
         )}
         autoComplete="off"
@@ -40,6 +40,30 @@ const Input = React.forwardRef<HTMLInputElement, InputTextProps>(
     );
   },
 );
+
+const TextArea = React.forwardRef<
+  HTMLTextAreaElement,
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>
+>((props, ref: any) => {
+  const { className, ...rest } = props;
+
+  return (
+    <textarea
+      className={cn(
+        "bg-section input-control w-full py-2.5 pr-4 text-base text-black/80 placeholder:font-normal placeholder:text-black/40 resize-none focus-visible:outline-none focus:ring-1 focus-visible:ring-1 focus-visible:ring-ring",
+        className ?? "",
+      )}
+      autoComplete="off"
+      autoCorrect="off"
+      spellCheck="false"
+      ref={ref}
+      rows={5}
+      {...rest}
+    />
+  );
+});
+
+InputGroup.TextArea = TextArea;
 
 const InputGroupText = ({ className, children }: InputGroupProps) => {
   return (

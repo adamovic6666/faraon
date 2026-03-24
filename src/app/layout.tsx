@@ -5,6 +5,7 @@ import TopNavbar from "@/components/layout/Navbar/TopNavbar";
 import Footer from "@/components/layout/Footer";
 import HolyLoader from "holy-loader";
 import Providers from "./providers";
+import HeroNavBar from "@/components/homepage/Header/HeroNavBar";
 
 export const metadata: Metadata = {
   title: "Faraon",
@@ -26,6 +27,7 @@ export default function RootLayout({
         <HolyLoader color="#868686" />
         <Providers>
           <TopNavbar />
+          <HeroNavBar />
           <div className="pt-16">{children}</div>
           <Footer />
         </Providers>

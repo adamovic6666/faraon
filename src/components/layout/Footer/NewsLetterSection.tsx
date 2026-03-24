@@ -1,7 +1,10 @@
+"use client";
+import page from "@/app/shop/product/[...slug]/page";
 import { cn } from "@/lib/utils";
 import { integralCF } from "@/styles/fonts";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const contactItems = [
   {
@@ -25,6 +28,23 @@ const contactItems = [
 ];
 
 const NewsLetterSection = () => {
+  const pathname = usePathname();
+  const bannerText: {
+    [key: string]: React.ReactNode;
+  } = {
+    "/": (
+      <>
+        <span className="inline">BESPLATNA DOSTAVA I POVRATNA</span>{" "}
+        <span className="inline">AMBALAŽA PREKO 12,000 RSD! POZOVITE!</span>
+      </>
+    ),
+    "/kontakt": (
+      <>
+        <span className="inline">KONTAKTIRAJTE NAS!</span>{" "}
+        <span className="inline">TU SMO ZA SVA VAŠA PITANJA!</span>
+      </>
+    ),
+  };
   return (
     <div className="relative overflow-hidden flex flex-col md:flex-row items-center md:justify-between  gap-6 md:gap-4 py-9 md:py-16 px-6 md:px-16 max-w-frame mx-auto bg-brand rounded-[20px]">
       <div className="absolute inset-0 opacity-75 pointer-events-none">
@@ -43,8 +63,7 @@ const NewsLetterSection = () => {
           "relative z-10 font-bold text-2xl md:text-4xl text-white mb-0 text-center md:text-left leading-snug md:flex md:flex-col",
         ])}
       >
-        <span className="inline">BESPLATNA DOSTAVA I POVRATNA</span>{" "}
-        <span className="inline">AMBALAŽA PREKO 12,000 RSD! POZOVITE!</span>
+        {bannerText[pathname]}
       </p>
 
       <div className="relative z-10 flex items-center md:justify-end">

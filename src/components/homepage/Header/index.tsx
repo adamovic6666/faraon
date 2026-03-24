@@ -3,13 +3,10 @@ import { integralCF } from "@/styles/fonts";
 import Image from "next/image";
 import * as motion from "framer-motion/client";
 import PageLink from "@/components/common/Link";
-import HeroNavBar from "./HeroNavBar";
 
 const Header = () => {
   return (
     <header className="relative bg-brand overflow-hidden">
-      <HeroNavBar />
-
       <div className="absolute inset-0 opacity-75 pointer-events-none">
         <div className="h-full w-full bg-[url('/images/hijeroglofi.svg')] bg-size-[300%_auto] bg-center bg-repeat-y md:bg-size-[150%_auto] lg:bg-cover lg:bg-no-repeat" />
       </div>

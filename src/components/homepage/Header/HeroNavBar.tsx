@@ -24,7 +24,7 @@ const menuDropdownItems = [
   },
   {
     title: "Kontakt",
-    href: "/",
+    href: "/kontakt",
     description: "Kontaktirajte nas za sva pitanja i porudžbine",
   },
 ];

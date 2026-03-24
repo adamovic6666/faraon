@@ -34,7 +34,7 @@ const data: NavMenu = [
     id: 4,
     type: "MenuItem",
     label: "Kontakt",
-    url: "/",
+    url: "/kontakt",
     children: [],
   },
 ];
@@ -74,7 +74,7 @@ const TopNavbar = () => {
               type="search"
               name="search"
               placeholder="Pretraži proizvode po nazivu..."
-              className="bg-transparent placeholder:text-black/40"
+              className="bg-transparent placeholder:text-black/40 focus:ring-0 focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0"
             />
           </InputGroup>
           <Link href="/" className="mr-1 block p-1 md:hidden">
