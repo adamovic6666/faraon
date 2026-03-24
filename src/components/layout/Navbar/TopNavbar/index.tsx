@@ -13,13 +13,13 @@ const data: NavMenu = [
     type: "MenuList",
     label: "Online prodavnica",
     children: [
-      { id: 21, label: "Žestoka alkoholna pića", url: "/" },
-      { id: 22, label: "Vina", url: "/" },
-      { id: 23, label: "Piva", url: "/" },
-      { id: 24, label: "Sirupi i likeri", url: "/" },
       { id: 25, label: "Bezalkoholna pića", url: "/" },
-      { id: 26, label: "Čajevi, kafe i napici", url: "/" },
+      { id: 21, label: "Žestoka alkoholna pića", url: "/" },
+      { id: 23, label: "Piva", url: "/" },
+      { id: 22, label: "Vina", url: "/" },
       { id: 27, label: "Vode", url: "/" },
+      { id: 26, label: "Čajevi, kafe i napici", url: "/" },
+      { id: 24, label: "Sirupi i likeri", url: "/" },
       { id: 28, label: "Led", url: "/" },
     ],
   },
@@ -41,10 +41,10 @@ const data: NavMenu = [
 
 const TopNavbar = () => {
   return (
-    <nav className="fixed inset-x-0 top-0 z-100 bg-white">
-      <div className="relative mx-auto flex min-h-18 max-w-frame items-center justify-between px-4 md:min-h-22 xl:px-0">
+    <nav className="fixed inset-x-0 top-0 z-100 bg-white h-16">
+      <div className="relative mx-auto flex h-full max-w-frame items-center justify-between px-4 xl:px-0">
         <div className="flex items-center md:w-full">
-          <div className="mr-4 block shrink-0 pt-[2.5px] md:hidden">
+          <div className="mr-4 block shrink-0 pt-[3px] md:hidden mt-0.5">
             <ResTopNavbar data={data} />
           </div>
           <Link
@@ -73,7 +73,7 @@ const TopNavbar = () => {
             <InputGroup.Input
               type="search"
               name="search"
-              placeholder="Pretraži proizvode..."
+              placeholder="Pretraži proizvode po nazivu..."
               className="bg-transparent placeholder:text-black/40"
             />
           </InputGroup>

@@ -48,28 +48,42 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
       <SheetTrigger asChild>
         <button
           type="button"
-          className={`group relative flex h-4.5 w-6 flex-col justify-between rounded-md p-0 text-black transition-all duration-300 ease-in-out ${open ? "open" : ""}`}
+          className="rounded-full p-1 text-black transition-colors duration-200 translate-y-0.5"
           aria-label={open ? "Zatvori meni" : "Otvori meni"}
         >
-          <span
-            aria-hidden
-            className="h-0.5 w-full rounded-full bg-current transition-all duration-300 ease-in-out origin-center group-[.open]:translate-y-2 group-[.open]:rotate-45"
-          />
-
-          <span
-            aria-hidden
-            className="h-0.5 w-full rounded-full bg-current transition-all duration-300 ease-in-out group-[.open]:opacity-0 group-[.open]:-translate-x-1.5"
-          />
-
-          <span
-            aria-hidden
-            className="h-0.5 w-full rounded-full bg-current transition-all duration-300 ease-in-out origin-center group-[.open]:-translate-y-2 group-[.open]:-rotate-45"
-          />
+          <span className="relative block h-5.5 w-5.5">
+            <Image
+              priority
+              src="/icons/menu.svg"
+              height={22}
+              width={22}
+              alt=""
+              aria-hidden
+              className={`absolute inset-0 max-h-5.5 max-w-5.5 brightness-0 transition-all duration-200 ease-out motion-reduce:transition-none ${
+                open
+                  ? "scale-75 -rotate-90 opacity-0"
+                  : "scale-100 rotate-0 opacity-100"
+              }`}
+            />
+            <Image
+              priority
+              src="/icons/times.svg"
+              height={18}
+              width={18}
+              alt=""
+              aria-hidden
+              className={`absolute left-0.5 inset-0 max-h-5.5 max-w-5.5 brightness-0 transition-all duration-200 ease-out motion-reduce:transition-none ${
+                open
+                  ? "scale-100 rotate-0 opacity-100"
+                  : "scale-75 rotate-90 opacity-0"
+              }`}
+            />
+          </span>
         </button>
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="top-17 bottom-0 z-200 h-auto! w-screen! max-w-none! border-r-0! bg-white! p-0! overflow-y-auto [&>button]:hidden"
+        className="top-15.5 bottom-0 z-200 h-auto! w-screen! max-w-none! border-r-0! bg-white! p-0! overflow-y-auto [&>button]:hidden"
       >
         <div className="flex h-full flex-col px-6 pb-6 pt-8">
           <div className="flex flex-1 flex-col">
@@ -93,7 +107,7 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
                           {item.label}
                         </AccordionTrigger>
                         <AccordionContent className="pt-2 pb-0">
-                          <div className="flex flex-col border-l border-black/15 pl-4">
+                          <div className="flex flex-col pl-4">
                             {item.children.map((itemChild) => (
                               <SheetClose
                                 key={itemChild.id}

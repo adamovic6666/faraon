@@ -14,7 +14,7 @@ const Header = () => {
         <div className="h-full w-full bg-[url('/images/hijeroglofi.svg')] bg-size-[300%_auto] bg-center bg-repeat-y md:bg-size-[150%_auto] lg:bg-cover lg:bg-no-repeat" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-frame px-4 pt-[12dvh] md:pt-15.5 lg:px-0">
+      <div className="relative z-10 mx-auto max-w-frame px-4 pt-[12.5dvh] md:pt-15.5 lg:px-0">
         <div className="relative z-10 flex flex-col md:flex-row min-h-[calc(100dvh-184px)] md:min-h-120 lg:h-132">
           <motion.section
             initial={{ y: "80px", opacity: 0, rotate: -6 }}

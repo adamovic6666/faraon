@@ -12,9 +12,21 @@ import {
 } from "@/components/ui/navigation-menu";
 
 const menuDropdownItems = [
-  { title: "Prodavnica", href: "/" },
-  { title: "Diskonti", href: "/" },
-  { title: "Kontakt", href: "/" },
+  {
+    title: "Prodavnica",
+    href: "/",
+    description: "Online prodavnica pića sa brzom dostavom",
+  },
+  {
+    title: "Diskonti",
+    href: "/",
+    description: "Pronađi najbliži Faraon diskont u tvojoj okolini",
+  },
+  {
+    title: "Kontakt",
+    href: "/",
+    description: "Kontaktirajte nas za sva pitanja i porudžbine",
+  },
 ];
 
 const otherLinks = [
@@ -30,13 +42,13 @@ const otherLinks = [
 ];
 
 const linkClass =
-  "whitespace-nowrap rounded-full px-3 py-0.5 md:py-1 transition-colors hover:text-brand md:px-4 text-lg font-normal text-black/80";
+  "whitespace-nowrap rounded-full px-3 py-0.5 md:py-1 transition-colors hover:text-brand md:px-4  text-normal md:text-lg font-normal text-black/80";
 
 const HeroNavBar = () => {
   return (
-    <div className="fixed inset-x-0 top-18 z-100 border-t border-black/10 bg-primary shadow-xs md:top-22">
+    <div className="fixed inset-x-0 top-16 z-100 border-t border-black/10 bg-primary shadow-xs">
       <div className="relative mx-auto max-w-frame md:px-4 lg:px-0">
-        <div className="hero-category-scroll mx-auto flex h-12 max-w-frame items-center overflow-x-auto scrollbar-none md:h-14 md:overflow-visible">
+        <div className="hero-category-scroll mx-auto flex h-10 max-w-frame items-center overflow-x-auto scrollbar-none md:h-12 md:overflow-visible">
           {/* Single row: scrollable on mobile, justify-between on desktop.
             Meni lives inside the same flex so every separator gap receives
             the same extra space from justify-between — no more unequal
@@ -70,6 +82,9 @@ const HeroNavBar = () => {
                                 <p className="text-base text-black/80 leading-snug">
                                   {item.title}
                                 </p>
+                                <p className="mt-0.5 text-sm font-light text-black/55 leading-snug">
+                                  {item.description}
+                                </p>
                               </Link>
                             </li>
                           ))}
@@ -97,7 +112,7 @@ const HeroNavBar = () => {
                         "shrink-0",
                         linkClass,
                         item.highlighted &&
-                          "bg-brand text-white hover:text-white mr-3 md:mr-0",
+                          "bg-brand text-white hover:text-white mr-3 md:mr-0 py-0.5 md:py-0.5",
                         index === otherLinks.length - 1 && "md:pr-0",
                       )}
                     >
@@ -113,7 +128,7 @@ const HeroNavBar = () => {
         {/* Right-edge fade — mobile only, fixed to the visible strip edge */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 w-14 bg-linear-to-l from-primary via-primary/92 to-transparent md:hidden"
+          className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-primary via-primary/92 to-transparent md:hidden"
         />
       </div>
     </div>

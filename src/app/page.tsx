@@ -60,16 +60,17 @@ export const newArrivalsData: Product[] = [
 
 const categories: CategoryItem[] = [
   {
+    id: 1,
+    title: "Bezalkoholna pića",
+    count: 84,
+    icon: "/images/bezalkoholna-pica.svg",
+    badge: "Popularno",
+  },
+  {
     id: 2,
     title: "Žestoka alkoholna pića",
     count: 126,
     icon: "/images/alkoholna-pica.svg",
-  },
-  {
-    id: 4,
-    title: "Vina",
-    count: 97,
-    icon: "/images/vina.svg",
   },
   {
     id: 3,
@@ -79,17 +80,16 @@ const categories: CategoryItem[] = [
     badge: "Novo",
   },
   {
-    id: 7,
-    title: "Sirupi i likeri",
-    count: 38,
-    icon: "/images/likeri.svg",
+    id: 4,
+    title: "Vina",
+    count: 97,
+    icon: "/images/vina.svg",
   },
   {
-    id: 1,
-    title: "Bezalkoholna pića",
-    count: 84,
-    icon: "/images/bezalkoholna-pica.svg",
-    badge: "Popularno",
+    id: 5,
+    title: "Vode",
+    count: 32,
+    icon: "/images/vode.svg",
   },
   {
     id: 6,
@@ -98,11 +98,12 @@ const categories: CategoryItem[] = [
     icon: "/images/kafe-cajevi-napici.svg",
   },
   {
-    id: 5,
-    title: "Vode",
-    count: 32,
-    icon: "/images/vode.svg",
+    id: 7,
+    title: "Sirupi i likeri",
+    count: 38,
+    icon: "/images/likeri.svg",
   },
+
   {
     id: 8,
     title: "Led",
