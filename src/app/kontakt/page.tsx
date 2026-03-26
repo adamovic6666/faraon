@@ -91,8 +91,8 @@ const KontaktPage = () => {
   };
 
   return (
-    <section className="max-w-frame mx-auto px-4 xl:px-0 relative pt-18 pb-10 md:pt-36 md:pb-24 flex flex-col items-center text-center">
-      <SectionTitle title="Kontakt" />
+    <section className="max-w-frame mx-auto px-4 xl:px-0 relative pt-20 pb-10 md:pt-26 md:pb-12 flex flex-col items-center text-center">
+      <SectionTitle title="Pišite nam" />
       <motion.p
         initial={{ y: "60px", opacity: 0 }}
         whileInView={{ y: "0", opacity: 1 }}
@@ -172,7 +172,7 @@ const KontaktPage = () => {
             control={control}
             render={({ field }) => (
               <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger className="bg-section border shadow-none border-gray-300 rounded-full h-auto p-4 px-6 text-base text-black/80 data-placeholder:text-black/40 w-full focus:ring-1 focus:ring-ring">
+                <SelectTrigger className="bg-section border shadow-none border-gray-300 rounded-full h-auto p-4 px-6 text-base text-black/80 font-light data-placeholder:text-black/40 w-full focus:ring-1 focus:ring-ring">
                   <SelectValue placeholder="Izaberite razlog javljanja....." />
                 </SelectTrigger>
                 <SelectContent>
