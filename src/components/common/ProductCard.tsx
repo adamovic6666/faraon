@@ -7,7 +7,6 @@ import { FaMinus, FaPlus } from "react-icons/fa6";
 import { Product } from "@/types/product.types";
 import { useAppDispatch } from "@/lib/hooks/redux";
 import { addToCart } from "@/lib/features/carts/cartsSlice";
-import { IoCartOutline } from "react-icons/io5";
 import { formatPrice } from "@/utils/format-price";
 
 type ProductCardProps = {
@@ -91,9 +90,11 @@ const ProductCard = ({ data }: ProductCardProps) => {
       {/* Content */}
       <div className="flex flex-col p-4 flex-1 ">
         <Link href={productHref}>
-          <h3 className="text-left text-black text-lg xl:text-xl leading-snug mb-2 md:mb-4 line-clamp-2 min-h-14">
-            {data.title}
-          </h3>
+          <div className="min-h-14 mb-2 md:mb-4">
+            <h3 className="text-left text-black text-lg xl:text-xl leading-snug line-clamp-2">
+              {data.title}
+            </h3>
+          </div>
         </Link>
 
         <div className="flex flex-col items-start justify-between gap-2 mt-auto">
@@ -154,7 +155,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="bg-primary text-black/80 text-sm rounded-full uppercase px-6 py-1 md:py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center"
+              className="bg-primary text-black/80 text-sm rounded-full uppercase px-3 md:px-6 py-1 md:py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center shrink-0"
               aria-label="Dodaj u korpu"
             >
               <span className="hidden md:block"> Dodaj u korpu</span>
