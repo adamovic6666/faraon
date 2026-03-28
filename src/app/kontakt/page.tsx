@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import * as motion from "framer-motion/client";
+import { cn } from "@/lib/utils";
 
 const schema = z.object({
   fullName: z.string().min(1, "Ime i prezime su obavezni"),
@@ -107,7 +108,7 @@ const KontaktPage = () => {
         initial={{ y: "60px", opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="pt-10 w-full max-w-2xl space-y-8"
+        className="flex w-full max-w-2xl flex-col gap-3 pt-10 md:gap-4"
         onSubmit={handleSubmit(onSubmit)}
       >
         {submitSuccess && (
@@ -121,58 +122,57 @@ const KontaktPage = () => {
           </div>
         )}
 
-        <div className="flex gap-8 md:gap-6 flex-col md:flex-row relative">
+        <div className="flex flex-col gap-3 md:flex-row md:gap-4">
           <InputGroup className="pl-0">
             <InputGroup.Input
               type="text"
               placeholder="Unesite vaše ime i prezime"
-              className="bg-section border border-gray-300 rounded-full p-4 px-6 placeholder:text-base"
+              className={cn(
+                "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
+                errors.fullName && "border-red-500",
+              )}
               {...register("fullName")}
             />
-            {errors.fullName && (
-              <p className="text-red-500 text-xs absolute left-6 -bottom-5">
-                {errors.fullName.message}
-              </p>
-            )}
           </InputGroup>
-          <InputGroup className="pl-0 relative">
+          <InputGroup className="pl-0">
             <InputGroup.Input
               type="email"
               placeholder="Unesite vaš e-mail"
-              className="bg-section border border-gray-300 rounded-full p-4 px-6 placeholder:text-base"
+              className={cn(
+                "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
+                errors.email && "border-red-500",
+              )}
               {...register("email")}
             />
-            {errors.email && (
-              <p className="text-red-500 text-xs absolute left-6 -bottom-5">
-                {errors.email.message}
-              </p>
-            )}
           </InputGroup>
         </div>
 
-        <div className="space-y-1 relative">
+        <div>
           <InputGroup className="pl-0">
             <InputGroup.Input
               type="text"
               placeholder="Unesite naslov poruke"
-              className="bg-section border border-gray-300 rounded-full p-4 px-6 placeholder:text-base"
+              className={cn(
+                "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
+                errors.subject && "border-red-500",
+              )}
               {...register("subject")}
             />
           </InputGroup>
-          {errors.subject && (
-            <p className="text-red-500 text-xs absolute left-6 -bottom-5">
-              {errors.subject.message}
-            </p>
-          )}
         </div>
 
-        <div className="space-y-1 relative">
+        <div>
           <Controller
             name="reason"
             control={control}
             render={({ field }) => (
               <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger className="bg-section border shadow-none border-gray-300 rounded-full h-auto p-4 px-6 text-base text-black/80 font-light data-placeholder:text-black/40 w-full focus:ring-1 focus:ring-ring">
+                <SelectTrigger
+                  className={cn(
+                    "bg-section h-auto w-full rounded-full border border-gray-300 p-4 px-6 text-base font-light text-black/80 shadow-none data-placeholder:text-black/40 focus:ring-1 focus:ring-ring",
+                    errors.reason && "border-red-500",
+                  )}
+                >
                   <SelectValue placeholder="Izaberite razlog javljanja....." />
                 </SelectTrigger>
                 <SelectContent>
@@ -185,27 +185,24 @@ const KontaktPage = () => {
               </Select>
             )}
           />
-          {errors.reason && (
-            <p className="text-red-500 text-xs absolute left-6 -bottom-5">
-              {errors.reason.message}
-            </p>
-          )}
         </div>
 
-        <div className="space-y-1 relative">
+        <div>
           <Textarea
             placeholder="Unesite vašu poruku ovde"
-            className="bg-section border border-gray-300 rounded-4xl p-4 px-6 placeholder:text-base min-h-37.5 resize-none"
+            className={cn(
+              "bg-section min-h-37.5 resize-none rounded-4xl border border-gray-300 p-4 px-6 placeholder:text-base",
+              errors.message && "border-red-500",
+            )}
             {...register("message")}
           />
-          {errors.message && (
-            <p className="text-red-500 text-xs absolute left-6 -bottom-5">
-              {errors.message.message}
-            </p>
-          )}
         </div>
 
-        <Button type="submit" className="mx-auto block" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          className="mx-auto mt-6 md:mt-8 block"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "Šaljem..." : "Pošalji"}
         </Button>
       </motion.form>

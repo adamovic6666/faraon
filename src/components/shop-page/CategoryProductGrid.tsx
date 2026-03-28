@@ -68,17 +68,17 @@ export default function CategoryProductGrid({
   return (
     <>
       <div className="flex items-center justify-between mb-6">
-        <SortSelect currentSort={sort} onSortChange={handleSort} />
-        <div className="text-right">
+        <div>
           <h1 className="font-bold text-2xl md:text-4xl text-brand">
             {categoryLabel}
           </h1>
-          <span className="text-sm text-black/60">
+          <span className="text-xs md:text-sm text-black/60">
             Prikazano {start + 1}–
             {Math.min(start + PRODUCTS_PER_PAGE, sorted.length)} od{" "}
             {sorted.length} proizvoda
           </span>
         </div>
+        <SortSelect currentSort={sort} onSortChange={handleSort} />
       </div>
       <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
         {pageProducts.map((product) => (

@@ -88,7 +88,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
       </Link>
 
       {/* Content */}
-      <div className="flex flex-col p-4 flex-1 ">
+      <div className="flex flex-col p-3 md:p-4 flex-1 ">
         <Link href={productHref}>
           <div className="min-h-14 mb-2 md:mb-4">
             <h3 className="text-left text-black text-lg xl:text-xl leading-snug line-clamp-2">
@@ -114,8 +114,8 @@ const ProductCard = ({ data }: ProductCardProps) => {
           </div>
 
           {/* Quantity + Add to cart */}
-          <div className="flex w-full items-center gap-2 bg-white rounded-full justify-between p-1 md:mt-auto">
-            <div className="flex items-center justify-between rounded-full bg-white p-1 w-20 md:w-24">
+          <div className="flex w-full items-center gap-1 md:gap-2 bg-white rounded-full justify-between p-0.5 md:p-1 md:mt-auto">
+            <div className="flex items-center justify-between rounded-full bg-white p-0.5 w-16 md:w-22">
               <button
                 type="button"
                 onClick={decrement}
@@ -139,7 +139,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
                     setQtyInput("1");
                   }
                 }}
-                className="w-8 md:w-6 text-center text-sm font-medium bg-transparent outline-none"
+                className="w-6 text-center text-sm font-medium bg-transparent outline-none"
                 aria-label="Količina proizvoda za dodavanje u korpu"
               />
               <button
@@ -166,7 +166,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
                 height={100}
                 width={100}
                 alt="cart"
-                className="w-4.5 h-4.5 md:hidden"
+                className="w-4 h-4 md:hidden"
               />
             </button>
           </div>
