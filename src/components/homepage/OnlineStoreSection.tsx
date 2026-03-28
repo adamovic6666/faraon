@@ -14,7 +14,7 @@ const OnlineStoreSection = ({
   data: CategoryItem[];
 }) => {
   return (
-    <section id={id} className="max-w-frame mx-auto px-4 xl:px-0">
+    <section id={id} className="max-w-frame mx-auto px-4 xl:px-0 w-full">
       <div>
         <SectionTitle
           title={title}
@@ -34,7 +34,7 @@ const OnlineStoreSection = ({
           {data.map((item) => (
             <Link
               key={item.id}
-              href="/"
+              href={item.href}
               className="group min-h-44 rounded-xl border border-[#e4a100] bg-primary pl-4 pt-4  transition-shadow hover:shadow-[0_10px_20px_rgba(0,0,0,0.12)] sm:min-h-48"
             >
               <div className="relative flex h-full min-h-20 items-start justify-between gap-8 sm:min-h-24">
@@ -59,7 +59,7 @@ const OnlineStoreSection = ({
         </div>
 
         <div className="mt-9 flex justify-center md:items-center">
-          <PageLink inCenter href="/" variant="brand">
+          <PageLink inCenter href="/webshop" variant="brand">
             Vidi sve
           </PageLink>
         </div>

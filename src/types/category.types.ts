@@ -4,4 +4,5 @@ export type CategoryItem = {
   count: number;
   icon: string;
   badge?: "Novo" | "Popularno";
+  href: string;
 };

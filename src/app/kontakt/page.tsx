@@ -91,7 +91,7 @@ const KontaktPage = () => {
   };
 
   return (
-    <section className="max-w-frame mx-auto px-4 xl:px-0 relative pt-20 pb-10 md:pt-26 md:pb-12 flex flex-col items-center text-center">
+    <section className="max-w-frame mx-auto px-4 xl:px-0 relative pt-20 pb-10 md:pt-24 md:pb-12 flex flex-col items-center text-center">
       <SectionTitle title="Pišite nam" />
       <motion.p
         initial={{ y: "60px", opacity: 0 }}

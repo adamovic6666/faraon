@@ -4,6 +4,7 @@ import {
   ArrowRightIcon,
   DotsHorizontalIcon,
 } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { ButtonProps, buttonVariants } from "@/components/ui/button";
@@ -41,7 +42,7 @@ PaginationItem.displayName = "PaginationItem";
 type PaginationLinkProps = {
   isActive?: boolean;
 } & Pick<ButtonProps, "size"> &
-  React.ComponentProps<"a">;
+  React.ComponentProps<typeof Link>;
 
 const PaginationLink = ({
   className,
@@ -49,7 +50,7 @@ const PaginationLink = ({
   size = "icon",
   ...props
 }: PaginationLinkProps) => (
-  <a
+  <Link
     aria-current={isActive ? "page" : undefined}
     className={cn(
       buttonVariants({
@@ -57,7 +58,7 @@ const PaginationLink = ({
         size,
       }),
       isActive && "bg-black/5 shadow-none border-none !text-black",
-      className
+      className,
     )}
     {...props}
   />
@@ -75,7 +76,7 @@ const PaginationPrevious = ({
     {...props}
   >
     <ArrowLeftIcon className="h-4 w-4 hidden xs:block" />
-    <span className="xs:ml-2">Previous</span>
+    <span className="xs:ml-2">Prethodna</span>
   </PaginationLink>
 );
 PaginationPrevious.displayName = "PaginationPrevious";
@@ -90,7 +91,7 @@ const PaginationNext = ({
     className={cn("gap-1 px-2.5 xs:pr-2.5", className)}
     {...props}
   >
-    <span className="xs:mr-2">Next</span>
+    <span className="xs:mr-2">Sledeća</span>
     <ArrowRightIcon className="h-4 w-4 hidden xs:block" />
   </PaginationLink>
 );

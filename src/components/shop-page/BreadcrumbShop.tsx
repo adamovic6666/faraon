@@ -11,16 +11,16 @@ import Link from "next/link";
 
 const BreadcrumbShop = () => {
   return (
-    <Breadcrumb className="mb-5 sm:mb-9">
+    <Breadcrumb className="mb-5 pt-12 sm:mb-6">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="/">Home</Link>
+            <Link href="/">Početna</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>Shop</BreadcrumbPage>
+          <BreadcrumbPage>Prodavnica</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

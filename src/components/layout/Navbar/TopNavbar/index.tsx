@@ -13,7 +13,7 @@ const data: NavMenu = [
     type: "MenuList",
     label: "Online prodavnica",
     children: [
-      { id: 25, label: "Bezalkoholna pića", url: "/" },
+      { id: 25, label: "Bezalkoholna pića", url: "/webshop/bezalkoholna-pica" },
       { id: 21, label: "Žestoka alkoholna pića", url: "/" },
       { id: 23, label: "Piva", url: "/" },
       { id: 22, label: "Vina", url: "/" },
@@ -27,7 +27,7 @@ const data: NavMenu = [
     id: 3,
     type: "MenuItem",
     label: "Diskonti",
-    url: "/",
+    url: "/lokacije",
     children: [],
   },
   {
