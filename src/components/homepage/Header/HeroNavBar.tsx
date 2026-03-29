@@ -31,7 +31,7 @@ const menuDropdownItems = [
 
 const otherLinks = [
   { id: 2, label: "Akcije", href: "/", highlighted: true },
-  { id: 3, label: "Bezalkoholna pića", href: "/webshop/bezalkoholna-pica" },
+  { id: 3, label: "Bezalkoholna pića", href: "/webshop/bezalkholna-pica" },
   { id: 4, label: "Žestoka alkoholna pića", href: "/" },
   { id: 5, label: "Piva", href: "/" },
   { id: 6, label: "Vina", href: "/" },

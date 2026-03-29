@@ -9,6 +9,7 @@ const bezalkoholnaBase: Product[] = [
     oldPrice: 200,
     price: 160,
     discount: 20,
+    slug: "rosa-voda-negazirana-0-75l-nepovratno-staklo",
   },
   {
     id: 2,
@@ -43,10 +44,12 @@ export const bezalkoholnaPicaProducts: Product[] = Array.from(
 
 export const categoryProductsMap: Record<string, Product[]> = {
   "bezalkoholna-pica": bezalkoholnaPicaProducts,
+  "bezalkholna-pica": bezalkoholnaPicaProducts,
 };
 
 export const categoryLabelsMap: Record<string, string> = {
   "bezalkoholna-pica": "Bezalkoholna pića",
+  "bezalkholna-pica": "Bezalkoholna pića",
   "alkoholna-pica": "Žestoka alkoholna pića",
   piva: "Piva",
   vina: "Vina",
@@ -64,6 +67,7 @@ export const newArrivalsData: Product[] = [
     oldPrice: 200,
     price: 160,
     discount: 20,
+    slug: "rosa-voda-negazirana-0-75l-nepovratno-staklo",
   },
   {
     id: 2,
@@ -114,7 +118,7 @@ export const categories: CategoryItem[] = [
     count: 84,
     icon: "/images/bezalkoholna-pica.svg",
     badge: "Popularno",
-    href: "/webshop/bezalkoholna-pica",
+    href: "/webshop/bezalkholna-pica",
   },
   {
     id: 2,

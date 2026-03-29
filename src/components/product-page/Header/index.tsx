@@ -1,37 +1,40 @@
 import { Product } from "@/types/product.types";
 import { integralCF } from "@/styles/fonts";
 import { cn } from "@/lib/utils";
-import Rating from "@/components/ui/Rating";
-import ColorSelection from "./ColorSelection";
-import SizeSelection from "./SizeSelection";
 import AddToCardSection from "./AddToCardSection";
+import ProductGallery from "./ProductGallery";
+import { formatPrice } from "@/utils/format-price";
 
 const Header = ({ data }: { data: Product }) => {
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div>
-          <h1
-            className={cn([
-              integralCF.className,
-              "text-2xl md:text-[40px] md:leading-[40px] mb-3 md:mb-3.5 capitalize",
-            ])}
-          >
-            {data.title}
-          </h1>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 items-stretch">
+      <ProductGallery title={data.title} srcUrl={data.srcUrl} />
+
+      <div className="flex min-h-full flex-col">
+        <h1
+          className={cn([
+            integralCF.className,
+            "text-2xl text-brand md:text-[40px] md:leading-10 mb-3 md:mb-3.5 max-w-120",
+          ])}
+        >
+          {data.title}
+        </h1>
+
+        <p className="font-bold text-black text-2xl sm:text-[32px]">
+          {formatPrice(data.price)} <span className="text-xs">RSD</span>
+        </p>
+
+        {data.description ? (
           <p className="text-sm sm:text-base text-black/60 mb-5">
-            This graphic t-shirt which is perfect for any occasion. Crafted from
-            a soft and breathable fabric, it offers superior comfort and style.
+            {data.description}
           </p>
-          <hr className="h-[1px] border-t-black/10 mb-5" />
-          <ColorSelection />
-          <hr className="h-[1px] border-t-black/10 my-5" />
-          <SizeSelection />
-          <hr className="hidden md:block h-[1px] border-t-black/10 my-5" />
+        ) : null}
+
+        <div className="mt-auto">
           <AddToCardSection data={data} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

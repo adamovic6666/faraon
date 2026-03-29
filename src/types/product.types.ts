@@ -1,5 +1,3 @@
-
-
 export type Product = {
   id: number;
   title: string;
@@ -7,6 +5,8 @@ export type Product = {
   oldPrice?: number;
   price: number;
   discount?: number;
+  slug?: string;
+  description?: string;
 };
 
 

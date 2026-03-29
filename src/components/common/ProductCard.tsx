@@ -16,11 +16,16 @@ type ProductCardProps = {
 const ProductCard = ({ data }: ProductCardProps) => {
   const dispatch = useAppDispatch();
   const [qtyInput, setQtyInput] = useState("1");
-
   const hasDiscount = data.discount !== undefined && data.discount > 0;
-
-  const productHref = `/`;
-
+  const productSlug =
+    data.slug ??
+    data.title
+      .toLowerCase()
+      .replaceAll("\n", " ")
+      .replaceAll(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replaceAll(/\s+/g, "-");
+  const productHref = `/webshop/bezalkholna-pica/${productSlug}`;
   const getSafeQty = (value: string = qtyInput) => {
     const parsedQty = Number(value);
     if (!Number.isFinite(parsedQty) || parsedQty < 1) return 1;
@@ -89,7 +94,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
 
       {/* Content */}
       <div className="flex flex-col p-3 md:p-4 flex-1 ">
-        <Link href={productHref}>
+        <Link href={productHref} className="block">
           <div className="min-h-14 mb-2 md:mb-4">
             <h3 className="text-left text-black text-lg xl:text-xl leading-snug line-clamp-2">
               {data.title}
@@ -155,7 +160,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="bg-primary text-black/80 text-sm rounded-full uppercase px-3 md:px-6 py-1 md:py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center shrink-0"
+              className="bg-primary text-black/80 text-sm rounded-full uppercase px-4 md:px-6 py-1 md:py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center shrink-0"
               aria-label="Dodaj u korpu"
             >
               <span className="hidden md:block"> Dodaj u korpu</span>

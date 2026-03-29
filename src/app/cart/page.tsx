@@ -3,17 +3,17 @@
 import BreadcrumbCart from "@/components/cart-page/BreadcrumbCart";
 import ProductCard from "@/components/cart-page/ProductCard";
 import { Button } from "@/components/ui/button";
-import InputGroup from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
 import { integralCF } from "@/styles/fonts";
 import { FaArrowRight } from "react-icons/fa6";
-import { MdOutlineLocalOffer } from "react-icons/md";
 import { TbBasketExclamation } from "react-icons/tb";
 import React from "react";
 import { RootState } from "@/lib/store";
 import { useAppSelector } from "@/lib/hooks/redux";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { formatPrice } from "@/utils/format-price";
+import PageLink from "@/components/common/Link";
 
 export default function CartPage() {
   const { cart, totalPrice, adjustedTotalPrice } = useAppSelector(
@@ -21,18 +21,18 @@ export default function CartPage() {
   );
 
   return (
-    <main className="pb-20">
+    <main className="pb-10 md:pb-12 pt-20 md:pt-24">
       <div className="max-w-frame mx-auto px-4 xl:px-0">
         {cart && cart.items.length > 0 ? (
           <>
-            <BreadcrumbCart />
+            {/* <BreadcrumbCart /> */}
             <h2
               className={cn([
                 integralCF.className,
-                "font-bold text-[32px] md:text-[40px] text-black uppercase mb-5 md:mb-6",
+                "text-[32px] text-brand md:text-5xl uppercase text-center font-semibold pb-10 md:pb-12",
               ])}
             >
-              your cart
+              vaša korpa
             </h2>
             <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 items-start">
               <div className="w-full p-3.5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/10">
@@ -45,77 +45,61 @@ export default function CartPage() {
                   </React.Fragment>
                 ))}
               </div>
-              <div className="w-full lg:max-w-[505px] p-5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/10">
+              <div className="w-full lg:max-w-126.25 p-5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/10">
                 <h6 className="text-xl md:text-2xl font-bold text-black">
-                  Order Summary
+                  Pregled porudžbine
                 </h6>
                 <div className="flex flex-col space-y-5">
                   <div className="flex items-center justify-between">
-                    <span className="md:text-xl text-black/60">Subtotal</span>
-                    <span className="md:text-xl font-bold">${totalPrice}</span>
+                    <span className="md:text-xl text-black/60">Međuzbir</span>
+                    <span className="md:text-xl font-bold">
+                      {formatPrice(totalPrice)} RSD
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="md:text-xl text-black/60">
-                      Discount (-
+                      Popust (-
                       {Math.round(
                         ((totalPrice - adjustedTotalPrice) / totalPrice) * 100,
                       )}
                       %)
                     </span>
                     <span className="md:text-xl font-bold text-red-600">
-                      -${Math.round(totalPrice - adjustedTotalPrice)}
+                      -
+                      {formatPrice(Math.round(totalPrice - adjustedTotalPrice))}{" "}
+                      RSD
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="md:text-xl text-black/60">
-                      Delivery Fee
-                    </span>
-                    <span className="md:text-xl font-bold">Free</span>
+                    <span className="md:text-xl text-black/60">Dostava</span>
+                    <span className="md:text-xl font-bold">Besplatno</span>
                   </div>
                   <Separator className="bg-black/10" />
                   <div className="flex items-center justify-between">
-                    <span className="md:text-xl text-black">Total</span>
+                    <span className="md:text-xl text-black">Ukupno</span>
                     <span className="text-xl md:text-2xl font-bold">
-                      ${Math.round(adjustedTotalPrice)}
+                      {formatPrice(Math.round(adjustedTotalPrice))} RSD
                     </span>
                   </div>
                 </div>
-                <div className="flex space-x-3">
-                  <InputGroup className="bg-[#F0F0F0]">
-                    <InputGroup.Text>
-                      <MdOutlineLocalOffer className="text-black/40 text-2xl" />
-                    </InputGroup.Text>
-                    <InputGroup.Input
-                      type="text"
-                      name="code"
-                      placeholder="Add promo code"
-                      className="bg-transparent placeholder:text-black/40"
-                    />
-                  </InputGroup>
-                  <Button
-                    type="button"
-                    className="bg-black rounded-full w-full max-w-[119px] h-[48px]"
-                  >
-                    Apply
-                  </Button>
-                </div>
                 <Button
                   type="button"
-                  className="text-sm md:text-base font-medium bg-black rounded-full w-full py-4 h-[54px] md:h-[60px] group"
+                  className="text-sm md:text-base font-medium bg-brand text-white cursor-pointer hover:bg-brand/90 rounded-full w-full py-4 h-13.5 md:h-15 group"
                 >
-                  Go to Checkout{" "}
+                  Nastavi na plaćanjem
                   <FaArrowRight className="text-xl ml-2 group-hover:translate-x-1 transition-all" />
                 </Button>
               </div>
             </div>
           </>
         ) : (
-          <div className="flex items-center flex-col text-gray-300 mt-32">
-            <TbBasketExclamation strokeWidth={1} className="text-6xl" />
-            <span className="block mb-4">Your shopping cart is empty.</span>
-            <Button className="rounded-full w-24" asChild>
-              <Link href="/">Shop</Link>
-            </Button>
+          <div className="text-black/80 mt-12 flex flex-col items-center justify-center">
+            <TbBasketExclamation strokeWidth={1} className="text-8xl" />
+            <span className="block mb-12">Vaša korpa je trenutno prazna.</span>
+
+            <PageLink href="/webshop" className=" flex justify-center">
+              Vrati se nazad
+            </PageLink>
           </div>
         )}
       </div>

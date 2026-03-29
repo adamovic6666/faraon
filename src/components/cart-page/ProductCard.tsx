@@ -24,7 +24,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
     <div className="flex items-start space-x-4">
       <Link
         href={`/`}
-        className="bg-[#F0EEED] rounded-lg w-full min-w-[100px] max-w-[100px] sm:max-w-[124px] aspect-square overflow-hidden"
+        className="bg-[#F0EEED] rounded-lg w-full min-w-25 max-w-25 sm:max-w-31 aspect-square overflow-hidden"
       >
         <Image
           src={data.srcUrl}
@@ -59,18 +59,6 @@ const ProductCard = ({ data }: ProductCardProps) => {
           >
             <PiTrashFill className="text-xl md:text-2xl text-red-600" />
           </Button>
-        </div>
-        <div className="-mt-1">
-          <span className="text-black text-xs md:text-sm mr-1">Size:</span>
-          <span className="text-black/60 text-xs md:text-sm">
-            {data.attributes[0]}
-          </span>
-        </div>
-        <div className="mb-auto -mt-1.5">
-          <span className="text-black text-xs md:text-sm mr-1">Color:</span>
-          <span className="text-black/60 text-xs md:text-sm">
-            {data.attributes[1]}
-          </span>
         </div>
       </div>
     </div>

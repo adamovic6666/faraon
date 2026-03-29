@@ -1,21 +1,16 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { addToCart } from "@/lib/features/carts/cartsSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
-import { RootState } from "@/lib/store";
+import { useAppDispatch } from "@/lib/hooks/redux";
 import { Product } from "@/types/product.types";
-import React from "react";
 
 const AddToCartBtn = ({ data }: { data: Product & { quantity: number } }) => {
   const dispatch = useAppDispatch();
-  const { sizeSelection, colorSelection } = useAppSelector(
-    (state: RootState) => state.products,
-  );
 
   return (
-    <button
-      type="button"
-      className="bg-black w-full ml-3 sm:ml-5 rounded-full h-11 md:h-[52px] text-sm sm:text-base text-white hover:bg-black/80 transition-all"
+    <Button
+      className="ml-3 sm:ml-5 h-11 w-full rounded-full cursor-pointer bg-primary px-6 text-base md:text-lg font-normal text-black/80 shadow-none transition-all hover:bg-primary/85 md:h-13 md:px-10"
       onClick={() =>
         dispatch(
           addToCart({
@@ -23,15 +18,15 @@ const AddToCartBtn = ({ data }: { data: Product & { quantity: number } }) => {
             name: data.title,
             srcUrl: data.srcUrl,
             price: data.price,
-            attributes: [sizeSelection, colorSelection.name],
+            attributes: [],
             discount: data.discount ? data.discount : 0,
             quantity: data.quantity,
           }),
         )
       }
     >
-      Add to Cart
-    </button>
+      Dodaj u korpu
+    </Button>
   );
 };
 
