@@ -38,7 +38,7 @@ export default function CartPage() {
               vaša korpa
             </h2>
             <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 items-start">
-              <div className="w-fullflex-col px-4 rounded-[20px] overflow-hidden border border-black/15">
+              <div className="w-full flex-col px-4 rounded-[20px] overflow-hidden border border-black/15">
                 {cart?.items.map((product, idx, arr) => (
                   <React.Fragment key={idx}>
                     <ProductCard data={product} />
