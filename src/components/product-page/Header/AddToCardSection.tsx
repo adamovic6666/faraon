@@ -19,7 +19,7 @@ const AddToCardSection = ({ data }: { data: Product }) => {
   };
 
   return (
-    <div className="flex h-auto w-full items-center rounded-full border border-black/15 bg-section p-1 sm:w-fit">
+    <div className="flex h-auto items-center rounded-full border border-black/15 bg-section p-1 max-w-fit gap-2">
       <div className="flex min-w-22 items-center justify-between rounded-full p-1 pr-3">
         <button
           type="button"
