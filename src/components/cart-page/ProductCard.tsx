@@ -132,7 +132,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
           <Link href={`/`} className="text-black font-bold text-xl">
             {data.name}
           </Link>
-          <p className="text-lg font-medium text-black/80 mt-2">
+          <p className="text-lg font-medium text-black/80 mt-auto">
             {formatPrice(data.price)} <span className="text-sm">RSD</span>
           </p>
         </div>
