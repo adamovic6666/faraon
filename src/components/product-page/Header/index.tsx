@@ -38,7 +38,7 @@ const Header = ({
             <span className="text-sm ml-0.5 leading-none">RSD</span>
           </p>
           {hasDiscount && data.oldPrice ? (
-            <span className="relative w-fit text-lg text-black/40 leading-none -translate-y-0.5">
+            <span className="relative w-fit text-lg text-black/40 leading-none md:-translate-y-0.5">
               {formatPrice(data.oldPrice)}{" "}
               <span className="text-xs leading-none">RSD</span>
               <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-black/20" />
