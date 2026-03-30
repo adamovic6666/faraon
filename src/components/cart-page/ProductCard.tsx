@@ -43,7 +43,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
   return (
     <>
       <div className="md:hidden relative">
-        <div className="flex items-start py-4">
+        <div className="flex py-4">
           <Link
             href={`/`}
             className="bg-[#F0EEED] rounded-lg w-22 h-22 shrink-0 overflow-hidden"

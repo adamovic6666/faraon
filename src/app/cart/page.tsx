@@ -100,20 +100,22 @@ export default function CartPage() {
                     </span>
                   </div>
                 </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="text-base md:text-lg font-medium border-black/80 text-black/80 cursor-pointer hover:bg-primary hover:border-primary rounded-full w-full py-4 h-13.5 md:h-15"
-                  onClick={() => dispatch(clearCart())}
-                >
-                  Isprazni korpu
-                </Button>
-                <Button
-                  type="button"
-                  className="text-base md:text-lg font-medium bg-primary text-black/80 cursor-pointer hover:bg-primary/90 rounded-full w-full py-4 h-13.5 md:h-15"
-                >
-                  Nastavi s plaćanjem
-                </Button>
+                <div className="space-y-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="text-base md:text-lg shadow-none uppercase font-medium border-black/15 text-black/80 cursor-pointer hover:bg-primary hover:border-primary rounded-full w-full py-4 h-13.5 md:h-15"
+                    onClick={() => dispatch(clearCart())}
+                  >
+                    Isprazni korpu
+                  </Button>
+                  <Button
+                    type="button"
+                    className="text-base md:text-lg font-medium bg-primary text-black/80 uppercase cursor-pointer hover:bg-primary/90 rounded-full w-full py-4 h-13.5 md:h-15"
+                  >
+                    Nastavi sa plaćanjem
+                  </Button>
+                </div>
               </div>
             </div>
           </>

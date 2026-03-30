@@ -60,6 +60,7 @@ export default async function ProductPage({
         viewAllLink="/akcije"
         viewAllVariant="brand"
         showArrows
+        noAnimation
       />
 
       <AnkhSeparator />

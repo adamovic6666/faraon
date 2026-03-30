@@ -125,9 +125,15 @@ const ProductGallery = ({
 
       {/* Desktop: thumbnails column on the left, main image on the right */}
       <div className="hidden md:flex gap-4 items-start">
-        {images.length > 1 ? (
-          <div className="flex flex-col gap-3 w-24 shrink-0">{thumbnails}</div>
-        ) : null}
+        <div
+          className={cn(
+            "w-24 shrink-0",
+            images.length > 1 ? "flex flex-col gap-3" : "",
+          )}
+          aria-hidden={images.length === 1}
+        >
+          {images.length > 1 ? thumbnails : null}
+        </div>
         <button
           type="button"
           className="relative aspect-square flex-1 overflow-hidden rounded-2xl border border-black/15"

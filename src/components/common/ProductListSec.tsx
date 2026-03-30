@@ -12,6 +12,7 @@ type ProductListSecProps = {
   showArrows?: boolean;
   className?: string;
   viewAllVariant?: "primary" | "brand";
+  noAnimation?: boolean;
 };
 
 const ProductListSec = ({
@@ -22,15 +23,24 @@ const ProductListSec = ({
   showArrows = false,
   className,
   viewAllVariant = "primary",
+  noAnimation = false,
 }: ProductListSecProps) => {
   return (
     <section id={id} className={className ?? "max-w-frame mx-auto text-center"}>
-      <SectionTitle title={title} className="mb-10 md:mb-12" />
+      <SectionTitle
+        title={title}
+        className="mb-10 md:mb-12"
+        noAnimation={noAnimation}
+      />
       <motion.div
-        initial={{ y: "100px", opacity: 0 }}
-        whileInView={{ y: "0", opacity: 1 }}
+        initial={
+          noAnimation ? { y: 0, opacity: 1 } : { y: "100px", opacity: 0 }
+        }
+        whileInView={
+          noAnimation ? { y: 0, opacity: 1 } : { y: "0", opacity: 1 }
+        }
         viewport={{ once: true }}
-        transition={{ delay: 0.6, duration: 0.6 }}
+        transition={{ delay: noAnimation ? 0 : 0.6, duration: 0.6 }}
       >
         <ProductSwiper data={data} showArrows={showArrows} />
         {viewAllLink && (

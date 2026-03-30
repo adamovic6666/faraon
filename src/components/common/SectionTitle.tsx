@@ -9,6 +9,7 @@ type SectionTitleProps = {
   className?: string;
   titleClassName?: string;
   descriptionClassName?: string;
+  noAnimation?: boolean;
 };
 
 const SectionTitle = ({
@@ -17,14 +18,19 @@ const SectionTitle = ({
   className,
   titleClassName,
   descriptionClassName,
+  noAnimation = false,
 }: SectionTitleProps) => {
   return (
     <div className={cn("text-center", className)}>
       <motion.h2
-        initial={{ y: "100px", opacity: 0 }}
-        whileInView={{ y: "0", opacity: 1 }}
+        initial={
+          noAnimation ? { y: 0, opacity: 1 } : { y: "100px", opacity: 0 }
+        }
+        whileInView={
+          noAnimation ? { y: 0, opacity: 1 } : { y: "0", opacity: 1 }
+        }
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={noAnimation ? { duration: 0 } : { duration: 0.6 }}
         className={cn(
           integralCF.className,
           "text-[32px] text-brand md:text-5xl uppercase text-center font-semibold",
@@ -36,10 +42,16 @@ const SectionTitle = ({
 
       {description && (
         <motion.p
-          initial={{ y: "60px", opacity: 0 }}
-          whileInView={{ y: "0", opacity: 1 }}
+          initial={
+            noAnimation ? { y: 0, opacity: 1 } : { y: "60px", opacity: 0 }
+          }
+          whileInView={
+            noAnimation ? { y: 0, opacity: 1 } : { y: "0", opacity: 1 }
+          }
           viewport={{ once: true }}
-          transition={{ delay: 0.1, duration: 0.6 }}
+          transition={
+            noAnimation ? { duration: 0 } : { delay: 0.1, duration: 0.6 }
+          }
           className={cn(
             "text-black/80 text-center text-md sm:text-lg max-w-2xl mx-auto leading-relaxed mt-2 font-light",
             descriptionClassName,
