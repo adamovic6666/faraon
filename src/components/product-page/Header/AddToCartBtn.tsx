@@ -10,7 +10,7 @@ const AddToCartBtn = ({ data }: { data: Product & { quantity: number } }) => {
 
   return (
     <Button
-      className="h-12 min-w-52 shrink-0 rounded-full bg-primary text-black/80 hover:bg-primary/85 px-10 text-center text-base md:text-lg font-medium transition-all  md:h-13 md:min-w-60 md:px-14 uppercase"
+      className="h-12 min-w-52 shrink-0 shadow-none rounded-full bg-primary text-black/80 hover:bg-primary/85 px-10 text-center text-base md:text-lg font-medium transition-all  md:h-13 md:min-w-60 md:px-14 uppercase"
       onClick={() =>
         dispatch(
           addToCart({

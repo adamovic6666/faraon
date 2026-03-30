@@ -27,32 +27,35 @@ const Header = ({
         <h1
           className={cn([
             integralCF.className,
-            "text-2xl text-black/80 md:text-[40px] leading-8 md:leading-11 mb-3 md:mb-3.5 max-w-120",
+            "text-2xl text-black/80 md:text-[40px] leading-8 md:leading-11 mb-4 md:mb-6 max-w-120",
           ])}
         >
           {data.title}
         </h1>
-        <div className="flex flex-row md:flex-col gap-3 md:gap-2 justify-start items-end md:items-start">
+        <div className="flex flex-row gap-3 items-end">
           <p className="font-bold text-black text-4xl leading-none sm:text-5xl">
             {formatPrice(data.price)}
-            <span className="text-sm ml-0.5">RSD</span>
+            <span className="text-sm ml-0.5 leading-none">RSD</span>
           </p>
           {hasDiscount && data.oldPrice ? (
-            <span className="relative w-fit text-lg text-black/40">
-              {formatPrice(data.oldPrice)} <span className="text-xs">RSD</span>
+            <span className="relative w-fit text-lg text-black/40 leading-none -translate-y-0.5">
+              {formatPrice(data.oldPrice)}{" "}
+              <span className="text-xs leading-none">RSD</span>
               <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-black/20" />
             </span>
           ) : null}
         </div>
 
-        {data.description ? (
-          <p className="text-md font-light text-black/60 mt-8 mb-5 max-w-160 md:max-h-48 md:overflow-y-auto md:pr-1">
-            {data.description}
-          </p>
-        ) : null}
+        <div className="flex flex-col-reverse md:flex-col h-full">
+          {data.description ? (
+            <p className="text-md font-light text-black/60 mt-6 mb-0 md:mb-3 max-w-160 max-h-72 md:max-h-54 overflow-y-auto md:pr-1">
+              {data.description}
+            </p>
+          ) : null}
 
-        <div className="mt-4 md:mt-auto flex flex-col gap-3">
-          <AddToCardSection data={data} />
+          <div className="mt-8 mb-4 md:mt-auto md:mb-0 flex flex-col gap-3">
+            <AddToCardSection data={data} />
+          </div>
         </div>
       </div>
     </div>

@@ -38,7 +38,7 @@ export default function CartPage() {
               vaša korpa
             </h2>
             <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 items-start">
-              <div className="w-full flex-col px-4 rounded-[20px] overflow-hidden border border-black/10">
+              <div className="w-fullflex-col px-4 rounded-[20px] overflow-hidden border border-black/15">
                 {cart?.items.map((product, idx, arr) => (
                   <React.Fragment key={idx}>
                     <ProductCard data={product} />
@@ -48,7 +48,7 @@ export default function CartPage() {
                   </React.Fragment>
                 ))}
               </div>
-              <div className="w-full lg:max-w-132 p-5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/10">
+              <div className="w-full lg:max-w-132 p-5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/15">
                 <h6 className="text-xl md:text-2xl font-bold text-black">
                   Pregled porudžbine
                 </h6>
@@ -88,7 +88,7 @@ export default function CartPage() {
                       Besplatno
                     </span>
                   </div>
-                  <Separator className="bg-black/10" />
+                  <Separator className="bg-black/15" />
                   <div className="flex items-center justify-between">
                     <span className="text-base md:text-lg text-black/60">
                       Ukupno
@@ -104,7 +104,7 @@ export default function CartPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="text-base md:text-lg shadow-none uppercase font-medium border-black/15 text-black/80 cursor-pointer hover:bg-primary hover:border-primary rounded-full w-full py-4 h-13.5 md:h-15"
+                    className="text-base md:text-lg shadow-none uppercase font-medium border-black/15 text-black/80 cursor-pointer hover:bg-brand hover:border-brand hover:text-white rounded-full w-full py-4 h-13.5 md:h-15"
                     onClick={() => dispatch(clearCart())}
                   >
                     Isprazni korpu

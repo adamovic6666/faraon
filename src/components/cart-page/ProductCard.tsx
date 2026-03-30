@@ -133,7 +133,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             {data.name}
           </Link>
           <p className="text-lg font-medium text-black/80 mt-2">
-            {formatPrice(itemTotal)} <span className="text-sm">RSD</span>
+            {formatPrice(data.price)} <span className="text-sm">RSD</span>
           </p>
         </div>
 

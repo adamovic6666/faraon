@@ -110,7 +110,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
                 {data?.oldPrice ? formatPrice(data.oldPrice) : ""}{" "}
                 <span className="text-[10px]">RSD</span>
                 {/* Line though custom */}
-                <span className="absolute inset-0 bg-black/10 h-0.5 top-1/2 transform -translate-y-1/2 z-1"></span>
+                <span className="absolute inset-0 bg-black/15 h-0.5 top-1/2 transform -translate-y-1/2 z-1"></span>
               </span>
             )}
             <span className="font-bold text-black text-2xl leading-none">
@@ -160,7 +160,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="bg-primary text-black/80 text-sm rounded-full uppercase px-4 md:px-6 py-1 md:py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center shrink-0"
+              className="bg-primary shadow-none text-black/80 text-sm rounded-full uppercase px-4 md:px-6 py-1 md:py-1.5 hover:bg-primary/85 transition whitespace-nowrap inline-flex items-center justify-center shrink-0"
               aria-label="Dodaj u korpu"
             >
               <span className="hidden md:block"> Dodaj u korpu</span>
