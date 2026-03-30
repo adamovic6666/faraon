@@ -1,24 +1,27 @@
 "use client";
 
-import BreadcrumbCart from "@/components/cart-page/BreadcrumbCart";
 import ProductCard from "@/components/cart-page/ProductCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { integralCF } from "@/styles/fonts";
-import { FaArrowRight } from "react-icons/fa6";
 import { TbBasketExclamation } from "react-icons/tb";
 import React from "react";
 import { RootState } from "@/lib/store";
-import { useAppSelector } from "@/lib/hooks/redux";
-import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { Separator } from "@/components/ui/separator";
 import { formatPrice } from "@/utils/format-price";
 import PageLink from "@/components/common/Link";
+import { clearCart } from "@/lib/features/carts/cartsSlice";
 
 export default function CartPage() {
+  const dispatch = useAppDispatch();
   const { cart, totalPrice, adjustedTotalPrice } = useAppSelector(
     (state: RootState) => state.carts,
   );
+  const discountPercentage =
+    totalPrice > 0
+      ? Math.round(((totalPrice - adjustedTotalPrice) / totalPrice) * 100)
+      : 0;
 
   return (
     <main className="pb-10 md:pb-12 pt-20 md:pt-24">
@@ -35,59 +38,81 @@ export default function CartPage() {
               vaša korpa
             </h2>
             <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 items-start">
-              <div className="w-full p-3.5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/10">
+              <div className="w-full flex-col px-4 rounded-[20px] overflow-hidden border border-black/10">
                 {cart?.items.map((product, idx, arr) => (
                   <React.Fragment key={idx}>
                     <ProductCard data={product} />
                     {arr.length - 1 !== idx && (
-                      <Separator className="bg-black/10" />
+                      <Separator className="bg-black/15 md:my-0" />
                     )}
                   </React.Fragment>
                 ))}
               </div>
-              <div className="w-full lg:max-w-126.25 p-5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/10">
+              <div className="w-full lg:max-w-132 p-5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/10">
                 <h6 className="text-xl md:text-2xl font-bold text-black">
                   Pregled porudžbine
                 </h6>
                 <div className="flex flex-col space-y-5">
                   <div className="flex items-center justify-between">
-                    <span className="md:text-xl text-black/60">Međuzbir</span>
-                    <span className="md:text-xl font-bold">
-                      {formatPrice(totalPrice)} RSD
+                    <span className="text-base md:text-lg text-black/60">
+                      Broj artikala
+                    </span>
+                    <span className="text-base md:text-lg font-semibold text-black/80">
+                      {cart.totalQuantities}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="md:text-xl text-black/60">
-                      Popust (-
-                      {Math.round(
-                        ((totalPrice - adjustedTotalPrice) / totalPrice) * 100,
-                      )}
-                      %)
+                    <span className="text-base md:text-lg text-black/60">
+                      Međuzbir
                     </span>
-                    <span className="md:text-xl font-bold text-red-600">
+                    <span className="text-base md:text-lg font-semibold text-black/80">
+                      {formatPrice(totalPrice)}{" "}
+                      <span className="text-sm">RSD</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-base md:text-lg text-black/60">
+                      Popust (-{discountPercentage}%)
+                    </span>
+                    <span className="text-base md:text-lg font-semibold text-brand">
                       -
                       {formatPrice(Math.round(totalPrice - adjustedTotalPrice))}{" "}
-                      RSD
+                      <span className="text-sm">RSD</span>
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="md:text-xl text-black/60">Dostava</span>
-                    <span className="md:text-xl font-bold">Besplatno</span>
+                    <span className="text-base md:text-lg text-black/60">
+                      Dostava
+                    </span>
+                    <span className="text-base md:text-lg font-semibold text-black/80">
+                      Besplatno
+                    </span>
                   </div>
                   <Separator className="bg-black/10" />
                   <div className="flex items-center justify-between">
-                    <span className="md:text-xl text-black">Ukupno</span>
+                    <span className="text-base md:text-lg text-black/60">
+                      Ukupno
+                    </span>
+
                     <span className="text-xl md:text-2xl font-bold">
-                      {formatPrice(Math.round(adjustedTotalPrice))} RSD
+                      {formatPrice(Math.round(adjustedTotalPrice))}{" "}
+                      <span className="text-sm">RSD</span>
                     </span>
                   </div>
                 </div>
                 <Button
                   type="button"
-                  className="text-sm md:text-base font-medium bg-brand text-white cursor-pointer hover:bg-brand/90 rounded-full w-full py-4 h-13.5 md:h-15 group"
+                  variant="outline"
+                  className="text-base md:text-lg font-medium border-black/80 text-black/80 cursor-pointer hover:bg-primary hover:border-primary rounded-full w-full py-4 h-13.5 md:h-15"
+                  onClick={() => dispatch(clearCart())}
                 >
-                  Nastavi na plaćanjem
-                  <FaArrowRight className="text-xl ml-2 group-hover:translate-x-1 transition-all" />
+                  Isprazni korpu
+                </Button>
+                <Button
+                  type="button"
+                  className="text-base md:text-lg font-medium bg-primary text-black/80 cursor-pointer hover:bg-primary/90 rounded-full w-full py-4 h-13.5 md:h-15"
+                >
+                  Nastavi s plaćanjem
                 </Button>
               </div>
             </div>

@@ -126,7 +126,7 @@ const KontaktPage = () => {
           <InputGroup className="pl-0">
             <InputGroup.Input
               type="text"
-              placeholder="Unesite vaše ime i prezime"
+              placeholder="Unesite Vaše ime i prezime"
               className={cn(
                 "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
                 errors.fullName && "border-red-500",
@@ -137,7 +137,7 @@ const KontaktPage = () => {
           <InputGroup className="pl-0">
             <InputGroup.Input
               type="email"
-              placeholder="Unesite vaš e-mail"
+              placeholder="Unesite Vaš e-mail"
               className={cn(
                 "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
                 errors.email && "border-red-500",
@@ -189,7 +189,7 @@ const KontaktPage = () => {
 
         <div>
           <Textarea
-            placeholder="Unesite vašu poruku ovde"
+            placeholder="Unesite Vašu poruku ovde"
             className={cn(
               "bg-section min-h-37.5 resize-none rounded-4xl border border-gray-300 p-4 px-6 placeholder:text-base",
               errors.message && "border-red-500",
