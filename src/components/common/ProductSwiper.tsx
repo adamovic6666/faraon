@@ -53,7 +53,7 @@ const ProductSwiper = ({ data, showArrows = false }: ProductSwiperProps) => {
             onClick={handlePrev}
             disabled={isBeginning}
             aria-label="Prethodni proizvod"
-            className="hidden md:flex absolute left-0 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-primary text-black items-center justify-center shadow-sm hover:bg-primary/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="hidden md:flex absolute left-2 top-1/2 z-40 -translate-y-1/2 h-9 w-9 rounded-full bg-primary text-black items-center justify-center shadow-sm hover:bg-primary/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <IoIosArrowBack size={18} aria-hidden="true" />
           </button>
@@ -62,7 +62,7 @@ const ProductSwiper = ({ data, showArrows = false }: ProductSwiperProps) => {
             onClick={handleNext}
             disabled={isEnd}
             aria-label="Sledeci proizvod"
-            className="hidden md:flex absolute right-0 top-1/2 z-40 translate-x-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-primary text-black items-center justify-center shadow-sm hover:bg-primary/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="hidden md:flex absolute right-2 top-1/2 z-40 -translate-y-1/2 h-9 w-9 rounded-full bg-primary text-black items-center justify-center shadow-sm hover:bg-primary/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <IoIosArrowForward size={18} aria-hidden="true" />
           </button>

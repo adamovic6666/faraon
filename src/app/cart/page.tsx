@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { formatPrice } from "@/utils/format-price";
 import PageLink from "@/components/common/Link";
 import { clearCart } from "@/lib/features/carts/cartsSlice";
+import Link from "next/link";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
@@ -109,12 +110,12 @@ export default function CartPage() {
                   >
                     Isprazni korpu
                   </Button>
-                  <Button
-                    type="button"
-                    className="text-base md:text-lg font-medium bg-primary text-black/80 uppercase cursor-pointer hover:bg-primary/90 rounded-full w-full py-4 h-13.5 md:h-15"
+                  <Link
+                    href="/korpa/checkout"
+                    className="inline-flex w-full items-center justify-center rounded-full bg-primary py-4 text-base font-medium uppercase text-black/80 transition-colors hover:bg-primary/90 md:h-15 md:text-lg"
                   >
                     Nastavi sa plaćanjem
-                  </Button>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import HolyLoader from "holy-loader";
 import Providers from "./providers";
 import HeroNavBar from "@/components/homepage/Header/HeroNavBar";
+import CookieConsent from "@/components/common/CookieConsent";
 
 export const metadata: Metadata = {
   title: "Faraon",
@@ -30,6 +31,7 @@ export default function RootLayout({
           <HeroNavBar />
           <div className="pt-16">{children}</div>
           <Footer />
+          <CookieConsent />
         </Providers>
       </body>
     </html>

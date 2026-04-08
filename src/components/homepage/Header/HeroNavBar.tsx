@@ -42,13 +42,13 @@ const otherLinks = [
 ];
 
 const linkClass =
-  "whitespace-nowrap rounded-full px-3 py-0.5 md:py-1 transition-colors hover:text-brand md:px-4  text-normal md:text-lg font-normal text-black/80";
+  "whitespace-nowrap rounded-full px-3 py-0.5 md:py-1 transition-colors hover:text-brand md:px-4 text-normal md:text-base xl:text-lg font-normal text-black/80";
 
 const HeroNavBar = () => {
   return (
-    <div className="fixed inset-x-0 top-16 z-100 border-t border-black/10 bg-primary shadow-xs">
+    <div className="fixed inset-x-0 top-16 z-80 border-t border-black/10 bg-primary shadow-xs">
       <div className="relative mx-auto max-w-frame md:px-4 lg:px-0">
-        <div className="hero-category-scroll mx-auto flex h-10 max-w-frame items-center overflow-x-auto scrollbar-none md:h-12 md:overflow-visible">
+        <div className="hero-category-scroll mx-auto flex h-10 max-w-frame items-center overflow-x-auto scrollbar-none md:h-11 xl:h-12 xl:overflow-visible">
           {/* Single row: scrollable on mobile, justify-between on desktop.
             Meni lives inside the same flex so every separator gap receives
             the same extra space from justify-between — no more unequal
@@ -56,11 +56,11 @@ const HeroNavBar = () => {
           <div className="hero-category-bar relative min-w-0 flex-1">
             <div>
               <div
-                className="flex w-max min-w-full items-center pl-4 pr-8 md:w-full md:min-w-0 md:pl-0 md:pr-0 md:justify-between"
+                className="flex w-max min-w-full items-center pl-4 pr-8 xl:w-full xl:min-w-0 xl:pl-0 xl:pr-0 xl:justify-between"
                 data-mobile-category-scroll
               >
                 {/* Meni dropdown — desktop only, first item in the justified row */}
-                <NavigationMenu className="hidden md:flex shrink-0 flex-none! max-w-none!">
+                <NavigationMenu className="hidden xl:flex shrink-0 flex-none! max-w-none!">
                   <NavigationMenuList>
                     <NavigationMenuItem>
                       <NavigationMenuTrigger
@@ -103,7 +103,7 @@ const HeroNavBar = () => {
                       aria-hidden
                       className={cn(
                         "h-4 w-px shrink-0 bg-black/25",
-                        index === 0 && "hidden md:block",
+                        index === 0 && "hidden xl:block",
                       )}
                     />
                     <Link
@@ -112,8 +112,8 @@ const HeroNavBar = () => {
                         "shrink-0",
                         linkClass,
                         item.highlighted &&
-                          "bg-brand text-white hover:text-white mr-3 md:mr-0 py-0.5 md:py-0.5",
-                        index === otherLinks.length - 1 && "md:pr-0",
+                          "bg-brand text-white hover:text-white mr-3 xl:mr-0 py-0.5 md:py-0.5",
+                        index === otherLinks.length - 1 && "xl:pr-0",
                       )}
                     >
                       {item.label}
@@ -128,7 +128,7 @@ const HeroNavBar = () => {
         {/* Right-edge fade — mobile only, fixed to the visible strip edge */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-primary via-primary/92 to-transparent md:hidden"
+          className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-primary via-primary/92 to-transparent xl:hidden"
         />
       </div>
     </div>
