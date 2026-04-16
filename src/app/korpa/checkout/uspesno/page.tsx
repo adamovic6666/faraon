@@ -24,45 +24,45 @@ const SuccessPage = () => {
   }, [cleared, dispatch]);
 
   return (
-    <main className="pt-20 pb-10 md:pt-24 md:pb-12">
-      <section className="mx-auto max-w-frame px-4 xl:px-0">
-        <div className="mx-auto max-w-2xl rounded-[24px] border border-black/15 bg-white p-6 text-center shadow-sm md:p-10">
-          <p className="inline-flex rounded-full border border-black/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-black/70">
+    <main className="relative isolate overflow-hidden px-4 pb-12 pt-24 md:pb-16 md:pt-28">
+      <section className="mx-auto max-w-frame px-0">
+        <div className="mx-auto flex min-h-[45vh] max-w-3xl flex-col items-center justify-center rounded-[28px] border border-black/10 bg-white/90 px-6 py-12 text-center md:px-10">
+          <p className="inline-flex rounded-full border border-black/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-black/70">
             Porudžbina uspešna
           </p>
 
-          <h1 className="mt-4 text-2xl font-bold text-black md:text-3xl">
+          <h1 className="mt-5 text-4xl font-bold leading-none text-brand md:text-6xl">
             Hvala na kupovini
           </h1>
 
-          <p className="mt-3 text-sm leading-relaxed text-black/70 md:text-base">
+          <p className="mx-auto mt-5 max-w-2xl text-center text-base font-light leading-relaxed text-black/80 sm:text-lg">
             Vaša porudžbina je evidentirana i uskoro ćemo Vas kontaktirati radi
             potvrde i isporuke.
           </p>
 
           {orderNumber ? (
-            <p className="mt-4 text-base font-semibold text-brand md:text-lg">
+            <p className="mt-5 text-lg font-semibold text-brand md:text-2xl">
               Broj porudžbine: #{orderNumber}
             </p>
           ) : (
-            <p className="mt-4 text-sm text-black/65">
+            <p className="mt-5 text-sm text-black/70 md:text-base">
               Broj porudžbine nije dostupan u URL-u, ali je porudžbina uspešno
               poslata.
             </p>
           )}
 
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex w-full flex-wrap justify-center gap-3">
             <Link
               href="/prodavnica"
-              className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-black/80 transition hover:bg-primary/90"
+              className="inline-flex w-full items-center justify-center whitespace-nowrap rounded-full bg-brand px-10 py-4 text-center text-white transition-all hover:bg-brand/90 md:w-60 md:px-10 md:text-lg"
             >
-              Nazad u webshop
+              Idi u webshop
             </Link>
             <Link
               href="/"
-              className="rounded-full border border-black/20 bg-white px-6 py-3 text-sm font-semibold text-black/80 transition hover:bg-black/5"
+              className="inline-flex w-full items-center justify-center whitespace-nowrap rounded-full bg-primary px-10 py-4 text-center text-black/80 transition-all hover:bg-primary/85 md:w-60 md:px-10 md:text-lg"
             >
-              Početna strana
+              Nazad na početnu
             </Link>
           </div>
         </div>
