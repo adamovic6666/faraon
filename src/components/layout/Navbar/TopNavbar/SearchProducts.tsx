@@ -1,7 +1,7 @@
 "use client";
 
 import InputGroup from "@/components/ui/input-group";
-import { searchProducts } from "@/lib/features/products/search";
+import { searchProducts } from "@/lib/features/products/search.server";
 import { SearchProduct } from "@/data/search-products";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +10,26 @@ import { useEffect, useMemo, useRef, useState } from "react";
 const MIN_QUERY_LENGTH = 2;
 const DROPDOWN_LIMIT = 5;
 const DEBOUNCE_MS = 300;
+
+const getProductHref = (product: SearchProduct) => {
+  if (product.url) {
+    const parts = product.url.split("/").filter(Boolean);
+
+    if (parts.length >= 2) {
+      const slug = parts.at(-1);
+      const category = parts.at(-2);
+      if (slug && category) {
+        return `/prodavnica/${category}/${slug}`;
+      }
+    }
+  }
+
+  if (product.category && product.slug) {
+    return `/prodavnica/${product.category}/${product.slug}`;
+  }
+
+  return "/prodavnica";
+};
 
 type SearchProductsProps = {
   className?: string;
@@ -125,7 +145,7 @@ const SearchProducts = ({
     onClear();
   };
 
-  const resultsLink = `/webshop?search=${encodeURIComponent(query.trim())}`;
+  const resultsLink = `/prodavnica/search?q=${encodeURIComponent(query.trim())}`;
   const shouldShowDropdown = isOpen && query.trim().length >= MIN_QUERY_LENGTH;
 
   const renderSearchInput = (inputClassName: string) => (
@@ -192,7 +212,7 @@ const SearchProducts = ({
               {dropdownResults.map((product) => (
                 <li key={product.id}>
                   <Link
-                    href={`/webshop/${product.category}/${product.slug}`}
+                    href={getProductHref(product)}
                     className="block border-b border-black/10 px-3 py-2 text-base leading-6 text-black/75 transition-colors hover:bg-black/3"
                     onClick={() => {
                       setIsOpen(false);

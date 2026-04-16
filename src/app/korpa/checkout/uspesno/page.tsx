@@ -53,7 +53,7 @@ const SuccessPage = () => {
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href="/webshop"
+              href="/prodavnica"
               className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-black/80 transition hover:bg-primary/90"
             >
               Nazad u webshop

@@ -3,18 +3,24 @@ import Header from "@/components/homepage/Header";
 import OnlineStoreSection from "@/components/homepage/OnlineStoreSection";
 import StoreMapSection from "@/components/homepage/StoreMapSection";
 import AnkhSeparator from "@/components/common/AnkhSeparator";
-import { newArrivalsData, categories } from "@/data/store-data";
+import { fetchActionProducts, fetchTopLevelCategories } from "@/lib/api/faraon";
 
-export default function Home() {
+export const revalidate = 3600; // Revalidate every hour
+
+export default async function Home() {
+  const [products, categories] = await Promise.all([
+    fetchActionProducts(),
+    fetchTopLevelCategories(),
+  ]);
+
   return (
     <>
       <Header />
       <main className="mb-10 md:mb-12 mt-10 sm:mt-12">
         <ProductListSec
           title="Akcijske cene"
-          data={newArrivalsData}
+          data={products}
           viewAllLink="/akcije"
-          viewAllVariant="brand"
           showArrows
         />
         <AnkhSeparator />

@@ -1,20 +1,19 @@
-// import BreadcrumbShop from "@/components/shop-page/BreadcrumbShop";
 import CategoryProductGrid from "@/components/shop-page/CategoryProductGrid";
-import { categoryProductsMap, categoryLabelsMap } from "@/data/store-data";
+import { fetchCategoryProducts } from "@/lib/api/faraon";
 
 export default async function CategoryPage({
   params,
 }: Readonly<{
   params: Promise<{ category: string }>;
 }>) {
-  const { category } = await params;
-  const products = categoryProductsMap[category] ?? [];
-  const categoryLabel = categoryLabelsMap[category] ?? category;
+  const resolvedParams = await params;
+  const pathname = `/prodavnica/${resolvedParams.category}`;
+
+  const { products, title } = await fetchCategoryProducts(pathname);
 
   return (
     <div className="max-w-frame mx-auto px-4 xl:px-0 pt-18 sm:pt-24 pb-10 md:pb-12">
-      {/* <BreadcrumbShop /> */}
-      <CategoryProductGrid products={products} categoryLabel={categoryLabel} />
+      <CategoryProductGrid products={products} title={title} />
     </div>
   );
 }

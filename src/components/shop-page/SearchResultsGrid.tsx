@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState, useCallback } from "react";
 import ProductCard from "@/components/common/ProductCard";
-import SortSelect from "@/components/shop-page/SortSelect";
 import {
   Pagination,
   PaginationContent,
@@ -15,33 +14,19 @@ import { Product } from "@/types/product.types";
 
 const PRODUCTS_PER_PAGE = 24;
 
-function sortProducts(products: Product[], sort: string): Product[] {
-  const list = [...products];
-  if (sort === "niza-cena") return list.sort((a, b) => a.price - b.price);
-  if (sort === "visa-cena") return list.sort((a, b) => b.price - a.price);
-  return list;
-}
-
-export default function CategoryProductGrid({
+export default function SearchResultsGrid({
   products,
-  title,
+  query,
 }: Readonly<{
   products: Product[];
-  title: string;
+  query: string;
 }>) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sort, setSort] = useState("");
 
-  const sorted = sortProducts(products, sort);
-  const hasProducts = sorted.length > 0;
-  const totalPages = Math.ceil(sorted.length / PRODUCTS_PER_PAGE);
+  const hasProducts = products.length > 0;
+  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
   const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
-  const pageProducts = sorted.slice(start, start + PRODUCTS_PER_PAGE);
-
-  const handleSort = useCallback((value: string) => {
-    setSort(value);
-    setCurrentPage(1);
-  }, []);
+  const pageProducts = products.slice(start, start + PRODUCTS_PER_PAGE);
 
   const goTo = useCallback((page: number) => {
     setCurrentPage(page);
@@ -68,18 +53,17 @@ export default function CategoryProductGrid({
     <>
       <div className="flex items-center justify-between mb-6 gap-3">
         <div>
-          <h1 className="font-bold text-2xl md:text-4xl text-brand">{title}</h1>
+          <h1 className="font-bold text-2xl md:text-4xl text-brand">
+            Rezultati pretrage
+          </h1>
           {hasProducts && (
             <span className="text-xs md:text-sm text-black/60">
               Prikazano {start + 1}–
-              {Math.min(start + PRODUCTS_PER_PAGE, sorted.length)} od{" "}
-              {sorted.length} proizvoda
+              {Math.min(start + PRODUCTS_PER_PAGE, products.length)} od{" "}
+              {products.length} proizvoda za &quot;{query}&quot;
             </span>
           )}
         </div>
-        {hasProducts && (
-          <SortSelect currentSort={sort} onSortChange={handleSort} />
-        )}
       </div>
       {hasProducts ? (
         <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
@@ -93,7 +77,7 @@ export default function CategoryProductGrid({
       ) : (
         <div className="rounded-2xl border border-black/10 bg-section p-8 md:p-10 text-center">
           <p className="text-base md:text-lg text-black/75">
-            Trenutno nema proizvoda u ovoj kategoriji.
+            Nema rezultata pretrage za &quot;{query}&quot;.
           </p>
         </div>
       )}
@@ -138,21 +122,20 @@ function PageButton({
   isActive: boolean;
   goTo: (page: number) => void;
 }>) {
-  const handleClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      goTo(page);
-    },
-    [page, goTo],
-  );
-
   return (
     <PaginationItem>
       <PaginationLink
         href="#"
-        onClick={handleClick}
         isActive={isActive}
-        className="text-black/50 font-medium text-sm"
+        onClick={(e) => {
+          e.preventDefault();
+          goTo(page);
+        }}
+        className={
+          isActive
+            ? "bg-brand text-white border-brand"
+            : "border border-black/10 rounded-lg hover:bg-black/3"
+        }
       >
         {page}
       </PaginationLink>

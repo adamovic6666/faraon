@@ -15,22 +15,12 @@ type ProductSwiperProps = {
 
 const ProductSwiper = ({ data, showArrows = false }: ProductSwiperProps) => {
   const swiperRef = useRef<SwiperType | null>(null);
-  const minLoopSlides = 6;
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
 
   if (!data.length) return null;
 
-  const loopSlides =
-    data.length > 1 && data.length < minLoopSlides
-      ? Array.from(
-          { length: minLoopSlides },
-          (_, index) => data[index % data.length],
-        )
-      : data;
-
-  const canLoop = loopSlides.length > 1;
-  const canShowArrows = showArrows && canLoop;
+  const canShowArrows = showArrows && data.length > 4;
 
   const handlePrev = () => {
     const swiper = swiperRef.current;
@@ -97,7 +87,7 @@ const ProductSwiper = ({ data, showArrows = false }: ProductSwiperProps) => {
         }}
         className="w-full mb-4 md:mb-9"
       >
-        {loopSlides.map((product, index) => (
+        {data.map((product, index) => (
           <SwiperSlide
             key={`${product.id}-${index}`}
             className="w-52! sm:w-77!"

@@ -1,8 +1,10 @@
 export type CategoryItem = {
-  id: number;
-  title: string;
-  count: number;
-  icon: string;
-  badge?: "Novo" | "Popularno";
-  href: string;
+  id?: number;
+  name: string;
+  image: string;
+  alias: string;
+  metatags: {
+    title: string;
+    description: string;
+  }
 };

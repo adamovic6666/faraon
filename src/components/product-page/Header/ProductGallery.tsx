@@ -12,28 +12,30 @@ import { cn } from "@/lib/utils";
 type ProductGalleryProps = {
   title: string;
   srcUrl: string;
-  discount?: number;
+  galleryImages?: string[];
   showOnlyMainImage?: boolean;
 };
 
 const ProductGallery = ({
   title,
   srcUrl,
-  discount,
+  galleryImages = [],
   showOnlyMainImage = false,
 }: ProductGalleryProps) => {
-  const images = useMemo(
-    () =>
-      showOnlyMainImage
-        ? [{ id: "img-1", src: srcUrl }]
-        : [
-            { id: "img-1", src: srcUrl },
-            { id: "img-2", src: srcUrl },
-            { id: "img-3", src: srcUrl },
-            { id: "img-4", src: srcUrl },
-          ],
-    [showOnlyMainImage, srcUrl],
-  );
+  const images = useMemo(() => {
+    const uniqueGallery = Array.from(
+      new Set(
+        galleryImages.filter(Boolean).filter((image) => image !== srcUrl),
+      ),
+    );
+    const ordered = showOnlyMainImage ? [srcUrl] : [srcUrl, ...uniqueGallery];
+
+    return ordered.map((image, index) => ({
+      id: `img-${index + 1}`,
+      src: image,
+    }));
+  }, [showOnlyMainImage, srcUrl, galleryImages]);
+  const hasThumbnails = images.length > 1;
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
@@ -93,13 +95,8 @@ const ProductGallery = ({
             priority
             className="object-contain"
           />
-          {discount && discount > 0 ? (
-            <span className="absolute right-3 top-3 rounded-full bg-brand px-2.5 py-1 text-xs font-bold leading-none text-white">
-              -{discount}%
-            </span>
-          ) : null}
         </button>
-        {images.length > 1 ? (
+        {hasThumbnails ? (
           <div className="grid grid-cols-3 gap-3">
             {images.slice(0, 3).map((img, index) => (
               <button
@@ -125,14 +122,10 @@ const ProductGallery = ({
 
       {/* Desktop: thumbnails column on the left, main image on the right */}
       <div className="hidden md:flex gap-4 items-start">
-        <div
-          className={cn(
-            "w-24 shrink-0",
-            images.length > 1 ? "flex flex-col gap-3" : "",
-          )}
-          aria-hidden={images.length === 1}
-        >
-          {images.length > 1 ? thumbnails : null}
+        <div className="w-24 shrink-0" aria-hidden={!hasThumbnails}>
+          {hasThumbnails ? (
+            <div className="flex flex-col gap-3">{thumbnails}</div>
+          ) : null}
         </div>
         <button
           type="button"
@@ -146,11 +139,6 @@ const ProductGallery = ({
             priority
             className="object-contain"
           />
-          {discount && discount > 0 ? (
-            <span className="absolute right-4 top-4 rounded-full bg-brand px-3 py-1.5 text-sm font-bold leading-none text-white">
-              -{discount}%
-            </span>
-          ) : null}
         </button>
       </div>
 
@@ -168,7 +156,7 @@ const ProductGallery = ({
 
           {/* Main lightbox image */}
           <div className="flex flex-1 items-center justify-center gap-3 min-h-0">
-            {images.length > 1 ? (
+            {hasThumbnails ? (
               <button
                 type="button"
                 aria-label="Prethodna slika"
@@ -188,7 +176,7 @@ const ProductGallery = ({
               />
             </div>
 
-            {images.length > 1 ? (
+            {hasThumbnails ? (
               <button
                 type="button"
                 aria-label="Sledeća slika"
@@ -201,7 +189,7 @@ const ProductGallery = ({
           </div>
 
           {/* Thumbnail strip at the bottom */}
-          {images.length > 1 ? (
+          {hasThumbnails ? (
             <div className="flex shrink-0 items-center justify-center gap-3 pt-4 pb-2">
               {images.map((img, index) => (
                 <button

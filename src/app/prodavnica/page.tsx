@@ -1,18 +1,22 @@
 import AnkhSeparator from "@/components/common/AnkhSeparator";
 import ProductListSec from "@/components/common/ProductListSec";
 import OnlineStoreSection from "@/components/homepage/OnlineStoreSection";
-import { categories, newArrivalsData } from "@/data/store-data";
+import { fetchActionProducts, fetchTopLevelCategories } from "@/lib/api/faraon";
 
-const WebshopPage = () => {
+const WebshopPage = async () => {
+  const [actionProducts, categories] = await Promise.all([
+    fetchActionProducts(),
+    fetchTopLevelCategories(),
+  ]);
+
   return (
     <main className="pb-10 md:pb-12 pt-18 sm:pt-24">
       <ProductListSec
         id="akcijske-cene"
         className="max-w-frame mx-auto text-center"
         title="Akcijske cene"
-        data={newArrivalsData}
-        viewAllLink="/"
-        viewAllVariant="brand"
+        data={actionProducts}
+        viewAllLink="/akcije"
         showArrows
       />
       <AnkhSeparator />

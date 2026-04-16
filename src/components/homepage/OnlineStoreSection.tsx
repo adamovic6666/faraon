@@ -33,21 +33,21 @@ const OnlineStoreSection = ({
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {data.map((item) => (
             <Link
-              key={item.id}
-              href={item.href}
+              key={item.alias}
+              href={item.alias}
               className="group min-h-44 rounded-xl border border-[#e4a100] bg-primary pl-4 pt-4  transition-shadow hover:shadow-[0_10px_20px_rgba(0,0,0,0.12)] sm:min-h-48"
             >
               <div className="relative flex h-full min-h-20 items-start justify-between gap-8 sm:min-h-24">
                 <div>
                   <h3 className="max-w-28 text-xl font-semibold leading-snug text-black sm:text-2xl">
-                    {item.title}
+                    {item.name}
                   </h3>
                 </div>
 
                 <div className="absolute bottom-0 right-0 mt-auto flex h-26 items-center justify-center sm:h-32 sm:w-32 w-26">
                   <Image
-                    src={item.icon}
-                    alt={item.title}
+                    src={process.env.BASE_URL + item.image}
+                    alt={item.name}
                     width={64}
                     height={64}
                     className="h-full w-full sm:h-full sm:w-full"
@@ -59,7 +59,7 @@ const OnlineStoreSection = ({
         </div>
 
         <div className="mt-9 flex justify-center md:items-center">
-          <PageLink inCenter href="/webshop" variant="brand">
+          <PageLink inCenter href="/prodavnica" variant="brand">
             Vidi sve
           </PageLink>
         </div>

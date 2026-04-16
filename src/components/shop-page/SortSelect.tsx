@@ -5,7 +5,7 @@ import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 
 const SORT_OPTIONS = [
-  { value: "akcija", label: "Akcija" },
+  { value: "", label: "Podrazumevano" },
   { value: "niza-cena", label: "Niža cena" },
   { value: "visa-cena", label: "Viša cena" },
 ];

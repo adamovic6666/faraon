@@ -12,14 +12,12 @@ const Header = ({
   data: Product;
   showOnlyMainImage?: boolean;
 }) => {
-  const hasDiscount = data.discount !== undefined && data.discount > 0;
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 items-stretch">
       <ProductGallery
-        title={data.title}
-        srcUrl={data.srcUrl}
-        discount={data.discount}
+        title={data?.title ?? "Product title"}
+        srcUrl={data?.srcUrl ?? "/images/placeholder.png"}
+        galleryImages={data?.galleryImages}
         showOnlyMainImage={showOnlyMainImage}
       />
 
@@ -30,16 +28,16 @@ const Header = ({
             "text-2xl text-black/80 md:text-[40px] leading-8 md:leading-11 mb-4 md:mb-6 max-w-120",
           ])}
         >
-          {data.title}
+          {data?.title ?? "Product title"}
         </h1>
         <div className="flex flex-row gap-3 items-end">
           <p className="font-bold text-black text-4xl leading-none sm:text-5xl">
-            {formatPrice(data.price)}
+            {formatPrice(data?.price)}
             <span className="text-sm ml-0.5 leading-none">RSD</span>
           </p>
-          {hasDiscount && data.oldPrice ? (
+          {data?.oldPrice ? (
             <span className="relative w-fit text-lg text-black/40 leading-none md:-translate-y-0.5">
-              {formatPrice(data.oldPrice)}{" "}
+              {formatPrice(data?.oldPrice)}{" "}
               <span className="text-xs leading-none">RSD</span>
               <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-black/20" />
             </span>
@@ -47,7 +45,7 @@ const Header = ({
         </div>
 
         <div className="flex flex-col-reverse md:flex-col h-full">
-          {data.description ? (
+          {data?.description ? (
             <p className="text-md font-light text-black/60 mt-6 mb-0 md:mb-3 max-w-160 max-h-72 md:max-h-54 overflow-y-auto md:pr-1">
               {data.description}
             </p>

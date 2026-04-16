@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
+import { CategoryItem } from "@/types/category.types";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,7 +15,7 @@ import {
 const menuDropdownItems = [
   {
     title: "Prodavnica",
-    href: "/webshop",
+    href: "/prodavnica",
     description: "Online prodavnica pića sa brzom dostavom",
   },
   {
@@ -29,22 +30,26 @@ const menuDropdownItems = [
   },
 ];
 
-const otherLinks = [
-  { id: 2, label: "Akcije", href: "/", highlighted: true },
-  { id: 3, label: "Bezalkoholna pića", href: "/webshop/bezalkholna-pica" },
-  { id: 4, label: "Žestoka alkoholna pića", href: "/" },
-  { id: 5, label: "Piva", href: "/" },
-  { id: 6, label: "Vina", href: "/" },
-  { id: 7, label: "Vode", href: "/" },
-  { id: 8, label: "Čajevi, kafe i napici", href: "/" },
-  { id: 9, label: "Sirupi i likeri", href: "/" },
-  { id: 10, label: "Led", href: "/" },
-];
-
 const linkClass =
   "whitespace-nowrap rounded-full px-3 py-0.5 md:py-1 transition-colors hover:text-brand md:px-4 text-normal md:text-base xl:text-lg font-normal text-black/80";
 
-const HeroNavBar = () => {
+interface HeroNavBarProps {
+  categories?: CategoryItem[];
+}
+
+const HeroNavBar = ({ categories = [] }: HeroNavBarProps) => {
+  // Static Akcije link
+  const akcije = { id: 1, label: "Akcije", href: "/akcije", highlighted: true };
+
+  // Dynamic category links from API
+  const otherLinks =
+    categories.length > 0
+      ? categories.map((cat, index) => ({
+          id: cat.id ?? `${cat.alias}-${index}`,
+          label: cat.name,
+          href: cat.alias,
+        }))
+      : [];
   return (
     <div className="fixed inset-x-0 top-16 z-80 border-t border-black/10 bg-primary shadow-xs">
       <div className="relative mx-auto max-w-frame md:px-4 lg:px-0">
@@ -94,25 +99,34 @@ const HeroNavBar = () => {
                   </NavigationMenuList>
                 </NavigationMenu>
 
+                {/* Akcije link (static, always first) */}
+                <span
+                  aria-hidden
+                  className="h-4 w-px shrink-0 bg-black/25 hidden xl:block"
+                />
+                <Link
+                  href={akcije.href}
+                  className={cn(
+                    "shrink-0",
+                    linkClass,
+                    "bg-brand text-white hover:text-white mr-3 xl:mr-0 py-0.5 md:py-0.5",
+                  )}
+                >
+                  {akcije.label}
+                </Link>
+
+                {/* Dynamic category links */}
                 {otherLinks.map((item, index) => (
                   <React.Fragment key={item.id}>
-                    {/* Separator before every link.
-                        index=0 (before Akcije): desktop-only — sits between Meni and Akcije.
-                        index>0: always visible on both mobile and desktop. */}
                     <span
                       aria-hidden
-                      className={cn(
-                        "h-4 w-px shrink-0 bg-black/25",
-                        index === 0 && "hidden xl:block",
-                      )}
+                      className="h-4 w-px shrink-0 bg-black/25"
                     />
                     <Link
                       href={item.href}
                       className={cn(
                         "shrink-0",
                         linkClass,
-                        item.highlighted &&
-                          "bg-brand text-white hover:text-white mr-3 xl:mr-0 py-0.5 md:py-0.5",
                         index === otherLinks.length - 1 && "xl:pr-0",
                       )}
                     >

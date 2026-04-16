@@ -71,13 +71,7 @@ const CheckoutPage = () => {
       const payload = {
         ...data,
         orderItems: cart.items.map((item) => {
-          const unitPrice = Math.round(
-            item.discount > 0
-              ? item.discount > 100
-                ? item.price - item.discount
-                : item.price - (item.price * item.discount) / 100
-              : item.price,
-          );
+          const unitPrice = Math.round(item.price);
 
           return {
             name: item.name,
@@ -130,7 +124,7 @@ const CheckoutPage = () => {
         <div className="mx-auto flex max-w-frame flex-col items-center justify-center px-4 text-center text-black/80 xl:px-0">
           <TbBasketExclamation strokeWidth={1} className="text-8xl" />
           <p className="mb-8 mt-4">Vaša korpa je trenutno prazna.</p>
-          <Link href="/webshop">
+          <Link href="/prodavnica">
             <Button className="mx-auto block max-w-52">
               Vrati se u prodavnicu
             </Button>

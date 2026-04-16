@@ -7,6 +7,7 @@ import HolyLoader from "holy-loader";
 import Providers from "./providers";
 import HeroNavBar from "@/components/homepage/Header/HeroNavBar";
 import CookieConsent from "@/components/common/CookieConsent";
+import { fetchTopLevelCategories } from "@/lib/api/faraon";
 
 export const metadata: Metadata = {
   title: "Faraon",
@@ -17,18 +18,20 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const categories = await fetchTopLevelCategories();
+
   return (
     <html lang="en">
       <body className={satoshi.className} suppressHydrationWarning>
         <HolyLoader color="#868686" />
         <Providers>
           <TopNavbar />
-          <HeroNavBar />
+          <HeroNavBar categories={categories} />
           <div className="pt-16">{children}</div>
           <Footer />
           <CookieConsent />

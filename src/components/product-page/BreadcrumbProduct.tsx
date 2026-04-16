@@ -18,7 +18,7 @@ type BreadcrumbProductProps = {
 const BreadcrumbProduct = ({
   title,
   categoryLabel = "Shop",
-  categoryHref = "/webshop",
+  categoryHref = "/prodavnica",
 }: BreadcrumbProductProps) => {
   return (
     <Breadcrumb className="mb-5 sm:mb-9">

@@ -16,16 +16,8 @@ type ProductCardProps = {
 const ProductCard = ({ data }: ProductCardProps) => {
   const dispatch = useAppDispatch();
   const [qtyInput, setQtyInput] = useState("1");
-  const hasDiscount = data.discount !== undefined && data.discount > 0;
-  const productSlug =
-    data.slug ??
-    data.title
-      .toLowerCase()
-      .replaceAll("\n", " ")
-      .replaceAll(/[^a-z0-9\s-]/g, "")
-      .trim()
-      .replaceAll(/\s+/g, "-");
-  const productHref = `/webshop/bezalkholna-pica/${productSlug}`;
+  const category = data.category || "bezalkholna-pica";
+  const productHref = `/prodavnica/${category}/${data.slug}`;
   const getSafeQty = (value: string = qtyInput) => {
     const parsedQty = Number(value);
     if (!Number.isFinite(parsedQty) || parsedQty < 1) return 1;
@@ -52,7 +44,6 @@ const ProductCard = ({ data }: ProductCardProps) => {
         srcUrl: data.srcUrl,
         price: data.price,
         attributes: [],
-        discount: data?.discount ? data.discount : 0,
         quantity: quantityToAdd,
       }),
     );
@@ -70,7 +61,6 @@ const ProductCard = ({ data }: ProductCardProps) => {
     e.preventDefault();
     setQtyInput(String(Math.max(1, getSafeQty() - 1)));
   };
-
   return (
     <div className="flex flex-col rounded-[20px] border border-black/15 overflow-hidden bg-section  w-full">
       {/* Image */}
@@ -85,11 +75,6 @@ const ProductCard = ({ data }: ProductCardProps) => {
           alt={data.title}
           priority
         />
-        {hasDiscount && (
-          <span className="absolute top-3 left-3 bg-brand text-white text-xs font-bold rounded-full px-2.5 py-1.5 leading-none">
-            -{data.discount}%
-          </span>
-        )}
       </Link>
 
       {/* Content */}
@@ -105,16 +90,16 @@ const ProductCard = ({ data }: ProductCardProps) => {
         <div className="flex flex-col items-start justify-between gap-2 mt-auto">
           {/* Price */}
           <div className="flex flex-col items-start">
-            {hasDiscount && (
+            {data?.oldPrice && data.oldPrice > data.price && (
               <span className="text-md text-black/40 mt-0.5 relative">
-                {data?.oldPrice ? formatPrice(data.oldPrice) : ""}{" "}
+                {formatPrice(data.oldPrice)}{" "}
                 <span className="text-[10px]">RSD</span>
                 {/* Line though custom */}
                 <span className="absolute inset-0 bg-black/15 h-0.5 top-1/2 transform -translate-y-1/2 z-1"></span>
               </span>
             )}
             <span className="font-bold text-black text-2xl leading-none">
-              {formatPrice(data.price)} <span className="text-xs">RSD</span>
+              {formatPrice(data?.price)} <span className="text-xs">RSD</span>
             </span>
           </div>
 

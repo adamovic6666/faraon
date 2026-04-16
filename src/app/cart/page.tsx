@@ -125,7 +125,7 @@ export default function CartPage() {
             <TbBasketExclamation strokeWidth={1} className="text-8xl" />
             <span className="block mb-12">Vaša korpa je trenutno prazna.</span>
 
-            <PageLink href="/webshop" className=" flex justify-center">
+            <PageLink href="/prodavnica" className=" flex justify-center">
               Vrati se nazad
             </PageLink>
           </div>

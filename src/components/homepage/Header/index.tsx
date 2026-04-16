@@ -60,7 +60,7 @@ const Header = () => {
               transition={{ delay: 1, duration: 0.6 }}
               className="flex gap-3 w-full"
             >
-              <PageLink href="/webshop">Poruči odmah</PageLink>
+              <PageLink href="/prodavnica">Poruči odmah</PageLink>
             </motion.div>
           </section>
         </div>
