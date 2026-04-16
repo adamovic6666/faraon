@@ -19,8 +19,12 @@ type CategoryApiProduct = {
   title: string;
   image: string;
   alias: string;
+  cena?: string | number;
+  akcijska_cena?: string | number;
   sale_price?: string;
   base_price?: string;
+  price?: string | number;
+  oldPrice?: string | number;
 };
 
 type CategoryApiResponse = {
@@ -97,11 +101,14 @@ const mapActionProduct = (item: ActionApiProduct, index: number): Product => {
 
 const mapCategoryProducts = (items: CategoryApiProduct[] = []): Product[] => {
   return items.map((item, index) => {
-    const salePrice = toNumber(item.sale_price);
-    const basePrice = toNumber(item.base_price);
-    const price = salePrice || basePrice;
-    const oldPrice =
-      basePrice > salePrice && salePrice > 0 ? basePrice : undefined;
+    const basePrice = toNumber(
+      item.cena
+    );
+    const salePrice = toNumber(
+      item.akcijska_cena,
+    );
+    const price = salePrice > 0 ? salePrice : basePrice;
+    const oldPrice = basePrice > price && price > 0 ? basePrice : undefined;
 
     return {
       id: index + 1,
