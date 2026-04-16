@@ -12,7 +12,7 @@ const orderItemSchema = z.object({
 
 const checkoutSchema = z.object({
   fullName: z.string().min(1),
-  email: z.string().email(),
+  email: z.email(),
   phone: z.string().min(1),
   address: z.string().min(1),
   city: z.string().min(1),
@@ -28,6 +28,29 @@ const checkoutSchema = z.object({
 
 type CheckoutPayload = z.infer<typeof checkoutSchema>;
 
+const STORE_INFO = {
+  storefrontName: "FARAON DISKONTI",
+  legalName: "STR Diskont pi\u0107a Faraon PS",
+  addressLine1: "Karlova\u010dki put 1",
+  addressLine2: "21132 Petrovaradin",
+  phone: "062 801 7376",
+  email: "info@faraondiskonti.rs",
+  pib: "104032720",
+};
+
+const EMAIL_COLORS = {
+  brand: "#ac0000",
+  brandDark: "#8c0000",
+  primary: "#FFB200",
+  background: "#f5f1ea",
+  panel: "#ffffff",
+  panelMuted: "#fbf7f1",
+  panelSoft: "#f8f5ef",
+  text: "#1b1b1b",
+  textMuted: "#5b544d",
+  border: "#e5d9ca",
+};
+
 const getText = (value: string) =>
   value
     .replaceAll("&", "&amp;")
@@ -36,64 +59,228 @@ const getText = (value: string) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 
-const buildOwnerEmailHtml = (orderNumber: string, payload: CheckoutPayload) => {
-  const paymentLabel =
-    payload.paymentMethod === "cash_on_delivery"
-      ? "Plaćanje pouzećem"
-      : "Plaćanje preko računa";
+const getPaymentLabel = (paymentMethod: CheckoutPayload["paymentMethod"]) =>
+  paymentMethod === "cash_on_delivery"
+    ? "Pla\u0107anje pouze\u0107em"
+    : "Pla\u0107anje preko ra\u010duna";
 
-  const rows = payload.orderItems
+const getPaymentDescription = (
+  paymentMethod: CheckoutPayload["paymentMethod"],
+) =>
+  paymentMethod === "cash_on_delivery"
+    ? "Iznos navedene porud\u017ebine pla\u0107ate kuriru prilikom preuzimanja po\u0161iljke."
+    : "Nakon potvrde porud\u017ebine dobi\u0107ete instrukcije za uplatu, a isporuka kre\u0107e po evidentiranju uplate.";
+
+const buildOrderRows = (payload: CheckoutPayload) =>
+  payload.orderItems
     .map(
       (item) => `
         <tr>
-          <td style="padding:8px;border-bottom:1px solid #eee;">${getText(item.name)}</td>
-          <td style="padding:8px;border-bottom:1px solid #eee;">${getText(item.productCode)}</td>
-          <td style="padding:8px;border-bottom:1px solid #eee;">${item.quantity}</td>
-          <td style="padding:8px;border-bottom:1px solid #eee;">${getText(item.price)} RSD</td>
-          <td style="padding:8px;border-bottom:1px solid #eee;">${getText(item.total)} RSD</td>
+          <td style="padding:12px;border-bottom:1px solid ${EMAIL_COLORS.border};font-size:14px;color:${EMAIL_COLORS.textMuted};">${getText(item.productCode)}</td>
+          <td style="padding:12px;border-bottom:1px solid ${EMAIL_COLORS.border};font-size:14px;font-weight:700;color:${EMAIL_COLORS.text};">${getText(item.name)}</td>
+          <td style="padding:12px;border-bottom:1px solid ${EMAIL_COLORS.border};font-size:14px;text-align:center;color:${EMAIL_COLORS.text};">${item.quantity}</td>
+          <td style="padding:12px;border-bottom:1px solid ${EMAIL_COLORS.border};font-size:14px;text-align:right;color:${EMAIL_COLORS.text};white-space:nowrap;">${getText(item.total)} RSD</td>
         </tr>
       `,
     )
     .join("");
 
-  return `
-    <div style="font-family:Arial,sans-serif;color:#1b1b1b;line-height:1.5;">
-      <h2 style="margin-bottom:8px;">Nova porudžbina #${getText(orderNumber)}</h2>
-      <p style="margin:0 0 14px;">Kupac: <strong>${getText(payload.fullName)}</strong> (${getText(payload.email)})</p>
-      <p style="margin:0 0 6px;">Telefon: ${getText(payload.phone)}</p>
-      <p style="margin:0 0 6px;">Adresa: ${getText(payload.address)}, ${getText(payload.city)} ${getText(payload.postalCode)}</p>
-      <p style="margin:0 0 10px;">Način plaćanja: ${paymentLabel}</p>
-      <p style="margin:0 0 10px;">Napomena: ${getText(payload.note || "-")}</p>
+const buildTotalsTable = (payload: CheckoutPayload, totalLabel: string) => `
+  <table style="width:100%;margin-top:20px;border-collapse:collapse;">
+    <tr style="border-top:1px solid ${EMAIL_COLORS.border};">
+      <td style="padding:12px 10px;text-align:right;font-size:15px;font-weight:600;color:${EMAIL_COLORS.text};">
+        Me\u0111uzbir:
+      </td>
+      <td style="padding:12px 10px;text-align:right;font-size:15px;color:${EMAIL_COLORS.text};width:170px;white-space:nowrap;">
+        ${getText(payload.subtotal)} RSD
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:12px 10px;text-align:right;font-size:15px;font-weight:600;color:${EMAIL_COLORS.text};">
+        Tro\u0161kovi isporuke:
+      </td>
+      <td style="padding:12px 10px;text-align:right;font-size:15px;color:${EMAIL_COLORS.text};white-space:nowrap;">
+        ${getText(payload.deliveryCost)} RSD
+      </td>
+    </tr>
+    <tr style="border-top:2px solid ${EMAIL_COLORS.brand};">
+      <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:${EMAIL_COLORS.brand};">
+        ${getText(totalLabel)}
+      </td>
+      <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:${EMAIL_COLORS.brand};white-space:nowrap;">
+        ${getText(payload.total)} RSD
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding:10px;text-align:right;font-size:12px;color:${EMAIL_COLORS.textMuted};font-style:italic;">
+        * PDV ura\u010dunat u cenu
+      </td>
+    </tr>
+  </table>
+`;
 
-      <table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:12px;">
-        <thead>
-          <tr style="text-align:left;background:#fafafa;">
-            <th style="padding:8px;border-bottom:1px solid #eee;">Artikal</th>
-            <th style="padding:8px;border-bottom:1px solid #eee;">Šifra</th>
-            <th style="padding:8px;border-bottom:1px solid #eee;">Količina</th>
-            <th style="padding:8px;border-bottom:1px solid #eee;">Cena</th>
-            <th style="padding:8px;border-bottom:1px solid #eee;">Ukupno</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
+const buildSectionTitle = (title: string) => `
+  <h2 style="color:${EMAIL_COLORS.brand};font-size:18px;border-bottom:2px solid ${EMAIL_COLORS.primary};padding-bottom:8px;margin:0 0 16px;font-weight:800;">
+    ${getText(title)}
+  </h2>
+`;
 
-      <p style="margin:14px 0 0;">Međuzbir: <strong>${getText(payload.subtotal)} RSD</strong></p>
-      <p style="margin:4px 0 0;">Dostava: <strong>${getText(payload.deliveryCost)} RSD</strong></p>
-      <p style="margin:4px 0 0;font-size:16px;">Ukupno: <strong>${getText(payload.total)} RSD</strong></p>
-    </div>
-  `;
+type EmailLayoutProps = {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  content: string;
 };
 
-const buildCustomerEmailHtml = (orderNumber: string, payload: CheckoutPayload) => `
-  <div style="font-family:Arial,sans-serif;color:#1b1b1b;line-height:1.5;">
-    <h2 style="margin-bottom:10px;">Hvala na porudžbini!</h2>
-    <p style="margin:0 0 10px;">Poštovani/a ${getText(payload.fullName)}, uspešno smo primili Vašu porudžbinu.</p>
-    <p style="margin:0 0 8px;">Broj porudžbine: <strong>#${getText(orderNumber)}</strong></p>
-    <p style="margin:0 0 8px;">Ukupan iznos: <strong>${getText(payload.total)} RSD</strong></p>
-    <p style="margin:0;">Kontaktiraćemo Vas uskoro radi potvrde i isporuke.</p>
-  </div>
+const buildEmailLayout = ({
+  eyebrow,
+  title,
+  subtitle,
+  content,
+}: EmailLayoutProps) => `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>${getText(title)}</title>
+    </head>
+    <body style="margin:0;padding:24px 12px;background:${EMAIL_COLORS.background};font-family:Arial,sans-serif;color:${EMAIL_COLORS.text};line-height:1.6;">
+      <div style="max-width:680px;margin:0 auto;background:${EMAIL_COLORS.panel};border:1px solid ${EMAIL_COLORS.border};">
+        <div style="padding:24px 30px;background:${EMAIL_COLORS.panelSoft};border-bottom:3px solid ${EMAIL_COLORS.brand};overflow:hidden;">
+          <div style="float:left;width:48%;">
+            <div style="font-size:18px;line-height:1.1;font-weight:900;letter-spacing:0.04em;color:${EMAIL_COLORS.brand};text-transform:uppercase;">
+              ${getText(STORE_INFO.storefrontName)}
+            </div>
+          </div>
+          <div style="float:right;width:48%;text-align:right;font-size:12px;line-height:1.65;color:${EMAIL_COLORS.textMuted};">
+            <strong style="display:block;font-size:13px;color:${EMAIL_COLORS.text};margin-bottom:4px;">${getText(STORE_INFO.legalName)}</strong>
+            ${getText(STORE_INFO.addressLine1)}<br />
+            ${getText(STORE_INFO.addressLine2)}<br />
+            T: ${getText(STORE_INFO.phone)}<br />
+            E: ${getText(STORE_INFO.email)}<br />
+            PIB: ${getText(STORE_INFO.pib)}
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+
+        <div style="background:${EMAIL_COLORS.brand};color:#ffffff;padding:22px 32px;text-align:center;">
+          <div style="font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;opacity:0.9;">${getText(eyebrow)}</div>
+          <h1 style="margin:10px 0 0;font-size:30px;line-height:1.15;font-weight:900;">${getText(title)}</h1>
+        </div>
+
+        <div style="background:${EMAIL_COLORS.primary};color:${EMAIL_COLORS.text};padding:15px 32px;text-align:center;font-size:20px;font-weight:800;">
+          ${getText(subtitle)}
+        </div>
+
+        <div style="padding:32px;">
+          ${content}
+        </div>
+
+        <div style="background:${EMAIL_COLORS.brandDark};padding:24px 32px;text-align:center;color:#fff;">
+          <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srda\u010dan pozdrav,</p>
+          <p style="margin:0 0 8px;font-size:15px;font-weight:700;">${getText(STORE_INFO.legalName)}</p>
+          <p style="margin:0;font-size:13px;opacity:0.92;">${getText(STORE_INFO.email)} | ${getText(STORE_INFO.phone)}</p>
+        </div>
+      </div>
+    </body>
+  </html>
 `;
+
+const buildOwnerEmailHtml = (orderNumber: string, payload: CheckoutPayload) => {
+  const content = `
+    <div style="margin-bottom:24px;padding:20px 22px;border:2px solid #f0d28a;border-radius:8px;background:#fff8e7;">
+      ${buildSectionTitle("Podaci o kupcu")}
+      <p style="margin:6px 0;"><strong>Ime i prezime:</strong> ${getText(payload.fullName)}</p>
+      <p style="margin:6px 0;"><strong>Email:</strong> ${getText(payload.email)}</p>
+      <p style="margin:6px 0;"><strong>Telefon:</strong> ${getText(payload.phone)}</p>
+      <p style="margin:6px 0;"><strong>Adresa:</strong> ${getText(payload.address)}, ${getText(payload.city)} ${getText(payload.postalCode)}</p>
+      <p style="margin:6px 0;"><strong>Napomena:</strong> ${getText(payload.note || "-")}</p>
+    </div>
+
+    <div style="margin-bottom:24px;padding:18px 20px;border:2px solid ${EMAIL_COLORS.brand};border-radius:8px;background:#fffaf6;">
+      ${buildSectionTitle("Način plaćanja")}
+      <p style="margin:0;font-weight:700;color:${EMAIL_COLORS.text};">${getText(getPaymentLabel(payload.paymentMethod))}</p>
+      <p style="margin:8px 0 0;color:${EMAIL_COLORS.textMuted};">${getText(getPaymentDescription(payload.paymentMethod))}</p>
+    </div>
+
+    <div style="margin-bottom:18px;">
+      ${buildSectionTitle("Sadržaj porudžbine")}
+      <table style="width:100%;border-collapse:collapse;margin-top:10px;">
+        <thead>
+          <tr style="background:${EMAIL_COLORS.brand};color:#fff;">
+            <th style="padding:12px;text-align:left;font-size:14px;">Šifra</th>
+            <th style="padding:12px;text-align:left;font-size:14px;">Proizvod</th>
+            <th style="padding:12px;text-align:center;font-size:14px;">Količina</th>
+            <th style="padding:12px;text-align:right;font-size:14px;">Ukupno</th>
+          </tr>
+        </thead>
+        <tbody>${buildOrderRows(payload)}</tbody>
+      </table>
+      ${buildTotalsTable(payload, "UKUPNO ZA NAPLATU:")}
+    </div>
+  `;
+
+  return buildEmailLayout({
+    eyebrow: "Nova porudžbina",
+    title: "Primljena je nova porudžbina",
+    subtitle: `Porudžbina #${orderNumber}`,
+    content,
+  });
+};
+
+const buildCustomerEmailHtml = (orderNumber: string, payload: CheckoutPayload) => {
+  const content = `
+    <p style="margin:0 0 18px;font-size:17px;">Poštovani/a <strong>${getText(payload.fullName)}</strong>,</p>
+    <p style="margin:0 0 24px;font-size:16px;color:${EMAIL_COLORS.text};">
+      Hvala na kupovini u Faraon Diskontima. Vaša porudžbina je uspešno evidentirana i biće obrađena u najkraćem mogućem roku.
+    </p>
+
+    <div style="margin-bottom:18px;">
+      ${buildSectionTitle("Sadržaj porudžbine")}
+      <table style="width:100%;border-collapse:collapse;margin-top:10px;">
+        <thead>
+          <tr style="background:${EMAIL_COLORS.panelSoft};color:${EMAIL_COLORS.text};border-top:2px solid ${EMAIL_COLORS.primary};border-bottom:2px solid ${EMAIL_COLORS.brand};">
+            <th style="padding:12px;text-align:left;font-size:14px;">Šifra</th>
+            <th style="padding:12px;text-align:left;font-size:14px;">Proizvod</th>
+            <th style="padding:12px;text-align:center;font-size:14px;">Količina</th>
+            <th style="padding:12px;text-align:right;font-size:14px;">Cena</th>
+          </tr>
+        </thead>
+        <tbody>${buildOrderRows(payload)}</tbody>
+      </table>
+      ${buildTotalsTable(payload, "UKUPNO:")}
+    </div>
+
+    <div style="margin:24px 0;padding:18px 20px;border:2px solid ${EMAIL_COLORS.primary};border-radius:8px;background:#fff8e7;">
+      ${buildSectionTitle("Plaćanje")}
+      <h3 style="margin:0 0 10px;font-size:18px;color:${EMAIL_COLORS.brand};">${getText(getPaymentLabel(payload.paymentMethod))}</h3>
+      <p style="margin:0;color:${EMAIL_COLORS.textMuted};">${getText(getPaymentDescription(payload.paymentMethod))}</p>
+    </div>
+
+    <div style="margin:24px 0;padding:18px 20px;border-radius:8px;background:${EMAIL_COLORS.panelSoft};">
+      ${buildSectionTitle("Podaci za isporuku")}
+      <p style="margin:5px 0;"><strong>${getText(payload.fullName)}</strong></p>
+      <p style="margin:5px 0;">${getText(payload.address)}</p>
+      <p style="margin:5px 0;">${getText(payload.city)}, ${getText(payload.postalCode)}</p>
+      <p style="margin:5px 0;">Telefon: ${getText(payload.phone)}</p>
+    </div>
+
+    <div style="padding:20px;border-radius:8px;background:${EMAIL_COLORS.panelSoft};color:${EMAIL_COLORS.textMuted};font-size:14px;line-height:1.8;">
+      ${buildSectionTitle("Uslovi plaćanja i isporuke")}
+      <p style="margin:0 0 10px;">Cene svih proizvoda izražene su u dinarima (RSD) i uključuju PDV.</p>
+      <p style="margin:0 0 10px;">Isporuku vrši kurirska služba na adresu navedenu u porudžbini. Troškovi isporuke su fiksni i dodaju se na ukupnu vrednost porudžbine.</p>
+      <p style="margin:0;">Za dodatne informacije odgovorićemo Vam na ${getText(STORE_INFO.email)} ili ${getText(STORE_INFO.phone)}.</p>
+    </div>
+  `;
+
+  return buildEmailLayout({
+    eyebrow: "Porudžbina uspešna",
+    title: "Hvala na kupovini",
+    subtitle: `Broj porudžbine #${orderNumber}`,
+    content,
+  });
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -104,7 +291,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: "Neispravni podaci porudžbine",
-          details: parsed.error.flatten(),
+          details: z.flattenError(parsed.error),
         },
         { status: 400 },
       );
