@@ -51,6 +51,11 @@ const EMAIL_COLORS = {
   border: "#e5d9ca",
 };
 
+const EMAIL_FONTS = {
+  body: 'Arial, Helvetica, sans-serif',
+  heading: 'Oswald, Arial Narrow, Arial, Helvetica, sans-serif',
+};
+
 const getText = (value: string) =>
   value
     .replaceAll("&", "&amp;")
@@ -120,7 +125,7 @@ const buildTotalsTable = (payload: CheckoutPayload, totalLabel: string) => `
 `;
 
 const buildSectionTitle = (title: string) => `
-  <h2 style="color:${EMAIL_COLORS.brand};font-size:18px;border-bottom:2px solid ${EMAIL_COLORS.primary};padding-bottom:8px;margin:0 0 16px;font-weight:800;">
+  <h2 style="font-family:${EMAIL_FONTS.heading};color:${EMAIL_COLORS.brand};font-size:18px;border-bottom:2px solid ${EMAIL_COLORS.primary};padding-bottom:8px;margin:0 0 16px;font-weight:800;letter-spacing:0.01em;">
     ${getText(title)}
   </h2>
 `;
@@ -145,11 +150,11 @@ const buildEmailLayout = ({
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>${getText(title)}</title>
     </head>
-    <body style="margin:0;padding:24px 12px;background:${EMAIL_COLORS.background};font-family:Arial,sans-serif;color:${EMAIL_COLORS.text};line-height:1.6;">
+    <body style="margin:0;padding:24px 12px;background:${EMAIL_COLORS.background};font-family:${EMAIL_FONTS.body};color:${EMAIL_COLORS.text};line-height:1.6;">
       <div style="max-width:680px;margin:0 auto;background:${EMAIL_COLORS.panel};border:1px solid ${EMAIL_COLORS.border};">
         <div style="padding:24px 30px;background:${EMAIL_COLORS.panelSoft};border-bottom:3px solid ${EMAIL_COLORS.brand};overflow:hidden;">
           <div style="float:left;width:48%;">
-            <div style="font-size:18px;line-height:1.1;font-weight:900;letter-spacing:0.04em;color:${EMAIL_COLORS.brand};text-transform:uppercase;">
+            <div style="font-family:${EMAIL_FONTS.heading};font-size:18px;line-height:1.1;font-weight:900;letter-spacing:0.04em;color:${EMAIL_COLORS.brand};text-transform:uppercase;">
               ${getText(STORE_INFO.storefrontName)}
             </div>
           </div>
@@ -166,10 +171,10 @@ const buildEmailLayout = ({
 
         <div style="background:${EMAIL_COLORS.brand};color:#ffffff;padding:22px 32px;text-align:center;">
           <div style="font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;opacity:0.9;">${getText(eyebrow)}</div>
-          <h1 style="margin:10px 0 0;font-size:30px;line-height:1.15;font-weight:900;">${getText(title)}</h1>
+          <h1 style="font-family:${EMAIL_FONTS.heading};margin:10px 0 0;font-size:30px;line-height:1.15;font-weight:900;letter-spacing:0.01em;">${getText(title)}</h1>
         </div>
 
-        <div style="background:${EMAIL_COLORS.primary};color:${EMAIL_COLORS.text};padding:15px 32px;text-align:center;font-size:20px;font-weight:800;">
+        <div style="font-family:${EMAIL_FONTS.heading};background:${EMAIL_COLORS.primary};color:${EMAIL_COLORS.text};padding:15px 32px;text-align:center;font-size:20px;font-weight:800;letter-spacing:0.01em;">
           ${getText(subtitle)}
         </div>
 
@@ -178,8 +183,8 @@ const buildEmailLayout = ({
         </div>
 
         <div style="background:${EMAIL_COLORS.brandDark};padding:24px 32px;text-align:center;color:#fff;">
-          <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srda\u010dan pozdrav,</p>
-          <p style="margin:0 0 8px;font-size:15px;font-weight:700;">${getText(STORE_INFO.legalName)}</p>
+          <p style="font-family:${EMAIL_FONTS.heading};margin:0 0 8px;font-size:17px;font-weight:800;letter-spacing:0.01em;">Srda\u010dan pozdrav,</p>
+          <p style="font-family:${EMAIL_FONTS.heading};margin:0 0 8px;font-size:15px;font-weight:700;letter-spacing:0.01em;">${getText(STORE_INFO.legalName)}</p>
           <p style="margin:0;font-size:13px;opacity:0.92;">${getText(STORE_INFO.email)} | ${getText(STORE_INFO.phone)}</p>
         </div>
       </div>
@@ -254,7 +259,7 @@ const buildCustomerEmailHtml = (orderNumber: string, payload: CheckoutPayload) =
 
     <div style="margin:24px 0;padding:18px 20px;border:2px solid ${EMAIL_COLORS.primary};border-radius:8px;background:#fff8e7;">
       ${buildSectionTitle("Plaćanje")}
-      <h3 style="margin:0 0 10px;font-size:18px;color:${EMAIL_COLORS.brand};">${getText(getPaymentLabel(payload.paymentMethod))}</h3>
+      <h3 style="font-family:${EMAIL_FONTS.heading};margin:0 0 10px;font-size:18px;color:${EMAIL_COLORS.brand};letter-spacing:0.01em;">${getText(getPaymentLabel(payload.paymentMethod))}</h3>
       <p style="margin:0;color:${EMAIL_COLORS.textMuted};">${getText(getPaymentDescription(payload.paymentMethod))}</p>
     </div>
 
