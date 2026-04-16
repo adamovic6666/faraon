@@ -1,5 +1,4 @@
 "use client";
-import page from "@/app/shop/product/[...slug]/page";
 import { cn } from "@/lib/utils";
 import { integralCF } from "@/styles/fonts";
 import Image from "next/image";
