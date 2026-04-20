@@ -33,6 +33,7 @@ type CategoryApiResponse = {
     title?: string;
     metatags?: {
       title?: string;
+      description?: string;
     };
   };
 };
