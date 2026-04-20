@@ -44,7 +44,7 @@ const StoreMapSection = ({ isLocationPage }: { isLocationPage: boolean }) => {
 
   return (
     <section className="w-full max-w-frame mx-auto px-4 xl:px-0 mt-8 mb-8">
-      <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+      <div className="rounded-xl overflow-hidden">
         <APIProvider apiKey={apiKey}>
           <Map
             style={{
