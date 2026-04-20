@@ -84,7 +84,7 @@ const CookieConsent = ({ onPreferenceChange }: CookieConsentProps) => {
                   setShowModal(true);
                   setShowBanner(false);
                 }}
-                className="rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black/80 transition hover:bg-black/5"
+                className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-black/80 transition hover:bg-primary/90"
               >
                 Podešavanja
               </button>
@@ -97,7 +97,7 @@ const CookieConsent = ({ onPreferenceChange }: CookieConsentProps) => {
                     marketing: false,
                   })
                 }
-                className="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white transition hover:bg-brand/90"
+                className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-black/80 transition hover:bg-primary/90"
               >
                 Odbij opcione
               </button>
@@ -206,7 +206,7 @@ const CookieConsent = ({ onPreferenceChange }: CookieConsentProps) => {
                     marketing: false,
                   })
                 }
-                className="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white transition hover:bg-brand/90"
+                className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-black/80 transition hover:bg-primary/90"
               >
                 Odbij opcione
               </button>
@@ -224,7 +224,7 @@ const CookieConsent = ({ onPreferenceChange }: CookieConsentProps) => {
               </button>
               <button
                 onClick={() => savePreferences(preferences)}
-                className="rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black/80 transition hover:bg-black/5"
+                className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-black/80 transition hover:bg-primary/90"
               >
                 Sačuvaj izbor
               </button>

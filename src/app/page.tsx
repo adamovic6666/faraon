@@ -4,6 +4,15 @@ import OnlineStoreSection from "@/components/homepage/OnlineStoreSection";
 import StoreMapSection from "@/components/homepage/StoreMapSection";
 import AnkhSeparator from "@/components/common/AnkhSeparator";
 import { fetchActionProducts, fetchTopLevelCategories } from "@/lib/api/faraon";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "Najbolji online diskont pića u Novom Sadu | Faraon diskonti",
+  },
+  description:
+    "Sve što pijete, Faraon donosi! Besplatna dostava za porudžbine preko 12,000 RSD!",
+};
 
 export const revalidate = 3600; // Revalidate every hour
 

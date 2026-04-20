@@ -19,13 +19,13 @@ const OnlineStoreSection = ({
         <SectionTitle
           title={title}
           description={
-            <div className="md:flex md:flex-col items-center justify-center">
+            <span className="md:flex md:flex-col items-center justify-center">
               <span>
                 Najpovoljnije cene pića u Novom Sada, najbrža isporuka do tvog
                 praga!
               </span>
               <span> Poruči svoje piće i Faraon dolazi do tebe.</span>
-            </div>
+            </span>
           }
           className="mb-10 md:mb-12"
         />

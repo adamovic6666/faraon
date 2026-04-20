@@ -186,19 +186,23 @@ export const fetchActionProducts = async (): Promise<Product[]> => {
 
 export const fetchCategoryProducts = async (
   pathname: string,
-): Promise<{ products: Product[]; title: string }> => {
+): Promise<{ products: Product[]; title: string; metatags: { title: string; description: string } }> => {
   try {
     const res = await fetch(buildApiUrl(pathname), { next: { revalidate: 60 } });
-    if (!res.ok) return { products: [], title: "" };
+    if (!res.ok) return { products: [], title: "", metatags: { title: "", description: "" } };
 
     const payload: CategoryApiResponse = await res.json();
 
     return {
       products: mapCategoryProducts(payload.products ?? []),
       title: payload.parent?.metatags?.title ?? payload.parent?.title ?? "",
+      metatags: {
+        title: payload.parent?.metatags?.title ?? payload.parent?.title ?? "",
+        description: payload.parent?.metatags?.description ?? "",
+      },
     };
   } catch {
-    return { products: [], title: "" };
+    return { products: [], title: "", metatags: { title: "", description: "" } };
   }
 };
 
