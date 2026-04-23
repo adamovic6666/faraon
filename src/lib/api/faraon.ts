@@ -7,8 +7,8 @@ type ActionApiProduct = {
   title: string;
   image: string;
   alias: string;
-  sale_price: string;
-  base_price: string;
+  akcijska_cena: string;
+  cena: string;
 };
 
 type ActionApiResponse = {
@@ -87,8 +87,8 @@ const toNumber = (value?: string | number) => {
 };
 
 const mapActionProduct = (item: ActionApiProduct, index: number): Product => {
-  const price = toNumber(item.sale_price);
-  const oldPrice = toNumber(item.base_price);
+  const price = toNumber(item.akcijska_cena) || toNumber(item.cena);
+  const oldPrice = toNumber(item.cena);
 
   return {
     id: index + 1,

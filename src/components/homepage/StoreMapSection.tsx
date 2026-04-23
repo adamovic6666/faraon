@@ -54,6 +54,7 @@ const StoreMapSection = ({ isLocationPage }: { isLocationPage: boolean }) => {
             defaultCenter={{ lat: 45.257, lng: 19.836 }}
             defaultZoom={11}
             mapId="YOUR_MAP_ID"
+            colorScheme="DARK"
           >
             {storeLocations.map((loc) => (
               <StoreMarker key={loc.name} location={loc} />

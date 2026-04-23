@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldErrors, UseFormRegister, useForm } from "react-hook-form";
 import Button from "@/components/common/Button";
 import SectionTitle from "@/components/common/SectionTitle";
 import InputGroup from "@/components/ui/input-group";
@@ -22,8 +22,110 @@ type CheckoutFormValues = {
   city: string;
   postalCode: string;
   paymentMethod: "cash_on_delivery" | "bank_transfer";
+  customerType: "personal" | "business";
+  pib: string;
+  mb: string;
   note: string;
 };
+
+type CustomerTypeSectionProps = {
+  customerType: CheckoutFormValues["customerType"];
+  register: UseFormRegister<CheckoutFormValues>;
+  errors: FieldErrors<CheckoutFormValues>;
+};
+
+const PIB_REGEX = /^\d{9}$/;
+const MB_REGEX = /^\d{8}$/;
+
+const CustomerTypeSection = ({
+  customerType,
+  register,
+  errors,
+}: CustomerTypeSectionProps) => (
+  <>
+    <div>
+      <h6 className="text-lg md:text-xl font-bold text-black pt-4 md:pt-6 mb-3 md:mb-4">
+        Tip kupca
+      </h6>
+
+      <div className="space-y-4">
+        <label
+          className={cn(
+            "flex cursor-pointer items-start gap-4 rounded-[20px] border border-transparent bg-white px-5 py-5 transition-colors",
+            customerType === "personal" && "bg-section border-black/15",
+          )}
+        >
+          <input
+            type="radio"
+            value="personal"
+            className="mt-1 h-5 w-5 accent-brand"
+            {...register("customerType")}
+          />
+          <span className="block text-md font-semibold text-black/80 md:text-xl">
+            Fizičko lice
+          </span>
+        </label>
+
+        <label
+          className={cn(
+            "flex cursor-pointer items-start gap-4 rounded-[20px] border border-transparent bg-white px-5 py-5 transition-colors",
+            customerType === "business" && "bg-section border-black/15",
+          )}
+        >
+          <input
+            type="radio"
+            value="business"
+            className="mt-1 h-5 w-5 accent-brand"
+            {...register("customerType")}
+          />
+          <span className="block text-md font-semibold text-black/80 md:text-xl">
+            Pravno lice
+          </span>
+        </label>
+      </div>
+    </div>
+
+    {customerType === "business" ? (
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+        <InputGroup className="pl-0">
+          <InputGroup.Input
+            type="text"
+            placeholder="PIB *"
+            inputMode="numeric"
+            maxLength={9}
+            className={cn(
+              "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
+              errors.pib && "border-red-500",
+            )}
+            {...register("pib", {
+              validate: (value) =>
+                customerType !== "business" ||
+                PIB_REGEX.test(value.trim().replaceAll(" ", "")),
+            })}
+          />
+        </InputGroup>
+
+        <InputGroup className="pl-0">
+          <InputGroup.Input
+            type="text"
+            placeholder="Matični broj *"
+            inputMode="numeric"
+            maxLength={8}
+            className={cn(
+              "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
+              errors.mb && "border-red-500",
+            )}
+            {...register("mb", {
+              validate: (value) =>
+                customerType !== "business" ||
+                MB_REGEX.test(value.trim().replaceAll(" ", "")),
+            })}
+          />
+        </InputGroup>
+      </div>
+    ) : null}
+  </>
+);
 
 const deliveryCost = 660;
 
@@ -50,11 +152,15 @@ const CheckoutPage = () => {
       city: "",
       postalCode: "",
       paymentMethod: "cash_on_delivery",
+      customerType: "personal",
+      pib: "",
+      mb: "",
       note: "",
     },
   });
 
   const paymentMethod = watch("paymentMethod");
+  const customerType = watch("customerType");
   const subtotal = Math.round(adjustedTotalPrice);
   const total = cart ? subtotal + deliveryCost : 0;
 
@@ -232,6 +338,12 @@ const CheckoutPage = () => {
                     />
                   </InputGroup>
                 </div>
+
+                <CustomerTypeSection
+                  customerType={customerType}
+                  register={register}
+                  errors={errors}
+                />
               </div>
             </div>
 

@@ -10,6 +10,9 @@ const orderItemSchema = z.object({
   total: z.string().min(1),
 });
 
+const PIB_REGEX = /^\d{9}$/;
+const MB_REGEX = /^\d{8}$/;
+
 const checkoutSchema = z.object({
   fullName: z.string().min(1),
   email: z.email(),
@@ -18,12 +21,36 @@ const checkoutSchema = z.object({
   city: z.string().min(1),
   postalCode: z.string().min(1),
   paymentMethod: z.enum(["bank_transfer", "cash_on_delivery"]),
+  customerType: z.enum(["personal", "business"]).default("personal"),
+  pib: z.string().optional().default(""),
+  mb: z.string().optional().default(""),
   note: z.string().optional().default(""),
   orderItems: z.array(orderItemSchema).min(1),
   subtotal: z.string().min(1),
   deliveryCost: z.string().min(1),
   total: z.string().min(1),
   itemCount: z.number().int().positive(),
+}).superRefine((data, ctx) => {
+  if (data.customerType === "business") {
+    const normalizedPib = data.pib?.trim().replaceAll(" ", "") ?? "";
+    const normalizedMb = data.mb?.trim().replaceAll(" ", "") ?? "";
+
+    if (!PIB_REGEX.test(normalizedPib)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["pib"],
+        message: "PIB mora imati tačno 9 cifara.",
+      });
+    }
+
+    if (!MB_REGEX.test(normalizedMb)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["mb"],
+        message: "Matični broj mora imati tačno 8 cifara.",
+      });
+    }
+  }
 });
 
 type CheckoutPayload = z.infer<typeof checkoutSchema>;
@@ -332,6 +359,22 @@ export async function POST(request: NextRequest) {
     const firstName = nameParts[0] || "";
     const lastName = nameParts.slice(1).join(" ") || "";
 
+    const shippingAddress = {
+      country_code: "RS",
+      address_line1: payload.address,
+      locality: payload.city,
+      postal_code: payload.postalCode,
+      given_name: firstName,
+      family_name: lastName,
+      phone_number: payload.phone,
+      ...(payload.customerType === "business"
+        ? {
+            pib: payload.pib.trim(),
+            mb: payload.mb.trim(),
+          }
+        : {}),
+    };
+
     const backendOrderData = {
       customer: {
         email: payload.email,
@@ -347,15 +390,7 @@ export async function POST(request: NextRequest) {
           given_name: firstName,
           family_name: lastName,
         },
-        shipping_address: {
-          country_code: "RS",
-          address_line1: payload.address,
-          locality: payload.city,
-          postal_code: payload.postalCode,
-          given_name: firstName,
-          family_name: lastName,
-          phone_number: payload.phone,
-        },
+        shipping_address: shippingAddress,
       },
       products: payload.orderItems.map((item) => ({
         product_id: item.productCode,
