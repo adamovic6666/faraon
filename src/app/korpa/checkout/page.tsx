@@ -1,31 +1,43 @@
 "use client";
 
-import { useState } from "react";
-import { FieldErrors, UseFormRegister, useForm } from "react-hook-form";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Controller,
+  FieldErrors,
+  UseFormRegister,
+  useForm,
+} from "react-hook-form";
 import Button from "@/components/common/Button";
 import SectionTitle from "@/components/common/SectionTitle";
 import InputGroup from "@/components/ui/input-group";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { RootState } from "@/lib/store";
 import { useAppSelector } from "@/lib/hooks/redux";
 import { formatPrice } from "@/utils/format-price";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { TbBasketExclamation } from "react-icons/tb";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type CheckoutFormValues = {
   fullName: string;
   email: string;
   phone: string;
   address: string;
-  city: string;
   postalCode: string;
   paymentMethod: "cash_on_delivery" | "bank_transfer";
   customerType: "personal" | "business";
   pib: string;
   mb: string;
   note: string;
+  cenovnikTermId: string;
 };
 
 type CustomerTypeSectionProps = {
@@ -33,6 +45,127 @@ type CustomerTypeSectionProps = {
   register: UseFormRegister<CheckoutFormValues>;
   errors: FieldErrors<CheckoutFormValues>;
 };
+
+type PricingOption = {
+  id: number;
+  name: string;
+  price: string;
+  currencyCode: string;
+};
+
+type CheckoutOrderItemPayload = {
+  name: string;
+  productCode: string;
+  quantity: number;
+  price: string;
+  total: string;
+};
+
+type CheckoutSubmitPayload = Omit<CheckoutFormValues, "cenovnikTermId"> & {
+  city: string;
+  cenovnikTermId: number;
+  orderItems: CheckoutOrderItemPayload[];
+  subtotal: string;
+  deliveryCost: string;
+  total: string;
+  itemCount: number;
+};
+
+type CheckoutSuccessResponse = {
+  error?: string;
+  orderNumber?: string;
+  orderId?: string;
+  paymentMethod?: CheckoutFormValues["paymentMethod"];
+  warrantUrl?: string;
+  warrantFileName?: string;
+};
+
+const getDeliveryLabel = (
+  isShippingLoading: boolean,
+  deliveryCost: number | null,
+) => {
+  if (isShippingLoading) return "Računanje...";
+  if (deliveryCost === null) return "Odaberite mesto";
+  return `${formatPrice(deliveryCost)} RSD`;
+};
+
+const normalizeSku = (value: string | number) => {
+  const raw = String(value).trim();
+  if (/^\d+$/.test(raw) && raw.length < 4) {
+    return raw.padStart(4, "0");
+  }
+  return raw;
+};
+
+const buildSuccessUrl = ({
+  orderNumber,
+  orderId,
+  paymentMethod,
+  warrantUrl,
+  warrantFileName,
+}: {
+  orderNumber: string;
+  orderId: string;
+  paymentMethod: CheckoutFormValues["paymentMethod"];
+  warrantUrl?: string;
+  warrantFileName?: string;
+}) => {
+  const params = new URLSearchParams({
+    order: orderNumber,
+    orderId,
+    paymentMethod,
+  });
+
+  if (warrantUrl) {
+    params.set("warrant", warrantUrl);
+  }
+
+  if (warrantFileName) {
+    params.set("warrantFileName", warrantFileName);
+  }
+
+  return `/korpa/checkout/uspesno?${params.toString()}`;
+};
+
+const buildOrderItems = (
+  items: NonNullable<RootState["carts"]["cart"]>["items"],
+): CheckoutOrderItemPayload[] =>
+  items.map((item) => {
+    const unitPrice = Math.round(item.price);
+
+    return {
+      name: item.name,
+      productCode: normalizeSku(item.id),
+      quantity: item.quantity,
+      price: String(unitPrice),
+      total: String(unitPrice * item.quantity),
+    };
+  });
+
+const buildCheckoutPayload = ({
+  formData,
+  city,
+  cart,
+  subtotal,
+  deliveryCost,
+  total,
+}: {
+  formData: CheckoutFormValues;
+  city: string;
+  cart: NonNullable<RootState["carts"]["cart"]>;
+  subtotal: number;
+  deliveryCost: number;
+  total: number;
+}): CheckoutSubmitPayload => ({
+  ...formData,
+  city,
+  cenovnikTermId: Number(formData.cenovnikTermId),
+  orderItems: buildOrderItems(cart.items),
+  subtotal: String(subtotal),
+  deliveryCost: String(deliveryCost),
+  total: String(total),
+  itemCount: cart.totalQuantities,
+});
 
 const PIB_REGEX = /^\d{9}$/;
 const MB_REGEX = /^\d{8}$/;
@@ -127,12 +260,17 @@ const CustomerTypeSection = ({
   </>
 );
 
-const deliveryCost = 660;
-
 const CheckoutPage = () => {
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pricingOptions, setPricingOptions] = useState<PricingOption[]>([]);
+  const [pricingError, setPricingError] = useState("");
+  const [isPricingLoading, setIsPricingLoading] = useState(true);
+  const [deliveryCost, setDeliveryCost] = useState<number | null>(null);
+  const [isShippingLoading, setIsShippingLoading] = useState(false);
+  const [shippingError, setShippingError] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const { cart, adjustedTotalPrice } = useAppSelector(
     (state: RootState) => state.carts,
@@ -140,7 +278,9 @@ const CheckoutPage = () => {
 
   const {
     register,
+    control,
     handleSubmit,
+    setValue,
     watch,
     formState: { errors },
   } = useForm<CheckoutFormValues>({
@@ -149,20 +289,158 @@ const CheckoutPage = () => {
       email: "",
       phone: "",
       address: "",
-      city: "",
       postalCode: "",
       paymentMethod: "cash_on_delivery",
       customerType: "personal",
       pib: "",
       mb: "",
       note: "",
+      cenovnikTermId: "",
     },
   });
 
   const paymentMethod = watch("paymentMethod");
   const customerType = watch("customerType");
+  const selectedPricingId = watch("cenovnikTermId");
+
+  useEffect(() => {
+    const queryPricingId = searchParams.get("cenovnikTermId")?.trim();
+    if (!queryPricingId) return;
+
+    setValue("cenovnikTermId", queryPricingId, { shouldDirty: false });
+  }, [searchParams, setValue]);
+
+  const selectedPricing = useMemo(
+    () =>
+      pricingOptions.find((option) => String(option.id) === selectedPricingId),
+    [pricingOptions, selectedPricingId],
+  );
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadPricing = async () => {
+      setIsPricingLoading(true);
+      setPricingError("");
+
+      try {
+        const response = await fetch("/api/checkout/pricing", {
+          cache: "no-store",
+        });
+        const result = (await response.json()) as {
+          data?: PricingOption[];
+          error?: string;
+        };
+
+        if (!response.ok || !Array.isArray(result.data)) {
+          throw new Error(
+            result.error || "Neuspešno učitavanje mesta dostave.",
+          );
+        }
+
+        if (!mounted) return;
+
+        setPricingOptions(result.data);
+      } catch (error) {
+        console.error("Pricing load error:", error);
+        if (!mounted) return;
+        setPricingError("Ne možemo da učitamo spisak mesta za dostavu.");
+      } finally {
+        if (mounted) {
+          setIsPricingLoading(false);
+        }
+      }
+    };
+
+    void loadPricing();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    const calculateShipping = async () => {
+      if (!cart || cart.items.length === 0) {
+        if (active) {
+          setDeliveryCost(null);
+          setShippingError("");
+          setIsShippingLoading(false);
+        }
+        return;
+      }
+
+      if (!selectedPricingId) {
+        if (active) {
+          setDeliveryCost(null);
+          setShippingError("");
+          setIsShippingLoading(false);
+        }
+        return;
+      }
+
+      setIsShippingLoading(true);
+      setShippingError("");
+
+      try {
+        const response = await fetch("/api/checkout/shipping-rate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cenovnikTermId: Number(selectedPricingId),
+            products: cart.items.map((item) => ({
+              sku: normalizeSku(item.id),
+              quantity: item.quantity,
+            })),
+          }),
+        });
+
+        const result = (await response.json()) as {
+          error?: string;
+          data?: {
+            amount?: string;
+          };
+        };
+
+        if (!response.ok || !result.data?.amount) {
+          throw new Error(result.error || "Neuspešan obračun dostave.");
+        }
+
+        const amount = Number(result.data.amount);
+        if (!Number.isFinite(amount)) {
+          throw new TypeError("Neispravan iznos dostave.");
+        }
+
+        if (!active) return;
+
+        setDeliveryCost(Math.round(amount));
+      } catch (error) {
+        console.error("Shipping calculation error:", error);
+        if (!active) return;
+        setDeliveryCost(null);
+        setShippingError(
+          "Ne možemo da izračunamo cenu dostave za izabrano mesto.",
+        );
+      } finally {
+        if (active) {
+          setIsShippingLoading(false);
+        }
+      }
+    };
+
+    void calculateShipping();
+
+    return () => {
+      active = false;
+    };
+  }, [cart, selectedPricingId]);
+
   const subtotal = Math.round(adjustedTotalPrice);
-  const total = cart ? subtotal + deliveryCost : 0;
+  const total = cart ? subtotal + (deliveryCost ?? 0) : 0;
 
   const onSubmit = async (data: CheckoutFormValues) => {
     if (!cart || cart.items.length === 0) {
@@ -170,43 +448,48 @@ const CheckoutPage = () => {
       return;
     }
 
+    if (!selectedPricing || !selectedPricingId) {
+      setSubmitError("Izaberite mesto dostave.");
+      return;
+    }
+
+    if (deliveryCost === null || isShippingLoading) {
+      setSubmitError("Sačekajte obračun cene dostave.");
+      return;
+    }
+
     setSubmitError("");
     setIsSubmitting(true);
+    let checkoutTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
     try {
-      const payload = {
-        ...data,
-        orderItems: cart.items.map((item) => {
-          const unitPrice = Math.round(item.price);
+      const payload = buildCheckoutPayload({
+        formData: data,
+        city: selectedPricing.name,
+        cart,
+        subtotal,
+        deliveryCost,
+        total,
+      });
 
-          return {
-            name: item.name,
-            productCode: String(item.id),
-            quantity: item.quantity,
-            price: String(unitPrice),
-            total: String(unitPrice * item.quantity),
-          };
-        }),
-        subtotal: String(subtotal),
-        deliveryCost: String(deliveryCost),
-        total: String(total),
-        itemCount: cart.totalQuantities,
-      };
+      const controller = new AbortController();
+      checkoutTimeoutId = globalThis.setTimeout(
+        () => controller.abort(),
+        90000,
+      );
 
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        signal: controller.signal,
         body: JSON.stringify(payload),
       });
 
-      const result = (await response.json()) as {
-        error?: string;
-        orderNumber?: string;
-      };
+      const result = (await response.json()) as CheckoutSuccessResponse;
 
-      if (!response.ok || !result.orderNumber) {
+      if (!response.ok || !result.orderNumber || !result.orderId) {
         setSubmitError(
           result.error || "Došlo je do greške prilikom slanja porudžbine.",
         );
@@ -214,12 +497,27 @@ const CheckoutPage = () => {
       }
 
       router.push(
-        `/korpa/checkout/uspesno?order=${encodeURIComponent(result.orderNumber)}`,
+        buildSuccessUrl({
+          orderNumber: result.orderNumber,
+          orderId: result.orderId,
+          paymentMethod: result.paymentMethod ?? data.paymentMethod,
+          warrantUrl: result.warrantUrl,
+          warrantFileName: result.warrantFileName,
+        }),
       );
     } catch (error) {
       console.error("Checkout submit error:", error);
-      setSubmitError("Došlo je do greške prilikom slanja porudžbine.");
+      if (error instanceof Error && error.name === "AbortError") {
+        setSubmitError(
+          "Zahtev je istekao. Porudžbina je možda kreirana, proverite email ili pokušajte ponovo za minut.",
+        );
+      } else {
+        setSubmitError("Došlo je do greške prilikom slanja porudžbine.");
+      }
     } finally {
+      if (checkoutTimeoutId !== null) {
+        globalThis.clearTimeout(checkoutTimeoutId);
+      }
       setIsSubmitting(false);
     }
   };
@@ -315,17 +613,51 @@ const CheckoutPage = () => {
                 </InputGroup>
 
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
-                  <InputGroup className="pl-0">
-                    <InputGroup.Input
-                      type="text"
-                      placeholder="Grad *"
-                      className={cn(
-                        "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
-                        errors.city && "border-red-500",
+                  <div>
+                    <Controller
+                      name="cenovnikTermId"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          disabled={isPricingLoading}
+                        >
+                          <SelectTrigger
+                            className={cn(
+                              "bg-section h-auto w-full rounded-full border border-gray-300 p-4 px-6 text-base font-light text-black/80 shadow-none data-placeholder:text-black/40 focus:ring-1 focus:ring-ring",
+                              errors.cenovnikTermId && "border-red-500",
+                            )}
+                          >
+                            <SelectValue
+                              placeholder={
+                                isPricingLoading
+                                  ? "Učitavanje mesta..."
+                                  : "Mesto dostave *"
+                              }
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {pricingOptions.map((option) => (
+                              <SelectItem
+                                key={option.id}
+                                value={String(option.id)}
+                              >
+                                {option.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       )}
-                      {...register("city", { required: true })}
                     />
-                  </InputGroup>
+                    {pricingError ? (
+                      <p className="mt-1 text-xs text-red-600">
+                        {pricingError}
+                      </p>
+                    ) : null}
+                  </div>
+
                   <InputGroup className="pl-0">
                     <InputGroup.Input
                       type="text"
@@ -410,7 +742,7 @@ const CheckoutPage = () => {
             </div>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isShippingLoading}
               className="inline-flex w-fit items-center justify-center rounded-full bg-primary px-10 py-4 m-auto text-base font-medium uppercase text-black/80 transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70 md:h-15 md:text-lg"
             >
               {isSubmitting ? "Slanje..." : "Potvrdi porudžbinu"}
@@ -462,10 +794,12 @@ const CheckoutPage = () => {
                     Dostava
                   </span>
                   <span className="text-base md:text-lg font-semibold text-black/80">
-                    {formatPrice(deliveryCost)}{" "}
-                    <span className="text-sm">RSD</span>
+                    {getDeliveryLabel(isShippingLoading, deliveryCost)}
                   </span>
                 </div>
+                {shippingError ? (
+                  <p className="text-xs text-red-600">{shippingError}</p>
+                ) : null}
               </div>
 
               <div className="h-px bg-black/15" />

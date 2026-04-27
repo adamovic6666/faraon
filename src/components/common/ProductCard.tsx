@@ -13,11 +13,26 @@ type ProductCardProps = {
   data: Product;
 };
 
+const formatPackagingLabel = (value?: string) => {
+  if (!value) return "";
+
+  const normalized = value.trim().toLowerCase();
+  const literPattern = /^(\d+)_(\d+)_l$/;
+  const literMatch = literPattern.exec(normalized);
+
+  if (literMatch) {
+    return `${literMatch[1]}.${literMatch[2]} l`;
+  }
+
+  return normalized.replaceAll("_", " ");
+};
+
 const ProductCard = ({ data }: ProductCardProps) => {
   const dispatch = useAppDispatch();
   const [qtyInput, setQtyInput] = useState("1");
   const category = data.category || "bezalkholna-pica";
   const productHref = `/prodavnica/${category}/${data.slug}`;
+  const packagingLabel = formatPackagingLabel(data.packaging);
   const getSafeQty = (value: string = qtyInput) => {
     const parsedQty = Number(value);
     if (!Number.isFinite(parsedQty) || parsedQty < 1) return 1;
@@ -68,6 +83,11 @@ const ProductCard = ({ data }: ProductCardProps) => {
         href={productHref}
         className="relative block aspect-square w-full overflow-hidden group rounded-xl"
       >
+        {packagingLabel ? (
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-brand/95 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-white">
+            {packagingLabel}
+          </span>
+        ) : null}
         <Image
           src={data.srcUrl}
           fill

@@ -31,8 +31,21 @@ export default function CategoryProductGrid({
 }>) {
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState("");
+  const [selectedTag, setSelectedTag] = useState("");
 
-  const sorted = sortProducts(products, sort);
+  const availableTags = Array.from(
+    new Set(
+      products
+        .map((product) => product.tag?.trim())
+        .filter((tag): tag is string => Boolean(tag)),
+    ),
+  ).sort((a, b) => a.localeCompare(b, "sr", { sensitivity: "base" }));
+
+  const filteredProducts = selectedTag
+    ? products.filter((product) => product.tag?.trim() === selectedTag)
+    : products;
+
+  const sorted = sortProducts(filteredProducts, sort);
   const hasProducts = sorted.length > 0;
   const totalPages = Math.ceil(sorted.length / PRODUCTS_PER_PAGE);
   const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -40,6 +53,11 @@ export default function CategoryProductGrid({
 
   const handleSort = useCallback((value: string) => {
     setSort(value);
+    setCurrentPage(1);
+  }, []);
+
+  const handleTagChange = useCallback((value: string) => {
+    setSelectedTag(value);
     setCurrentPage(1);
   }, []);
 
@@ -81,6 +99,27 @@ export default function CategoryProductGrid({
           <SortSelect currentSort={sort} onSortChange={handleSort} />
         )}
       </div>
+      {availableTags.length > 0 ? (
+        <div className="mb-6 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => handleTagChange("")}
+            className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.06em] transition-colors ${selectedTag === "" ? "border-brand bg-brand text-white" : "border-black/20 bg-white text-black/70 hover:bg-black/3"}`}
+          >
+            Svi tagovi
+          </button>
+          {availableTags.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => handleTagChange(tag)}
+              className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.06em] transition-colors ${selectedTag === tag ? "border-brand bg-brand text-white" : "border-black/20 bg-white text-black/70 hover:bg-black/3"}`}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      ) : null}
       {hasProducts ? (
         <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
           {pageProducts.map((product, index) => (

@@ -73,7 +73,7 @@ async function mapSearchResultToProduct(result: any): Promise<Product> {
   const oldPrice = basePrice > price && price > 0 ? basePrice : undefined;
 
   return {
-    id: result.id || 1,
+    id: String(result.sku ?? result.product_id ?? result.id ?? slug ?? "1"),
     title: result.title || "",
     srcUrl: normalizeImageUrl(mainImage),
     price,
@@ -81,6 +81,8 @@ async function mapSearchResultToProduct(result: any): Promise<Product> {
     slug: slug || "unknown",
     category: category || "bezalkholna-pica",
     description: result.description,
+    tag: result.tag,
+    packaging: result.packaging,
   };
 }
 

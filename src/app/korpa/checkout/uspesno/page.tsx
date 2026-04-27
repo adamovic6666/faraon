@@ -1,27 +1,147 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/lib/hooks/redux";
 import { clearCart } from "@/lib/features/carts/cartsSlice";
 
+type InvoiceState = {
+  loading: boolean;
+  error: string;
+  downloadUrl: string;
+  fileName: string;
+};
+
+type SuccessParams = {
+  orderNumber: string;
+  orderId: string;
+  paymentMethod: string;
+  warrantUrl: string;
+  warrantFileName: string;
+};
+
+const toBlobUrl = (base64: string, mimeType: string) => {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+
+  for (let i = 0; i < binary.length; i += 1) {
+    bytes[i] = binary.codePointAt(i) ?? 0;
+  }
+
+  return URL.createObjectURL(
+    new Blob([bytes], { type: mimeType || "application/pdf" }),
+  );
+};
+
+const getSearchValue = (
+  searchParams: ReturnType<typeof useSearchParams>,
+  key: string,
+) => searchParams.get(key)?.trim() || "";
+
+const getSuccessParams = (
+  searchParams: ReturnType<typeof useSearchParams>,
+): SuccessParams => {
+  const warrantUrl = getSearchValue(searchParams, "warrant");
+
+  return {
+    orderNumber: getSearchValue(searchParams, "order"),
+    orderId: getSearchValue(searchParams, "orderId"),
+    paymentMethod: getSearchValue(searchParams, "paymentMethod"),
+    warrantUrl,
+    warrantFileName:
+      getSearchValue(searchParams, "warrantFileName") ||
+      warrantUrl.split("/").findLast(Boolean) ||
+      "warehouse-warrant.pdf",
+  };
+};
+
 const SuccessPage = () => {
-  const [cleared, setCleared] = useState(false);
+  const [invoice, setInvoice] = useState<InvoiceState>({
+    loading: false,
+    error: "",
+    downloadUrl: "",
+    fileName: "",
+  });
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
-
-  const orderNumber = useMemo(() => {
-    const value = searchParams.get("order")?.trim();
-    return value || null;
-  }, [searchParams]);
+  const { orderNumber, orderId, paymentMethod, warrantUrl, warrantFileName } =
+    getSuccessParams(searchParams);
+  const shouldLoadInvoice =
+    paymentMethod === "bank_transfer" && Boolean(orderId);
 
   useEffect(() => {
-    if (!cleared) {
-      dispatch(clearCart());
-      setCleared(true);
+    dispatch(clearCart());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!shouldLoadInvoice) {
+      return;
     }
-  }, [cleared, dispatch]);
+
+    let active = true;
+
+    const loadInvoice = async () => {
+      setInvoice((prev) => ({ ...prev, loading: true, error: "" }));
+
+      try {
+        const response = await fetch(
+          `/api/checkout/invoice?orderId=${encodeURIComponent(orderId)}`,
+          { cache: "no-store" },
+        );
+        const result = (await response.json()) as {
+          error?: string;
+          contentBase64?: string;
+          mimeType?: string;
+          fileName?: string;
+        };
+
+        if (!response.ok || !result.contentBase64) {
+          throw new Error(result.error || "Faktura trenutno nije dostupna.");
+        }
+
+        const downloadUrl = toBlobUrl(
+          result.contentBase64,
+          result.mimeType || "application/pdf",
+        );
+
+        if (!active) {
+          URL.revokeObjectURL(downloadUrl);
+          return;
+        }
+
+        setInvoice({
+          loading: false,
+          error: "",
+          downloadUrl,
+          fileName: result.fileName || `invoice-${orderId}.pdf`,
+        });
+      } catch (error) {
+        console.error("Invoice fetch error:", error);
+
+        if (!active) return;
+        setInvoice((prev) => ({
+          ...prev,
+          loading: false,
+          error: "Faktura još nije spremna. Pokušajte ponovo za par trenutaka.",
+        }));
+      }
+    };
+
+    void loadInvoice();
+
+    return () => {
+      active = false;
+    };
+  }, [orderId, shouldLoadInvoice]);
+
+  useEffect(() => {
+    return () => {
+      if (invoice.downloadUrl) {
+        URL.revokeObjectURL(invoice.downloadUrl);
+      }
+    };
+  }, [invoice.downloadUrl]);
 
   return (
     <main className="relative isolate overflow-hidden px-4 pb-12 pt-24 md:pb-16 md:pt-28">
@@ -50,6 +170,29 @@ const SuccessPage = () => {
               poslata.
             </p>
           )}
+
+          {shouldLoadInvoice ? (
+            <div className="mt-6 w-full max-w-md rounded-2xl border border-black/10 bg-section p-4">
+              <p className="text-sm font-medium text-black/70">Faktura (PDF)</p>
+              {invoice.loading ? (
+                <p className="mt-1 text-sm text-black/60">
+                  Preuzimanje u toku...
+                </p>
+              ) : null}
+              {invoice.error ? (
+                <p className="mt-1 text-sm text-red-600">{invoice.error}</p>
+              ) : null}
+              {invoice.downloadUrl ? (
+                <a
+                  href={invoice.downloadUrl}
+                  download={invoice.fileName}
+                  className="mt-3 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold uppercase text-black/80 transition-colors hover:bg-primary/85"
+                >
+                  Preuzmi fakturu
+                </a>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="mt-8 flex w-full flex-wrap justify-center gap-3">
             <Link

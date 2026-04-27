@@ -12,6 +12,10 @@ const Header = ({
   data: Product;
   showOnlyMainImage?: boolean;
 }) => {
+  const packagingLabel = data.packaging
+    ? data.packaging.replace(/^(\d+)_(\d+)_l$/, "$1.$2 l").replaceAll("_", " ")
+    : "";
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 items-stretch">
       <ProductGallery
@@ -19,6 +23,7 @@ const Header = ({
         srcUrl={data?.srcUrl ?? "/images/placeholder.png"}
         galleryImages={data?.galleryImages}
         showOnlyMainImage={showOnlyMainImage}
+        packagingLabel={packagingLabel}
       />
 
       <div className="flex min-h-full flex-col md:min-h-0">

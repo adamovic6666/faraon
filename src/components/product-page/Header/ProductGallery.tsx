@@ -14,6 +14,7 @@ type ProductGalleryProps = {
   srcUrl: string;
   galleryImages?: string[];
   showOnlyMainImage?: boolean;
+  packagingLabel?: string;
 };
 
 const ProductGallery = ({
@@ -21,6 +22,7 @@ const ProductGallery = ({
   srcUrl,
   galleryImages = [],
   showOnlyMainImage = false,
+  packagingLabel = "",
 }: ProductGalleryProps) => {
   const images = useMemo(() => {
     const uniqueGallery = Array.from(
@@ -88,6 +90,11 @@ const ProductGallery = ({
           className="relative aspect-square w-full overflow-hidden rounded-2xl border border-black/15"
           onClick={() => setIsLightboxOpen(true)}
         >
+          {packagingLabel ? (
+            <span className="pointer-events-none absolute right-4 top-4 z-10 text-sm font-light tracking-[0.04em] text-black/60">
+              {packagingLabel}
+            </span>
+          ) : null}
           <Image
             src={images[activeIndex].src}
             alt={title}
@@ -132,6 +139,11 @@ const ProductGallery = ({
           className="relative aspect-square flex-1 overflow-hidden rounded-2xl border border-black/15"
           onClick={() => setIsLightboxOpen(true)}
         >
+          {packagingLabel ? (
+            <span className="pointer-events-none absolute right-5 top-5 z-10 text-base font-light tracking-[0.04em] text-black/60">
+              {packagingLabel}
+            </span>
+          ) : null}
           <Image
             src={images[activeIndex].src}
             alt={title}

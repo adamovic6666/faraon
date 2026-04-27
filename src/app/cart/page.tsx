@@ -16,18 +16,17 @@ import Link from "next/link";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
-  const { cart, totalPrice, adjustedTotalPrice } = useAppSelector(
+  const { cart, adjustedTotalPrice } = useAppSelector(
     (state: RootState) => state.carts,
   );
-  const discountPercentage =
-    totalPrice > 0
-      ? Math.round(((totalPrice - adjustedTotalPrice) / totalPrice) * 100)
-      : 0;
+
+  const subtotal = Math.round(adjustedTotalPrice);
+  const hasCartItems = !!cart && cart.items.length > 0;
 
   return (
     <main className="pb-10 md:pb-12 pt-20 md:pt-24">
       <div className="max-w-frame mx-auto px-4 xl:px-0">
-        {cart && cart.items.length > 0 ? (
+        {hasCartItems ? (
           <>
             {/* <BreadcrumbCart /> */}
             <h2
@@ -67,17 +66,7 @@ export default function CartPage() {
                       Međuzbir
                     </span>
                     <span className="text-base md:text-lg font-semibold text-black/80">
-                      {formatPrice(totalPrice)}{" "}
-                      <span className="text-sm">RSD</span>
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-base md:text-lg text-black/60">
-                      Popust (-{discountPercentage}%)
-                    </span>
-                    <span className="text-base md:text-lg font-semibold text-brand">
-                      -
-                      {formatPrice(Math.round(totalPrice - adjustedTotalPrice))}{" "}
+                      {formatPrice(subtotal)}{" "}
                       <span className="text-sm">RSD</span>
                     </span>
                   </div>
@@ -86,7 +75,7 @@ export default function CartPage() {
                       Dostava
                     </span>
                     <span className="text-base md:text-lg font-semibold text-black/80">
-                      Besplatno
+                      Obračun na checkout-u
                     </span>
                   </div>
                   <Separator className="bg-black/15" />
@@ -96,7 +85,7 @@ export default function CartPage() {
                     </span>
 
                     <span className="text-xl md:text-2xl font-bold">
-                      {formatPrice(Math.round(adjustedTotalPrice))}{" "}
+                      {formatPrice(subtotal)}{" "}
                       <span className="text-sm">RSD</span>
                     </span>
                   </div>
