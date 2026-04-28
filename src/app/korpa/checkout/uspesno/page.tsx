@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/lib/hooks/redux";
 import { clearCart } from "@/lib/features/carts/cartsSlice";
+import { useAppSelector } from "@/lib/hooks/redux";
+import { sendGAEvent } from "@next/third-parties/google";
 
 type InvoiceState = {
   loading: boolean;
@@ -65,14 +67,30 @@ const SuccessPage = () => {
   });
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
+  const cart = useAppSelector((state) => state.carts.cart);
+  const totalPrice = useAppSelector((state) => state.carts.totalPrice);
   const { orderNumber, orderId, paymentMethod, warrantUrl, warrantFileName } =
     getSuccessParams(searchParams);
   const shouldLoadInvoice =
     paymentMethod === "bank_transfer" && Boolean(orderId);
 
+
   useEffect(() => {
+      if (!cart) return;
+    sendGAEvent("event", "purchase", {
+          transaction_id: orderNumber || orderId,
+        value: totalPrice,
+        currency: "RSD",
+        items: cart.items.map((item) => ({
+          item_id: String(item.id),
+          item_name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+      });
     dispatch(clearCart());
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!shouldLoadInvoice) {

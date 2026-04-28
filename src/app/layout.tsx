@@ -8,6 +8,7 @@ import Providers from "./providers";
 import HeroNavBar from "@/components/homepage/Header/HeroNavBar";
 import CookieConsent from "@/components/common/CookieConsent";
 import { fetchTopLevelCategories } from "@/lib/api/faraon";
+import GoogleAnalytics from "./_components/google-analytics/GoogleAnalytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -51,6 +52,7 @@ export default async function RootLayout({
           <div className="pt-16">{children}</div>
           <Footer />
           <CookieConsent />
+            <GoogleAnalytics />
         </Providers>
       </body>
     </html>
