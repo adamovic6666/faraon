@@ -21,7 +21,15 @@ const normalizeImageUrl = (image: string) => {
 const toNumber = (value?: string | number) => {
   if (typeof value === "number") return value;
   if (!value) return 0;
-  const parsed = Number(value);
+
+  const normalized = String(value)
+    .trim()
+    .replaceAll(/\s/g, "")
+    .replaceAll(/\.(?=\d{3}(\D|$))/g, "")
+    .replace(/,(?=\d{1,2}$)/, ".")
+    .replaceAll(",", "");
+
+  const parsed = Number(normalized);
   return Number.isFinite(parsed) ? parsed : 0;
 };
 

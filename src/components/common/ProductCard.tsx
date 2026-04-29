@@ -8,6 +8,7 @@ import { Product } from "@/types/product.types";
 import { useAppDispatch } from "@/lib/hooks/redux";
 import { addToCart } from "@/lib/features/carts/cartsSlice";
 import { formatPrice } from "@/utils/format-price";
+import { toast } from "sonner";
 
 type ProductCardProps = {
   data: Product;
@@ -62,6 +63,8 @@ const ProductCard = ({ data }: ProductCardProps) => {
         quantity: quantityToAdd,
       }),
     );
+
+    toast.success("Proizvod je dodat u korpu");
 
     // Normalize the field after submit in case the user left it empty/invalid.
     setQtyInput(String(quantityToAdd));

@@ -57,7 +57,7 @@ const PaginationLink = ({
         variant: isActive ? "outline" : "ghost",
         size,
       }),
-      isActive && "bg-black/5 shadow-none border-none !text-black",
+      isActive && "bg-black/5 shadow-none border-none text-black!",
       className,
     )}
     {...props}
@@ -72,11 +72,11 @@ const PaginationPrevious = ({
   <PaginationLink
     aria-label="Go to previous page"
     size="default"
-    className={cn("gap-1 px-2.5 xs:pl-2.5", className)}
+    className={cn("gap-1 px-2 sm:px-2.5", className)}
     {...props}
   >
-    <ArrowLeftIcon className="h-4 w-4 hidden xs:block" />
-    <span className="xs:ml-2">Prethodna</span>
+    <ArrowLeftIcon className="h-4 w-4" />
+    <span className="hidden sm:inline sm:ml-2">Prethodna</span>
   </PaginationLink>
 );
 PaginationPrevious.displayName = "PaginationPrevious";
@@ -88,11 +88,11 @@ const PaginationNext = ({
   <PaginationLink
     aria-label="Go to next page"
     size="default"
-    className={cn("gap-1 px-2.5 xs:pr-2.5", className)}
+    className={cn("gap-1 px-2 sm:px-2.5", className)}
     {...props}
   >
-    <span className="xs:mr-2">Sledeća</span>
-    <ArrowRightIcon className="h-4 w-4 hidden xs:block" />
+    <span className="hidden sm:inline sm:mr-2">Sledeća</span>
+    <ArrowRightIcon className="h-4 w-4" />
   </PaginationLink>
 );
 PaginationNext.displayName = "PaginationNext";

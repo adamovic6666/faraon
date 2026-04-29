@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useAppDispatch } from "@/lib/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { clearCart } from "@/lib/features/carts/cartsSlice";
-import { useAppSelector } from "@/lib/hooks/redux";
 import { sendGAEvent } from "@next/third-parties/google";
 
 type InvoiceState = {
@@ -74,20 +73,19 @@ const SuccessPage = () => {
   const shouldLoadInvoice =
     paymentMethod === "bank_transfer" && Boolean(orderId);
 
-
   useEffect(() => {
-      if (!cart) return;
+    if (!cart) return;
     sendGAEvent("event", "purchase", {
-          transaction_id: orderNumber || orderId,
-        value: totalPrice,
-        currency: "RSD",
-        items: cart.items.map((item) => ({
-          item_id: String(item.id),
-          item_name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-        })),
-      });
+      transaction_id: orderNumber || orderId,
+      value: totalPrice,
+      currency: "RSD",
+      items: cart.items.map((item) => ({
+        item_id: String(item.id),
+        item_name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+    });
     dispatch(clearCart());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -6,6 +6,7 @@ import SortSelect from "@/components/shop-page/SortSelect";
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -14,6 +15,30 @@ import {
 import { Product } from "@/types/product.types";
 
 const PRODUCTS_PER_PAGE = 24;
+
+function buildPaginationTokens(currentPage: number, totalPages: number) {
+  if (totalPages <= 6) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  if (currentPage <= 3) {
+    return [1, 2, "ellipsis-right", totalPages - 1, totalPages] as const;
+  }
+
+  if (currentPage >= totalPages - 2) {
+    return [1, 2, "ellipsis-left", totalPages - 1, totalPages] as const;
+  }
+
+  return [
+    1,
+    2,
+    "ellipsis-left",
+    currentPage,
+    "ellipsis-right",
+    totalPages - 1,
+    totalPages,
+  ] as const;
+}
 
 function sortProducts(products: Product[], sort: string): Product[] {
   const list = [...products];
@@ -48,6 +73,7 @@ export default function CategoryProductGrid({
   const sorted = sortProducts(filteredProducts, sort);
   const hasProducts = sorted.length > 0;
   const totalPages = Math.ceil(sorted.length / PRODUCTS_PER_PAGE);
+  const paginationTokens = buildPaginationTokens(currentPage, totalPages);
   const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
   const pageProducts = sorted.slice(start, start + PRODUCTS_PER_PAGE);
 
@@ -138,23 +164,31 @@ export default function CategoryProductGrid({
       )}
       {hasProducts && totalPages > 1 && (
         <div className="mt-10 md:mt-12 flex justify-center">
-          <Pagination className="justify-between">
+          <Pagination className="w-auto max-w-full items-center gap-2">
             <PaginationPrevious
               href="#"
               onClick={handlePrev}
               className={`border rounded-2xl border-black/10 ${currentPage === 1 ? "pointer-events-none opacity-50" : ""}`}
             />
-            <PaginationContent>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
+            <PaginationContent className="gap-0.5 sm:gap-1">
+              {paginationTokens.map((token, index) => {
+                if (typeof token !== "number") {
+                  return (
+                    <PaginationItem key={`${token}-${index}`}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  );
+                }
+
+                return (
                   <PageButton
-                    key={page}
-                    page={page}
-                    isActive={page === currentPage}
+                    key={token}
+                    page={token}
+                    isActive={token === currentPage}
                     goTo={goTo}
                   />
-                ),
-              )}
+                );
+              })}
             </PaginationContent>
             <PaginationNext
               href="#"
