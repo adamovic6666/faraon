@@ -132,7 +132,7 @@ export default function CategoryProductGrid({
             onClick={() => handleTagChange("")}
             className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.06em] transition-colors ${selectedTag === "" ? "border-brand bg-brand text-white" : "border-black/20 bg-white text-black/70 hover:bg-black/3"}`}
           >
-            Svi tagovi
+            Sve
           </button>
           {availableTags.map((tag) => (
             <button
