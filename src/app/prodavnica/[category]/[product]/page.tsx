@@ -22,11 +22,9 @@ export default async function ProductPage({
           <Header data={productData} />
         </section>
       </div>
-
       <div className="mt-10 md:mt-12">
         <AnkhSeparator />
       </div>
-
       {hasActions && (
         <ProductListSec
           title="Akcijske cene"
@@ -37,7 +35,7 @@ export default async function ProductPage({
           noAnimation
         />
       )}
-      <AnkhSeparator />
+      {hasActions && <AnkhSeparator />}
     </main>
   );
 }
