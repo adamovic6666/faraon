@@ -22,17 +22,21 @@ export default async function Home() {
     fetchTopLevelCategories(),
   ]);
 
+  const hasActions = products.length > 0;
+
   return (
     <>
       <Header />
       <main className="mb-10 md:mb-12 mt-10 sm:mt-12">
-        <ProductListSec
-          title="Akcijske cene"
-          data={products}
-          viewAllLink="/akcije"
-          showArrows
-        />
-        <AnkhSeparator />
+        {hasActions && (
+          <ProductListSec
+            title="Akcijske cene"
+            data={products}
+            viewAllLink="/akcije"
+            showArrows
+          />
+        )}
+        {hasActions && <AnkhSeparator />}
         <OnlineStoreSection title="Online prodavnica" data={categories} />
         <AnkhSeparator />
         <StoreMapSection isLocationPage={false} />

@@ -14,7 +14,15 @@ const normalizeImageUrl = (image: string) => {
   if (!image) return "/images/placeholder.png";
   if (image.startsWith("http://") || image.startsWith("https://")) return image;
 
-  const baseUrl = "https://staging.backend.faraondiskonti.rs";
+  const baseUrl = (
+    process.env.NEXT_PUBLIC_API_URL ??
+    process.env.BASE_URL ??
+    ""
+  )
+    .replaceAll(/^[\s'"]+|[\s,'"]+$/g, "")
+    .replace(/\/$/, "");
+
+  if (!baseUrl) return image;
   return `${baseUrl}${image.startsWith("/") ? "" : "/"}${image}`;
 };
 

@@ -13,6 +13,8 @@ export default async function ProductPage({
   const productData = await fetchProductBySlug(product, category);
   const actionProducts = await fetchActionProducts();
 
+  const hasActions = actionProducts.length > 0;
+
   return (
     <main className="pt-20 pb-2 md:pt-24">
       <div className="max-w-frame mx-auto px-4 xl:px-0">
@@ -25,15 +27,16 @@ export default async function ProductPage({
         <AnkhSeparator />
       </div>
 
-      <ProductListSec
-        title="Akcijske cene"
-        data={actionProducts}
-        viewAllLink="/akcije"
-        viewAllVariant="brand"
-        showArrows
-        noAnimation
-      />
-
+      {hasActions && (
+        <ProductListSec
+          title="Akcijske cene"
+          data={actionProducts}
+          viewAllLink="/akcije"
+          viewAllVariant="brand"
+          showArrows
+          noAnimation
+        />
+      )}
       <AnkhSeparator />
     </main>
   );

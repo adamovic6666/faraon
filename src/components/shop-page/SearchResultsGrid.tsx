@@ -165,11 +165,7 @@ function PageButton({
           e.preventDefault();
           goTo(page);
         }}
-        className={
-          isActive
-            ? "bg-brand text-white border-brand"
-            : "border border-black/10 rounded-lg hover:bg-black/3"
-        }
+        className="text-black/50 font-medium text-sm"
       >
         {page}
       </PaginationLink>

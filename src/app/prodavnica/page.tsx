@@ -16,17 +16,21 @@ const WebshopPage = async () => {
     fetchTopLevelCategories(),
   ]);
 
+  const hasActions = actionProducts.length > 0;
+
   return (
     <main className="pb-10 md:pb-12 pt-18 sm:pt-24">
-      <ProductListSec
-        id="akcijske-cene"
-        className="max-w-frame mx-auto text-center"
-        title="Akcijske cene"
-        data={actionProducts}
-        viewAllLink="/akcije"
-        showArrows
-      />
-      <AnkhSeparator />
+      {hasActions && (
+        <ProductListSec
+          id="akcijske-cene"
+          className="max-w-frame mx-auto text-center"
+          title="Akcijske cene"
+          data={actionProducts}
+          viewAllLink="/akcije"
+          showArrows
+        />
+      )}
+      {hasActions && <AnkhSeparator />}
       <OnlineStoreSection
         id="online-prodavnica"
         title="Online prodavnica"
