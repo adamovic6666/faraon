@@ -14,7 +14,7 @@ export const searchProducts = async (
   }
 
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.BASE_URL || "https://staging.backend.faraondiskonti.rs";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.BASE_URL || "";
     const hash = process.env.API_HASH || "";
 
     if (!hash) {

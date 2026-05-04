@@ -1,6 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   /* config options here */
   images: {
     unoptimized: true, // Keep unoptimized for cPanel (change to false if cPanel supports image optimization)
@@ -21,4 +20,4 @@ const nextConfig: NextConfig = {
   staticPageGenerationTimeout: 180, // Increase timeout for static generation
 };
 
-export default nextConfig;
+module.exports = nextConfig;
