@@ -32,7 +32,15 @@ const OnlineStoreSection = ({
 
         <div className="absolute bottom-0 right-0 mt-auto flex h-26 items-center justify-center sm:h-32 sm:w-32 w-26">
           <Image
-            src={process.env.BASE_URL + item.image}
+            src={
+              process.env.NEXT_PUBLIC_API_URL +
+              item.image
+                .replace(
+                  /\/sites\/default\/files\/styles\/[^/]+\/public\//,
+                  "/sites/default/files/",
+                )
+                .replace(/\.webp$/, "")
+            }
             alt={item.name}
             width={64}
             height={64}
