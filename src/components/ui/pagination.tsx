@@ -57,6 +57,7 @@ const PaginationLink = ({
         variant: isActive ? "outline" : "ghost",
         size,
       }),
+      "rounded-full",
       isActive && "bg-black/5 shadow-none border-none text-black!",
       className,
     )}
@@ -103,7 +104,7 @@ const PaginationEllipsis = ({
 }: React.ComponentProps<"span">) => (
   <span
     aria-hidden
-    className={cn("flex h-9 w-9 items-center justify-center", className)}
+    className={cn("flex h-9 w-9 items-center justify-center rounded-full", className)}
     {...props}
   >
     <DotsHorizontalIcon className="h-4 w-4" />

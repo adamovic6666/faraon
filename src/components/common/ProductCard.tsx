@@ -61,6 +61,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
         price: data.price,
         attributes: [],
         quantity: quantityToAdd,
+        link: productHref,
       }),
     );
 

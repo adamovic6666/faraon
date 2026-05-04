@@ -40,12 +40,14 @@ const ProductCard = ({ data }: ProductCardProps) => {
     );
   };
 
+  console.log(data, "data");
+
   return (
     <>
       <div className="md:hidden relative">
         <div className="flex py-4">
           <Link
-            href={`/`}
+            href={data.link ?? `/`}
             className="bg-[#F0EEED] rounded-lg w-22 h-22 shrink-0 overflow-hidden"
           >
             <Image
@@ -60,7 +62,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
 
           <div className="min-w-0 flex flex-col pl-2 gap-4 w-full relative">
             <Link
-              href={`/`}
+              href={data.link ?? `/`}
               className="text-left text-black/80 leading-snug line-clamp-2 max-w-40"
             >
               {data.name}
@@ -115,7 +117,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
 
       <div className="hidden md:grid grid-cols-[120px_minmax(0,1fr)_200px] gap-5 items-start py-4">
         <Link
-          href={`/`}
+          href={data.link ?? `/`}
           className="bg-[#F0EEED] rounded-lg w-full aspect-square overflow-hidden"
         >
           <Image
@@ -129,7 +131,10 @@ const ProductCard = ({ data }: ProductCardProps) => {
         </Link>
 
         <div className="min-w-0 flex flex-col h-full">
-          <Link href={`/`} className="text-black font-bold text-xl">
+          <Link
+            href={data.link ?? `/`}
+            className="text-black font-bold text-xl"
+          >
             {data.name}
           </Link>
           <p className="text-lg font-medium text-black/80 mt-auto">

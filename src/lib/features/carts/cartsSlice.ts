@@ -21,6 +21,7 @@ export type CartItem = {
   price: number;
   attributes: string[];
   quantity: number;
+  link: string;
 };
 
 export type Cart = {

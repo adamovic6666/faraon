@@ -56,8 +56,8 @@ const StoreMapSection = ({ isLocationPage }: { isLocationPage: boolean }) => {
             mapId="YOUR_MAP_ID"
             colorScheme="DARK"
           >
-            {storeLocations.map((loc) => (
-              <StoreMarker key={loc.name} location={loc} />
+            {storeLocations.map((loc, i) => (
+              <StoreMarker key={loc.name + i} location={loc} />
             ))}
           </Map>
         </APIProvider>

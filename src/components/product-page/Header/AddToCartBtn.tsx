@@ -21,6 +21,7 @@ const AddToCartBtn = ({ data }: { data: Product & { quantity: number } }) => {
             price: data.price,
             attributes: [],
             quantity: data.quantity,
+            link: `/proizvod/${data.slug}`,
           }),
         );
         toast.success("Proizvod je dodat u korpu");

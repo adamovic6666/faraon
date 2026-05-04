@@ -185,12 +185,12 @@ const Footer = () => {
 
           <Separator className="mb-6 bg-black/10" />
 
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-2">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-2">
             <p className="text-sm text-black/70 text-center sm:text-left font-light">
               © {currentYear} STR Diskont Pića Faraon PS
             </p>
 
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               {paymentBadgesData.map((badge, _, arr) => (
                 <span
                   key={badge.id}
@@ -209,7 +209,7 @@ const Footer = () => {
                   />
                 </span>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
         <LayoutSpacing />
