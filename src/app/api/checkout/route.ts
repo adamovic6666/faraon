@@ -184,8 +184,8 @@ export async function POST(request: NextRequest) {
         ? "Prenos na račun"
         : "Plaćanje pouzećem";
 
-        const itemsHtml = payload.orderItems
-          .map(
+        const itemsHtml = [
+          ...payload.orderItems.map(
             (item) =>
               `<tr>
                 <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;color:#5b544d;">${item.productCode}</td>
@@ -193,8 +193,14 @@ export async function POST(request: NextRequest) {
                 <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">${item.quantity}</td>
                 <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${item.total} RSD</td>
               </tr>`,
-          )
-          .join("");
+          ),
+          `<tr>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;color:#5b544d;">901</td>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava</td>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">1</td>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.deliveryCost} RSD</td>
+              </tr>`,
+        ].join("");
 
         const ownerHtml = `<!DOCTYPE html>
 <html>
@@ -252,14 +258,6 @@ export async function POST(request: NextRequest) {
             <tbody>${itemsHtml}</tbody>
           </table>
           <table style="width:100%;margin-top:20px;border-collapse:collapse;">
-            <tr style="border-top:1px solid #e5d9ca;">
-              <td style="padding:12px 10px;text-align:right;font-size:15px;font-weight:600;color:#1b1b1b;">Međuzbir:</td>
-              <td style="padding:12px 10px;text-align:right;font-size:15px;color:#1b1b1b;width:170px;white-space:nowrap;">${payload.subtotal} RSD</td>
-            </tr>
-            <tr>
-              <td style="padding:12px 10px;text-align:right;font-size:15px;font-weight:600;color:#1b1b1b;">Troškovi isporuke:</td>
-              <td style="padding:12px 10px;text-align:right;font-size:15px;color:#1b1b1b;white-space:nowrap;">${payload.deliveryCost} RSD</td>
-            </tr>
             <tr style="border-top:2px solid #ac0000;">
               <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;">UKUPNO ZA NAPLATU:</td>
               <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${payload.total} RSD</td>
@@ -272,7 +270,8 @@ export async function POST(request: NextRequest) {
       </div>
       <div style="background:#8c0000;padding:24px 32px;text-align:center;color:#fff;">
         <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srdačan pozdrav,</p>
-        <p style="margin:0 0 8px;font-size:15px;font-weight:700;">STR Diskont pića Faraon PS</p>
+        <p style="margin:0 0 8px;font-size:15px;font-weight:700;">Faraon diskonti</p>
+        <p style="margin:0 0 4px;font-size:13px;opacity:0.92;"><a href="https://www.faraondiskonti.rs" style="color:#fff;text-decoration:underline;">www.faraondiskonti.rs</a></p>
         <p style="margin:0;font-size:13px;opacity:0.92;">info@faraondiskonti.rs | 062 801 7376</p>
       </div>
     </div>
@@ -305,14 +304,15 @@ export async function POST(request: NextRequest) {
       <div style="background:#FFB200;color:#1b1b1b;padding:15px 32px;text-align:center;font-size:20px;font-weight:800;">Porudžbina #${orderNumber}</div>
       <div style="padding:32px;">
         <p style="margin:0 0 20px;font-size:16px;color:#1b1b1b;">Vaša porudžbina je uspešno evidentirana i uskoro ćemo Vas kontaktirati radi potvrde i dogovora oko isporuke.</p>
-        ${
-          payload.paymentMethod === "bank_transfer"
-            ? `<div style="margin-bottom:24px;padding:18px 20px;border:2px solid #ac0000;border-radius:8px;background:#fffaf6;">
-          <p style="margin:0;font-weight:700;color:#ac0000;">Prenos na račun</p>
-          <p style="margin:8px 0 0;color:#5b544d;">Uplatu izvršite na račun Faraon Diskonti. Faktura je u prilogu kada je backend generiše, a dostupna je i na stranici uspešne porudžbine.</p>
-        </div>`
-            : ""
-        }
+        <div style="margin-bottom:24px;padding:18px 20px;border:2px solid #ac0000;border-radius:8px;background:#fffaf6;">
+          <h2 style="color:#ac0000;font-size:18px;border-bottom:2px solid #FFB200;padding-bottom:8px;margin:0 0 16px;font-weight:800;">Način plaćanja</h2>
+          ${payload.paymentMethod === "bank_transfer"
+            ? `<p style="margin:0;font-weight:700;color:#1b1b1b;">Plaćanje preko računa</p>
+          <p style="margin:8px 0 0;color:#5b544d;">Iznos navedene porudžbine plaćate preko računa prema predračunu #${orderNumber} u prilogu.</p>`
+            : `<p style="margin:0;font-weight:700;color:#1b1b1b;">Plaćanje pouzećem</p>
+          <p style="margin:8px 0 0;color:#5b544d;">Iznos navedene porudžbine plaćate kuriru u gotovini prilikom preuzimanja pošiljke.</p>`
+          }
+        </div>
         <h2 style="color:#ac0000;font-size:18px;border-bottom:2px solid #FFB200;padding-bottom:8px;margin:24px 0 16px;font-weight:800;">Vaša porudžbina</h2>
         <table style="width:100%;border-collapse:collapse;margin-top:10px;">
           <thead>
@@ -322,26 +322,23 @@ export async function POST(request: NextRequest) {
               <th style="padding:12px;text-align:right;font-size:14px;">Ukupno</th>
             </tr>
           </thead>
-          <tbody>${payload.orderItems
-            .map(
+          <tbody>${[
+            ...payload.orderItems.map(
               (item) =>
                 `<tr>
               <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">${item.name}</td>
               <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">${item.quantity}</td>
               <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${item.total} RSD</td>
             </tr>`,
-            )
-            .join("")}</tbody>
+            ),
+            `<tr>
+              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava</td>
+              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">1</td>
+              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.deliveryCost} RSD</td>
+            </tr>`,
+          ].join("")}</tbody>
         </table>
         <table style="width:100%;margin-top:20px;border-collapse:collapse;">
-          <tr style="border-top:1px solid #e5d9ca;">
-            <td style="padding:12px 10px;text-align:right;font-size:15px;font-weight:600;color:#1b1b1b;">Međuzbir:</td>
-            <td style="padding:12px 10px;text-align:right;font-size:15px;color:#1b1b1b;width:170px;white-space:nowrap;">${payload.subtotal} RSD</td>
-          </tr>
-          <tr>
-            <td style="padding:12px 10px;text-align:right;font-size:15px;font-weight:600;color:#1b1b1b;">Troškovi isporuke:</td>
-            <td style="padding:12px 10px;text-align:right;font-size:15px;color:#1b1b1b;white-space:nowrap;">${payload.deliveryCost} RSD</td>
-          </tr>
           <tr style="border-top:2px solid #ac0000;">
             <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;">UKUPNO ZA NAPLATU:</td>
             <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${payload.total} RSD</td>
@@ -353,7 +350,8 @@ export async function POST(request: NextRequest) {
       </div>
       <div style="background:#8c0000;padding:24px 32px;text-align:center;color:#fff;">
         <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srdačan pozdrav,</p>
-        <p style="margin:0 0 8px;font-size:15px;font-weight:700;">STR Diskont pića Faraon PS</p>
+        <p style="margin:0 0 8px;font-size:15px;font-weight:700;">Faraon diskonti</p>
+        <p style="margin:0 0 4px;font-size:13px;opacity:0.92;"><a href="https://www.faraondiskonti.rs" style="color:#fff;text-decoration:underline;">www.faraondiskonti.rs</a></p>
         <p style="margin:0;font-size:13px;opacity:0.92;">info@faraondiskonti.rs | 062 801 7376</p>
       </div>
     </div>
@@ -379,7 +377,7 @@ export async function POST(request: NextRequest) {
     const ownerEmailResult = await resend.emails.send({
       from: emailFrom,
       to: storeEmail,
-      subject: `[ORDER] #${orderNumber} - ${payload.fullName}`,
+      subject: `Porudžbina #${orderNumber} - ${payload.fullName}`,
       html: ownerHtml,
       attachments: emailAttachments,
     });

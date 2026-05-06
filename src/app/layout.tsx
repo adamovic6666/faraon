@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/images/favicon.webp",
   },
+  verification: {
+    google: "NV6vQB2yVDNPVwvxudSfvJp5Z0krUExyWp7px-K5jO4",
+  },
   openGraph: {
     title: "Faraon diskonti",
     description:
@@ -52,7 +55,7 @@ export default async function RootLayout({
           <div className="pt-16">{children}</div>
           <Footer />
           <CookieConsent />
-            <GoogleAnalytics />
+          <GoogleAnalytics />
         </Providers>
       </body>
     </html>
