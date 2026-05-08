@@ -182,6 +182,7 @@ const fetchInvoiceFromUrl = async (
 
     const payload = (await response.json()) as {
       file_name?: string;
+      file_url?: string;
       mime_type?: string;
       content_base64?: string;
     };
@@ -511,7 +512,7 @@ export const createOrder = async (
       order_id?: string | number;
       order_number?: string | number;
       message?: string;
-      warrant?: string;
+      warrant?: { file_name?: string; file_url?: string } | string;
       file_name?: string;
       mime_type?: string;
       content_base64?: string;
@@ -525,22 +526,29 @@ export const createOrder = async (
       };
     }
 
+    const resolveWarrant = (w: typeof result.warrant, orderId: string | number) => {
+      if (!w) return undefined;
+      if (typeof w === "object") {
+        return {
+          fileName: w.file_name ?? `warrant-${orderId}.pdf`,
+          url: toPublicFileUrl(w.file_url ?? ""),
+        };
+      }
+      return {
+        fileName: w.split("/").findLast(Boolean) ?? `warrant-${orderId}.pdf`,
+        url: toPublicFileUrl(w),
+      };
+    };
+
+    const warrantData = resolveWarrant(result.warrant, result.order_id);
+
     return {
       ok: true,
       data: {
         orderId: String(result.order_id),
         orderNumber: String(result.order_number),
         message: result.message ?? "Porudžbina je uspešno kreirana.",
-        ...(result.warrant
-          ? {
-              warrant: {
-                fileName:
-                  result.warrant.split("/").findLast(Boolean) ??
-                  `warrant-${result.order_id}.pdf`,
-                url: toPublicFileUrl(result.warrant),
-              },
-            }
-          : {}),
+        ...(warrantData ? { warrant: warrantData } : {}),
         ...(result.content_base64
           ? {
               invoicePdf: {

@@ -204,19 +204,29 @@ export async function POST(request: NextRequest) {
         ? "Prenos na račun"
         : "Plaćanje pouzećem";
 
+        const fmtRSD = (s: string): string => {
+          const n = Number.parseFloat(s.replaceAll(",", ""));
+          if (Number.isNaN(n)) return s;
+          const [intPart, decPart] = n.toFixed(2).split(".");
+          return `${intPart.replaceAll(/\B(?=(\d{3})+(?!\d))/g, ".")},${decPart}`;
+        };
+
+        const bd = "border-bottom:1px solid #e5d9ca;";
+        const hasExtraWeight = payload.extraWeightShipments > 0;
+
         const deliveryRowsHtml = [
           `<tr>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;color:#5b544d;">${payload.shippingFieldCode || "9001"}</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava ${payload.city}</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">1</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.shippingBasePrice} RSD</td>
+                <td style="padding:12px;${hasExtraWeight ? bd : ""}font-size:14px;color:#5b544d;">${payload.shippingFieldCode || "9001"}</td>
+                <td style="padding:12px;${hasExtraWeight ? bd : ""}font-size:14px;font-weight:700;color:#1b1b1b;">Dostava ${payload.city}</td>
+                <td style="padding:12px;${hasExtraWeight ? bd : ""}font-size:14px;text-align:center;color:#1b1b1b;">1</td>
+                <td style="padding:12px;${hasExtraWeight ? bd : ""}font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${fmtRSD(payload.shippingBasePrice)} RSD</td>
               </tr>`,
-          ...(payload.extraWeightShipments > 0
+          ...(hasExtraWeight
             ? [`<tr>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;color:#5b544d;">9000</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava dodatni kg (${payload.extraWeightShipments} × ${payload.extraWeightUnitPrice} RSD)</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">${payload.extraWeightShipments}</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.extraWeightTotalPrice} RSD</td>
+                <td style="padding:12px;font-size:14px;color:#5b544d;">9000</td>
+                <td style="padding:12px;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava dodatni kg (${payload.extraWeightShipments} × ${fmtRSD(payload.extraWeightUnitPrice)} RSD)</td>
+                <td style="padding:12px;font-size:14px;text-align:center;color:#1b1b1b;">${payload.extraWeightShipments}</td>
+                <td style="padding:12px;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${fmtRSD(payload.extraWeightTotalPrice)} RSD</td>
               </tr>`]
             : []),
         ].join("");
@@ -225,17 +235,17 @@ export async function POST(request: NextRequest) {
           ...payload.orderItems.map(
             (item) =>
               `<tr>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;color:#5b544d;">${item.productCode}</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">${item.name}</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">${item.quantity}</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${item.total} RSD</td>
+                <td style="padding:12px;${bd}font-size:14px;color:#5b544d;">${item.productCode}</td>
+                <td style="padding:12px;${bd}font-size:14px;font-weight:700;color:#1b1b1b;">${item.name}</td>
+                <td style="padding:12px;${bd}font-size:14px;text-align:center;color:#1b1b1b;">${item.quantity}</td>
+                <td style="padding:12px;${bd}font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${fmtRSD(item.price)} RSD</td>
               </tr>`,
           ),
           deliveryRowsHtml,
         ].join("");
 
         const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faraondiskonti.rs").replace(/\/$/, "");
-        const cenovnikHtml = `<p style="margin:16px 0 0;font-size:13px;color:#5b544d;">Kompletan cenovnik dostave dostupan je na: <a href="${siteUrl}/cenovnik-dostave" style="color:#ac0000;text-decoration:underline;">${siteUrl}/cenovnik-dostave</a></p>`;
+        const cenovnikHtml = `<div style="padding:20px 32px 28px;text-align:center;"><a href="${siteUrl}/cenovnik-dostave" style="font-size:14px;color:#ac0000;text-decoration:underline;">Pogledajte cenovnik dostave →</a></div>`;
 
         const ownerHtml = `<!DOCTYPE html>
 <html>
@@ -287,7 +297,7 @@ export async function POST(request: NextRequest) {
                 <th style="padding:12px;text-align:left;font-size:14px;">Šifra</th>
                 <th style="padding:12px;text-align:left;font-size:14px;">Proizvod</th>
                 <th style="padding:12px;text-align:center;font-size:14px;">Količina</th>
-                <th style="padding:12px;text-align:right;font-size:14px;">Ukupno</th>
+                <th style="padding:12px;text-align:right;font-size:14px;">Cena</th>
               </tr>
             </thead>
             <tbody>${itemsHtml}</tbody>
@@ -295,7 +305,7 @@ export async function POST(request: NextRequest) {
           <table style="width:100%;margin-top:20px;border-collapse:collapse;">
             <tr style="border-top:2px solid #ac0000;">
               <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;">UKUPNO ZA NAPLATU:</td>
-              <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${payload.total} RSD</td>
+              <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${fmtRSD(payload.total)} RSD</td>
             </tr>
             <tr>
               <td colspan="2" style="padding:10px;text-align:right;font-size:12px;color:#5b544d;font-style:italic;">* PDV uračunat u cenu${payload.totalWeight ? ` · Težina pošiljke: ${payload.totalWeight}` : ""}</td>
@@ -354,36 +364,40 @@ export async function POST(request: NextRequest) {
             <tr style="background:#ac0000;color:#fff;">
               <th style="padding:12px;text-align:left;font-size:14px;">Proizvod</th>
               <th style="padding:12px;text-align:center;font-size:14px;">Količina</th>
-              <th style="padding:12px;text-align:right;font-size:14px;">Ukupno</th>
+              <th style="padding:12px;text-align:right;font-size:14px;">Cena</th>
             </tr>
           </thead>
-          <tbody>${[
-            ...payload.orderItems.map(
-              (item) =>
-                `<tr>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">${item.name}</td>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">${item.quantity}</td>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${item.total} RSD</td>
+          <tbody>${(() => {
+            const cBd = "border-bottom:1px solid #e5d9ca;";
+            const cHasExtra = payload.extraWeightShipments > 0;
+            return [
+              ...payload.orderItems.map(
+                (item) =>
+                  `<tr>
+              <td style="padding:12px;${cBd}font-size:14px;font-weight:700;color:#1b1b1b;">${item.name}</td>
+              <td style="padding:12px;${cBd}font-size:14px;text-align:center;color:#1b1b1b;">${item.quantity}</td>
+              <td style="padding:12px;${cBd}font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${fmtRSD(item.price)} RSD</td>
             </tr>`,
-            ),
-            `<tr>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava ${payload.city}</td>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">1</td>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.shippingBasePrice} RSD</td>
+              ),
+              `<tr>
+              <td style="padding:12px;${cHasExtra ? cBd : ""}font-size:14px;font-weight:700;color:#1b1b1b;">Dostava ${payload.city}</td>
+              <td style="padding:12px;${cHasExtra ? cBd : ""}font-size:14px;text-align:center;color:#1b1b1b;">1</td>
+              <td style="padding:12px;${cHasExtra ? cBd : ""}font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${fmtRSD(payload.shippingBasePrice)} RSD</td>
             </tr>`,
-            ...(payload.extraWeightShipments > 0
-              ? [`<tr>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava dodatni kg (${payload.extraWeightShipments} × ${payload.extraWeightUnitPrice} RSD)</td>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">${payload.extraWeightShipments}</td>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.extraWeightTotalPrice} RSD</td>
+              ...(cHasExtra
+                ? [`<tr>
+              <td style="padding:12px;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava dodatni kg (${payload.extraWeightShipments} × ${fmtRSD(payload.extraWeightUnitPrice)} RSD)</td>
+              <td style="padding:12px;font-size:14px;text-align:center;color:#1b1b1b;">${payload.extraWeightShipments}</td>
+              <td style="padding:12px;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${fmtRSD(payload.extraWeightTotalPrice)} RSD</td>
             </tr>`]
-              : []),
-          ].join("")}</tbody>
+                : []),
+            ].join("");
+          })()}</tbody>
         </table>
         <table style="width:100%;margin-top:20px;border-collapse:collapse;">
           <tr style="border-top:2px solid #ac0000;">
             <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;">UKUPNO ZA NAPLATU:</td>
-            <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${payload.total} RSD</td>
+            <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${fmtRSD(payload.total)} RSD</td>
           </tr>
           <tr>
             <td colspan="2" style="padding:10px;text-align:right;font-size:12px;color:#5b544d;font-style:italic;">* PDV uračunat u cenu${payload.totalWeight ? ` · Težina pošiljke: ${payload.totalWeight}` : ""}</td>
