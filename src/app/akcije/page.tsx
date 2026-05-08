@@ -1,7 +1,7 @@
 import CategoryProductGrid from "@/components/shop-page/CategoryProductGrid";
 import { fetchActionProducts } from "@/lib/api/faraon";
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 30;
 
 export default async function AkcijePage() {
   const actionProducts = await fetchActionProducts();

@@ -2,8 +2,7 @@
 const nextConfig = {
   /* config options here */
   images: {
-    unoptimized: true, // Keep unoptimized for cPanel (change to false if cPanel supports image optimization)
-    minimumCacheTTL: 60, // Cache images for at least 60 seconds
+    unoptimized: true,
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.BASE_URL,
