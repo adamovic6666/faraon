@@ -113,7 +113,7 @@ const SuccessPage = () => {
         };
 
         if (!response.ok || !result.contentBase64) {
-          throw new Error(result.error || "Faktura trenutno nije dostupna.");
+          throw new Error(result.error || "Predračun trenutno nije dostupan.");
         }
 
         const downloadUrl = toBlobUrl(
@@ -139,7 +139,7 @@ const SuccessPage = () => {
         setInvoice((prev) => ({
           ...prev,
           loading: false,
-          error: "Faktura još nije spremna. Pokušajte ponovo za par trenutaka.",
+          error: "Predračun još nije spreman. Pokušajte ponovo za par trenutaka.",
         }));
       }
     };
@@ -189,7 +189,7 @@ const SuccessPage = () => {
 
           {shouldLoadInvoice ? (
             <div className="mt-6 w-full max-w-md rounded-2xl border border-black/10 bg-section p-4">
-              <p className="text-sm font-medium text-black/70">Faktura (PDF)</p>
+              <p className="text-sm font-medium text-black/70">Predračun (PDF)</p>
               {invoice.loading ? (
                 <p className="mt-1 text-sm text-black/60">
                   Preuzimanje u toku...
@@ -204,7 +204,7 @@ const SuccessPage = () => {
                   download={invoice.fileName}
                   className="mt-3 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold uppercase text-black/80 transition-colors hover:bg-primary/85"
                 >
-                  Preuzmi fakturu
+                  Preuzmi predračun
                 </a>
               ) : null}
             </div>

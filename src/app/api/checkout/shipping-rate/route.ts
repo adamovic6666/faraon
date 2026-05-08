@@ -42,5 +42,30 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ success: true, data: result.data });
+  const d = result.data;
+  return NextResponse.json({
+    success: true,
+    data: {
+      total_shipping_price: {
+        price: d.totalShippingPrice.price,
+        currency_code: d.totalShippingPrice.currencyCode,
+      },
+      shipping_price: {
+        price: d.shippingPrice.price,
+        currency_code: d.shippingPrice.currencyCode,
+      },
+      total_weight: {
+        weight_number: d.totalWeight.weightNumber,
+        weight_unit: d.totalWeight.weightUnit,
+      },
+      extra_weight: {
+        number_of_shipments: d.extraWeight.numberOfShipments,
+        extra_weight_price: {
+          price: d.extraWeight.extraWeightPrice.price,
+          price_total: d.extraWeight.extraWeightPrice.priceTotal,
+          currency_code: d.extraWeight.extraWeightPrice.currencyCode,
+        },
+      },
+    },
+  });
 }

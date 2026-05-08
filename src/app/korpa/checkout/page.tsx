@@ -49,8 +49,19 @@ type CustomerTypeSectionProps = {
 type PricingOption = {
   id: number;
   name: string;
+  fieldCode: string;
   price: string;
   currencyCode: string;
+};
+
+type ShippingBreakdown = {
+  totalShippingPrice: number;
+  shippingBasePrice: number;
+  totalWeightNumber: string;
+  totalWeightUnit: string;
+  extraWeightShipments: number;
+  extraWeightUnitPrice: number;
+  extraWeightTotalPrice: number;
 };
 
 type CheckoutOrderItemPayload = {
@@ -69,6 +80,12 @@ type CheckoutSubmitPayload = Omit<CheckoutFormValues, "cenovnikTermId"> & {
   deliveryCost: string;
   total: string;
   itemCount: number;
+  shippingFieldCode: string;
+  shippingBasePrice: string;
+  extraWeightShipments: number;
+  extraWeightUnitPrice: string;
+  extraWeightTotalPrice: string;
+  totalWeight: string;
 };
 
 type CheckoutSuccessResponse = {
@@ -78,15 +95,6 @@ type CheckoutSuccessResponse = {
   paymentMethod?: CheckoutFormValues["paymentMethod"];
   warrantUrl?: string;
   warrantFileName?: string;
-};
-
-const getDeliveryLabel = (
-  isShippingLoading: boolean,
-  deliveryCost: number | null,
-) => {
-  if (isShippingLoading) return "Računanje...";
-  if (deliveryCost === null) return "Odaberite mesto";
-  return `${formatPrice(deliveryCost)} RSD`;
 };
 
 const normalizeSku = (value: string | number) => {
@@ -149,6 +157,8 @@ const buildCheckoutPayload = ({
   subtotal,
   deliveryCost,
   total,
+  shippingBreakdown,
+  fieldCode,
 }: {
   formData: CheckoutFormValues;
   city: string;
@@ -156,6 +166,8 @@ const buildCheckoutPayload = ({
   subtotal: number;
   deliveryCost: number;
   total: number;
+  shippingBreakdown: ShippingBreakdown;
+  fieldCode: string;
 }): CheckoutSubmitPayload => ({
   ...formData,
   city,
@@ -165,6 +177,12 @@ const buildCheckoutPayload = ({
   deliveryCost: String(deliveryCost),
   total: String(total),
   itemCount: cart.totalQuantities,
+  shippingFieldCode: fieldCode,
+  shippingBasePrice: String(shippingBreakdown.shippingBasePrice),
+  extraWeightShipments: shippingBreakdown.extraWeightShipments,
+  extraWeightUnitPrice: String(shippingBreakdown.extraWeightUnitPrice),
+  extraWeightTotalPrice: String(shippingBreakdown.extraWeightTotalPrice),
+  totalWeight: `${shippingBreakdown.totalWeightNumber} ${shippingBreakdown.totalWeightUnit}`,
 });
 
 const PIB_REGEX = /^\d{9}$/;
@@ -266,7 +284,8 @@ const CheckoutPage = () => {
   const [pricingOptions, setPricingOptions] = useState<PricingOption[]>([]);
   const [pricingError, setPricingError] = useState("");
   const [isPricingLoading, setIsPricingLoading] = useState(true);
-  const [deliveryCost, setDeliveryCost] = useState<number | null>(null);
+  const [shippingBreakdown, setShippingBreakdown] =
+    useState<ShippingBreakdown | null>(null);
   const [isShippingLoading, setIsShippingLoading] = useState(false);
   const [shippingError, setShippingError] = useState("");
   const router = useRouter();
@@ -365,7 +384,7 @@ const CheckoutPage = () => {
     const calculateShipping = async () => {
       if (!cart || cart.items.length === 0) {
         if (active) {
-          setDeliveryCost(null);
+          setShippingBreakdown(null);
           setShippingError("");
           setIsShippingLoading(false);
         }
@@ -374,7 +393,7 @@ const CheckoutPage = () => {
 
       if (!selectedPricingId) {
         if (active) {
-          setDeliveryCost(null);
+          setShippingBreakdown(null);
           setShippingError("");
           setIsShippingLoading(false);
         }
@@ -402,26 +421,49 @@ const CheckoutPage = () => {
         const result = (await response.json()) as {
           error?: string;
           data?: {
-            amount?: string;
+            total_shipping_price?: { price?: string; currency_code?: string };
+            shipping_price?: { price?: string; currency_code?: string };
+            total_weight?: { weight_number?: string; weight_unit?: string };
+            extra_weight?: {
+              number_of_shipments?: number;
+              extra_weight_price?: {
+                price?: string;
+                price_total?: string;
+                currency_code?: string;
+              };
+            };
           };
         };
 
-        if (!response.ok || !result.data?.amount) {
+        if (!response.ok || !result.data?.total_shipping_price?.price) {
           throw new Error(result.error || "Neuspešan obračun dostave.");
         }
 
-        const amount = Number(result.data.amount);
-        if (!Number.isFinite(amount)) {
+        const d = result.data;
+        const totalPrice = Number(d.total_shipping_price!.price);
+        if (!Number.isFinite(totalPrice)) {
           throw new TypeError("Neispravan iznos dostave.");
         }
 
         if (!active) return;
 
-        setDeliveryCost(Math.round(amount));
+        setShippingBreakdown({
+          totalShippingPrice: Math.round(totalPrice),
+          shippingBasePrice: Math.round(Number(d.shipping_price?.price ?? "0")),
+          totalWeightNumber: d.total_weight?.weight_number ?? "0",
+          totalWeightUnit: d.total_weight?.weight_unit ?? "kg",
+          extraWeightShipments: d.extra_weight?.number_of_shipments ?? 0,
+          extraWeightUnitPrice: Math.round(
+            Number(d.extra_weight?.extra_weight_price?.price ?? "0"),
+          ),
+          extraWeightTotalPrice: Math.round(
+            Number(d.extra_weight?.extra_weight_price?.price_total ?? "0"),
+          ),
+        });
       } catch (error) {
         console.error("Shipping calculation error:", error);
         if (!active) return;
-        setDeliveryCost(null);
+        setShippingBreakdown(null);
         setShippingError(
           "Ne možemo da izračunamo cenu dostave za izabrano mesto.",
         );
@@ -439,6 +481,7 @@ const CheckoutPage = () => {
     };
   }, [cart, selectedPricingId]);
 
+  const deliveryCost = shippingBreakdown?.totalShippingPrice ?? null;
   const subtotal = Math.round(adjustedTotalPrice);
   const total = cart ? subtotal + (deliveryCost ?? 0) : 0;
 
@@ -453,7 +496,7 @@ const CheckoutPage = () => {
       return;
     }
 
-    if (deliveryCost === null || isShippingLoading) {
+    if (deliveryCost === null || isShippingLoading || !shippingBreakdown) {
       setSubmitError("Sačekajte obračun cene dostave.");
       return;
     }
@@ -470,6 +513,8 @@ const CheckoutPage = () => {
         subtotal,
         deliveryCost,
         total,
+        shippingBreakdown,
+        fieldCode: selectedPricing.fieldCode,
       });
 
       const controller = new AbortController();
@@ -791,12 +836,45 @@ const CheckoutPage = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-base md:text-lg text-black/60">
-                    Dostava
+                    {selectedPricing && !isShippingLoading
+                      ? `Dostava (${selectedPricing.name})`
+                      : "Dostava"}
                   </span>
                   <span className="text-base md:text-lg font-semibold text-black/80">
-                    {getDeliveryLabel(isShippingLoading, deliveryCost)}
+                    {isShippingLoading
+                      ? "Računanje..."
+                      : shippingBreakdown
+                        ? `${formatPrice(shippingBreakdown.shippingBasePrice)} RSD`
+                        : "Odaberite mesto"}
                   </span>
                 </div>
+                {shippingBreakdown &&
+                shippingBreakdown.extraWeightShipments > 0 ? (
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="text-base md:text-lg text-black/60">
+                      Dostava dodatni kg{" "}
+                      <span className="text-sm">
+                        ({shippingBreakdown.extraWeightShipments} ×{" "}
+                        {formatPrice(shippingBreakdown.extraWeightUnitPrice)}{" "}
+                        RSD)
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-base md:text-lg font-semibold text-black/80">
+                      {formatPrice(shippingBreakdown.extraWeightTotalPrice)} RSD
+                    </span>
+                  </div>
+                ) : null}
+                {shippingBreakdown ? (
+                  <div className="flex items-center justify-between">
+                    <span className="text-base md:text-lg text-black/60">
+                      Težina pošiljke
+                    </span>
+                    <span className="text-base md:text-lg font-semibold text-black/80">
+                      {shippingBreakdown.totalWeightNumber}{" "}
+                      {shippingBreakdown.totalWeightUnit}
+                    </span>
+                  </div>
+                ) : null}
                 {shippingError ? (
                   <p className="text-xs text-red-600">{shippingError}</p>
                 ) : null}
@@ -817,6 +895,18 @@ const CheckoutPage = () => {
                   </p>
                 </div>
               </div>
+            </div>
+
+            <div className="text-center">
+              <div className="h-px bg-black/15 mt-2" />
+              <Link
+                href="/cenovnik-dostave"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+              >
+                Pogledajte cenovnik dostave →
+              </Link>
             </div>
           </aside>
         </form>

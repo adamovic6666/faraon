@@ -76,6 +76,7 @@ type ProductApiResponse = {
 export type PricingTerm = {
   id: number;
   name: string;
+  fieldCode: string;
   price: string;
   currencyCode: string;
 };
@@ -86,8 +87,13 @@ export type ShippingRateProduct = {
 };
 
 export type ShippingRate = {
-  amount: string;
-  currencyCode: string;
+  totalShippingPrice: { price: string; currencyCode: string };
+  shippingPrice: { price: string; currencyCode: string };
+  totalWeight: { weightNumber: string; weightUnit: string };
+  extraWeight: {
+    numberOfShipments: number;
+    extraWeightPrice: { price: string; priceTotal: string; currencyCode: string };
+  };
 };
 
 export type BackendOrderPayload = {
@@ -313,6 +319,7 @@ export const fetchPricingTerms = async (): Promise<ApiCallResult<PricingTerm[]>>
     const payload = (await response.json()) as Array<{
       id?: number;
       name?: string;
+      field_code?: string;
       field_price?: {
         price?: string;
         currency_code?: string;
@@ -324,6 +331,7 @@ export const fetchPricingTerms = async (): Promise<ApiCallResult<PricingTerm[]>>
       .map((item) => ({
         id: item.id as number,
         name: (item.name ?? "").trim(),
+        fieldCode: (item.field_code ?? "").trim(),
         price: item.field_price?.price ?? "0",
         currencyCode: item.field_price?.currency_code ?? "RSD",
       }))
@@ -381,12 +389,47 @@ export const fetchShippingRate = async ({
       };
     }
 
-    const payload = (await response.json()) as {
-      data?: Array<{ amount?: string; currency_code?: string }>;
+    const rawJson = await response.json();
+    console.log("[fetchShippingRate] raw backend response:", JSON.stringify(rawJson, null, 2));
+    const payload = rawJson as {
+      data?:
+        | Array<{ amount?: string; currency_code?: string }>
+        | {
+            total_shipping_price?: { price?: string; currency_code?: string };
+            shipping_price?: { price?: string; currency_code?: string };
+            total_weight?: { weight_number?: string; weight_unit?: string };
+            extra_weight?: {
+              number_of_shipments?: number;
+              extra_weight_price?: { price?: string; price_total?: string; currency_code?: string };
+            };
+          };
     };
 
-    const firstRate = payload.data?.[0];
-    if (!firstRate?.amount) {
+    // Handle legacy array format: { data: [{ amount, currency_code }] }
+    if (Array.isArray(payload.data)) {
+      const firstRate = payload.data[0];
+      if (!firstRate?.amount) {
+        return {
+          ok: false,
+          status: 502,
+          error: "Cena dostave nije vraćena od backend-a.",
+        };
+      }
+      return {
+        ok: true,
+        data: {
+          totalShippingPrice: { price: firstRate.amount, currencyCode: firstRate.currency_code ?? "RSD" },
+          shippingPrice: { price: firstRate.amount, currencyCode: firstRate.currency_code ?? "RSD" },
+          totalWeight: { weightNumber: "0", weightUnit: "kg" },
+          extraWeight: {
+            numberOfShipments: 0,
+            extraWeightPrice: { price: "0", priceTotal: "0", currencyCode: "RSD" },
+          },
+        },
+      };
+    }
+    const data = payload.data;
+    if (!data?.total_shipping_price?.price) {
       return {
         ok: false,
         status: 502,
@@ -397,8 +440,26 @@ export const fetchShippingRate = async ({
     return {
       ok: true,
       data: {
-        amount: firstRate.amount,
-        currencyCode: firstRate.currency_code ?? "RSD",
+        totalShippingPrice: {
+          price: data.total_shipping_price.price,
+          currencyCode: data.total_shipping_price.currency_code ?? "RSD",
+        },
+        shippingPrice: {
+          price: data.shipping_price?.price ?? "0",
+          currencyCode: data.shipping_price?.currency_code ?? "RSD",
+        },
+        totalWeight: {
+          weightNumber: data.total_weight?.weight_number ?? "0",
+          weightUnit: data.total_weight?.weight_unit ?? "kg",
+        },
+        extraWeight: {
+          numberOfShipments: data.extra_weight?.number_of_shipments ?? 0,
+          extraWeightPrice: {
+            price: data.extra_weight?.extra_weight_price?.price ?? "0",
+            priceTotal: data.extra_weight?.extra_weight_price?.price_total ?? "0",
+            currencyCode: data.extra_weight?.extra_weight_price?.currency_code ?? "RSD",
+          },
+        },
       },
     };
   } catch (error) {
@@ -635,7 +696,7 @@ export const fetchTopLevelCategories = async (): Promise<CategoryItem[]> => {
 
 export const fetchActionProducts = async (): Promise<Product[]> => {
   try {
-    const res = await fetch(buildApiUrl("akcija"), { next: { revalidate: 3600 } });
+    const res = await fetch(buildApiUrl("akcija"), { next: { revalidate: 30 } });
     if (!res.ok) return [];
 
     const payload: ActionApiResponse = await res.json();
@@ -690,7 +751,7 @@ export const fetchProductBySlug = cache(
     endpoint.searchParams.set("p", productPath);
     endpoint.searchParams.set("cc", process.env.API_HASH ?? "");
 
-    const response = await fetch(endpoint.toString(), { redirect: "manual" });
+    const response = await fetch(endpoint.toString(), { redirect: "manual", next: { revalidate: 60 } });
 
     if (
       response.status === 301 ||

@@ -11,15 +11,15 @@ const INVOICE_RETRY_DELAY_MS = 3000;
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-type InvoicePdfPayload = {
-  fileName: string;
-  mimeType: string;
-  contentBase64: string;
+type PdfAttachment = {
+  filename: string;
+  content: Buffer;
+  content_type: string;
 };
 
 const resolveInvoicePdf = async (
   orderId: string,
-): Promise<InvoicePdfPayload | null> => {
+): Promise<PdfAttachment | null> => {
   const startedAt = Date.now();
 
   do {
@@ -27,9 +27,9 @@ const resolveInvoicePdf = async (
 
     if (invoiceResult.ok) {
       return {
-        fileName: invoiceResult.data.fileName,
-        mimeType: invoiceResult.data.mimeType,
-        contentBase64: invoiceResult.data.contentBase64,
+        filename: invoiceResult.data.fileName,
+        content: Buffer.from(invoiceResult.data.contentBase64, "base64"),
+        content_type: invoiceResult.data.mimeType,
       };
     }
 
@@ -41,6 +41,20 @@ const resolveInvoicePdf = async (
   } while (true);
 
   return null;
+};
+
+const fetchWarrantPdf = async (
+  url: string,
+  fileName: string,
+): Promise<PdfAttachment | null> => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    const buffer = Buffer.from(await response.arrayBuffer());
+    return { filename: fileName, content: buffer, content_type: "application/pdf" };
+  } catch {
+    return null;
+  }
 };
 
 const orderItemSchema = z.object({
@@ -73,6 +87,12 @@ const checkoutSchema = z
     deliveryCost: z.string().min(1),
     total: z.string().min(1),
     itemCount: z.number().int().positive(),
+    shippingFieldCode: z.string().optional().default(""),
+    shippingBasePrice: z.string().optional().default("0"),
+    extraWeightShipments: z.number().int().min(0).optional().default(0),
+    extraWeightUnitPrice: z.string().optional().default("0"),
+    extraWeightTotalPrice: z.string().optional().default("0"),
+    totalWeight: z.string().optional().default(""),
   })
   .superRefine((data, ctx) => {
     if (data.customerType === "business") {
@@ -184,6 +204,23 @@ export async function POST(request: NextRequest) {
         ? "Prenos na račun"
         : "Plaćanje pouzećem";
 
+        const deliveryRowsHtml = [
+          `<tr>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;color:#5b544d;">${payload.shippingFieldCode || "9001"}</td>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava ${payload.city}</td>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">1</td>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.shippingBasePrice} RSD</td>
+              </tr>`,
+          ...(payload.extraWeightShipments > 0
+            ? [`<tr>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;color:#5b544d;">9000</td>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava dodatni kg (${payload.extraWeightShipments} × ${payload.extraWeightUnitPrice} RSD)</td>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">${payload.extraWeightShipments}</td>
+                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.extraWeightTotalPrice} RSD</td>
+              </tr>`]
+            : []),
+        ].join("");
+
         const itemsHtml = [
           ...payload.orderItems.map(
             (item) =>
@@ -194,13 +231,11 @@ export async function POST(request: NextRequest) {
                 <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${item.total} RSD</td>
               </tr>`,
           ),
-          `<tr>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;color:#5b544d;">901</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">1</td>
-                <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.deliveryCost} RSD</td>
-              </tr>`,
+          deliveryRowsHtml,
         ].join("");
+
+        const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faraondiskonti.rs").replace(/\/$/, "");
+        const cenovnikHtml = `<p style="margin:16px 0 0;font-size:13px;color:#5b544d;">Kompletan cenovnik dostave dostupan je na: <a href="${siteUrl}/cenovnik-dostave" style="color:#ac0000;text-decoration:underline;">${siteUrl}/cenovnik-dostave</a></p>`;
 
         const ownerHtml = `<!DOCTYPE html>
 <html>
@@ -241,7 +276,7 @@ export async function POST(request: NextRequest) {
           <p style="margin:8px 0 0;color:#5b544d;">${
             payload.paymentMethod === "bank_transfer"
               ? "Iznos navedene porudžbine se plaća prevodom na račun Faraon Diskonti."
-              : "Iznos navedene porudžbine plaćate kuriru prilikom preuzimanja pošiljke."
+              : "Iznos navedene porudžbine plaćate kuriru u gotovini prilikom preuzimanja pošiljke."
           }</p>
         </div>
         <div style="margin-bottom:18px;">
@@ -263,7 +298,7 @@ export async function POST(request: NextRequest) {
               <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${payload.total} RSD</td>
             </tr>
             <tr>
-              <td colspan="2" style="padding:10px;text-align:right;font-size:12px;color:#5b544d;font-style:italic;">* PDV uračunat u cenu</td>
+              <td colspan="2" style="padding:10px;text-align:right;font-size:12px;color:#5b544d;font-style:italic;">* PDV uračunat u cenu${payload.totalWeight ? ` · Težina pošiljke: ${payload.totalWeight}` : ""}</td>
             </tr>
           </table>
         </div>
@@ -332,10 +367,17 @@ export async function POST(request: NextRequest) {
             </tr>`,
             ),
             `<tr>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava</td>
+              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava ${payload.city}</td>
               <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">1</td>
-              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.deliveryCost} RSD</td>
+              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.shippingBasePrice} RSD</td>
             </tr>`,
+            ...(payload.extraWeightShipments > 0
+              ? [`<tr>
+              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava dodatni kg (${payload.extraWeightShipments} × ${payload.extraWeightUnitPrice} RSD)</td>
+              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:center;color:#1b1b1b;">${payload.extraWeightShipments}</td>
+              <td style="padding:12px;border-bottom:1px solid #e5d9ca;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${payload.extraWeightTotalPrice} RSD</td>
+            </tr>`]
+              : []),
           ].join("")}</tbody>
         </table>
         <table style="width:100%;margin-top:20px;border-collapse:collapse;">
@@ -344,10 +386,11 @@ export async function POST(request: NextRequest) {
             <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${payload.total} RSD</td>
           </tr>
           <tr>
-            <td colspan="2" style="padding:10px;text-align:right;font-size:12px;color:#5b544d;font-style:italic;">* PDV uračunat u cenu</td>
+            <td colspan="2" style="padding:10px;text-align:right;font-size:12px;color:#5b544d;font-style:italic;">* PDV uračunat u cenu${payload.totalWeight ? ` · Težina pošiljke: ${payload.totalWeight}` : ""}</td>
           </tr>
         </table>
       </div>
+      ${cenovnikHtml}
       <div style="background:#8c0000;padding:24px 32px;text-align:center;color:#fff;">
         <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srdačan pozdrav,</p>
         <p style="margin:0 0 8px;font-size:15px;font-weight:700;">Faraon diskonti</p>
@@ -364,22 +407,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const emailAttachments = invoicePdf
-      ? [
-          {
-            filename: invoicePdf.fileName,
-            content: Buffer.from(invoicePdf.contentBase64, "base64"),
-            content_type: invoicePdf.mimeType,
-          },
-        ]
-      : undefined;
+    const warrantPdf = result.data.warrant
+      ? await fetchWarrantPdf(result.data.warrant.url, result.data.warrant.fileName)
+      : null;
+
+    if (!warrantPdf) {
+      emailWarnings.push("Nalog za magacin nije mogao biti priložen uz email.");
+    }
+
+    const ownerAttachments: PdfAttachment[] = [
+      ...(warrantPdf ? [warrantPdf] : []),
+      ...(invoicePdf ? [invoicePdf] : []),
+    ];
+
+    const customerAttachments: PdfAttachment[] = [
+      ...(invoicePdf ? [invoicePdf] : []),
+    ];
 
     const ownerEmailResult = await resend.emails.send({
       from: emailFrom,
       to: storeEmail,
       subject: `Porudžbina #${orderNumber} - ${payload.fullName}`,
       html: ownerHtml,
-      attachments: emailAttachments,
+      attachments: ownerAttachments.length ? ownerAttachments : undefined,
     });
 
     if (ownerEmailResult.error) {
@@ -392,7 +442,7 @@ export async function POST(request: NextRequest) {
       to: payload.email,
       subject: `Potvrda porudžbine #${orderNumber}`,
       html: customerHtml,
-      attachments: emailAttachments,
+      attachments: customerAttachments.length ? customerAttachments : undefined,
     });
 
     if (customerEmailResult.error) {
