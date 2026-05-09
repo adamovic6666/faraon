@@ -3,6 +3,12 @@ const nextConfig = {
   /* config options here */
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "backend.faraondiskonti.rs",
+      },
+    ],
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.BASE_URL,
