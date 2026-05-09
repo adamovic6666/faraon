@@ -8,7 +8,7 @@ export type Product = {
   slug?: string;
   category?: string;
   description?: string;
-  tag?: string;
+  tags?: string[];
   packaging?: string;
 };
 

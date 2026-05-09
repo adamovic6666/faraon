@@ -2,7 +2,7 @@ import SearchResultsGrid from "@/components/shop-page/SearchResultsGrid";
 import { searchProducts } from "@/lib/features/products/search.server";
 import { Product } from "@/types/product.types";
 
-export const revalidate = 300; // Cache for 5 minutes
+export const revalidate = 30; // Cache for 5 minutes
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -97,7 +97,7 @@ async function mapSearchResultToProduct(result: any): Promise<Product> {
     slug: slug || "unknown",
     category: category || "bezalkholna-pica",
     description: result.description,
-    tag: result.tag,
+    tags: result.tags,
     packaging: result.packaging,
   };
 }

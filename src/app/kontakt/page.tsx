@@ -169,7 +169,7 @@ const KontaktPage = () => {
               <Select onValueChange={field.onChange} value={field.value}>
                 <SelectTrigger
                   className={cn(
-                    "bg-section h-auto w-full rounded-full border border-gray-300 p-4 px-6 text-base font-light text-black/80 shadow-none data-placeholder:text-black/40 focus:ring-1 focus:ring-ring",
+                    "bg-section h-auto w-full rounded-full border border-gray-300 p-4 px-6 text-base font-light text-black/80 shadow-none data-placeholder:text-black/40 focus:ring-1 focus:ring-black/20",
                     errors.reason && "border-red-500",
                   )}
                 >

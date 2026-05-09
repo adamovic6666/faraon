@@ -3,7 +3,7 @@ import Header from "@/components/product-page/Header";
 import AnkhSeparator from "@/components/common/AnkhSeparator";
 import ProductListSec from "@/components/common/ProductListSec";
 
-export const revalidate = 30;
+export const revalidate = 10;
 
 export default async function ProductPage({
   params,

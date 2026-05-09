@@ -13,7 +13,7 @@ type ActionApiProduct = {
   alias: string;
   akcijska_cena: string;
   cena: string;
-  tag?: string;
+  tags?: string[];
   packaging?: string;
 };
 
@@ -35,7 +35,7 @@ type CategoryApiProduct = {
   base_price?: string;
   price?: string | number;
   oldPrice?: string | number;
-  tag?: string;
+  tags?: string[];
   packaging?: string;
 };
 
@@ -69,7 +69,7 @@ type ProductApiResponse = {
   oldPrice?: string | number;
   description?: string;
   photo_gallery?: string[] | { thumb?: string[]; orig?: string[] };
-  tag?: string;
+  tags?: string[];
   packaging?: string;
 };
 
@@ -622,7 +622,7 @@ const mapActionProduct = (item: ActionApiProduct, index: number): Product => {
     oldPrice: oldPrice || undefined,
     price,
     slug: item.alias?.split("/").findLast(Boolean),
-    tag: item.tag,
+    tags:   item.tags,
     packaging: item.packaging,
   };
 };
@@ -645,7 +645,7 @@ const mapCategoryProducts = (items: CategoryApiProduct[] = []): Product[] => {
       slug: item.alias?.split("/").findLast(Boolean),
       price,
       oldPrice,
-      tag: item.tag,
+      tags: item.tags,
       packaging: item.packaging,
     };
   });
@@ -687,7 +687,7 @@ const mapProductDetails = (payload: ProductApiResponse): Product => {
     oldPrice,
     description: payload.description,
     slug: payload.alias?.split("/").findLast(Boolean) ?? payload.slug,
-    tag: payload.tag,
+    tags: payload.tags,
     packaging: payload.packaging,
   };
 };
@@ -720,11 +720,10 @@ export const fetchCategoryProducts = async (
   pathname: string,
 ): Promise<{ products: Product[]; title: string; metatags: { title: string; description: string } }> => {
   try {
-    const res = await fetch(buildApiUrl(pathname), { next: { revalidate: 60 } });
+    const res = await fetch(buildApiUrl(pathname), { next: { revalidate: 10 } });
     if (!res.ok) return { products: [], title: "", metatags: { title: "", description: "" } };
 
     const payload: CategoryApiResponse = await res.json();
-
     return {
       products: mapCategoryProducts(payload.products ?? []),
       title: payload.parent?.metatags?.title ?? payload.parent?.title ?? "",
@@ -759,7 +758,7 @@ export const fetchProductBySlug = cache(
     endpoint.searchParams.set("p", productPath);
     endpoint.searchParams.set("cc", process.env.API_HASH ?? "");
 
-    const response = await fetch(endpoint.toString(), { redirect: "manual", next: { revalidate: 60 } });
+    const response = await fetch(endpoint.toString(), { redirect: "manual", next: { revalidate: 10 } });
 
     if (
       response.status === 301 ||

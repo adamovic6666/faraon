@@ -61,13 +61,15 @@ export default function CategoryProductGrid({
   const availableTags = Array.from(
     new Set(
       products
-        .map((product) => product.tag?.trim())
-        .filter((tag): tag is string => Boolean(tag)),
+        .flatMap((product) => product.tags?.map((t) => t.trim()) ?? [])
+        .filter(Boolean),
     ),
   ).sort((a, b) => a.localeCompare(b, "sr", { sensitivity: "base" }));
 
   const filteredProducts = selectedTag
-    ? products.filter((product) => product.tag?.trim() === selectedTag)
+    ? products.filter((product) =>
+        product.tags?.some((t) => t.trim() === selectedTag),
+      )
     : products;
 
   const sorted = sortProducts(filteredProducts, sort);

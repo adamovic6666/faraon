@@ -65,11 +65,7 @@ const orderItemSchema = z.object({
   total: z.string().min(1),
 });
 
-const PIB_REGEX = /^\d{9}$/;
-const MB_REGEX = /^\d{8}$/;
-
-const checkoutSchema = z
-  .object({
+const checkoutSchema = z.object({
     fullName: z.string().min(1),
     email: z.email(),
     phone: z.string().min(1),
@@ -77,7 +73,6 @@ const checkoutSchema = z
     city: z.string().min(1),
     postalCode: z.string().min(1),
     paymentMethod: z.enum(["bank_transfer", "cash_on_delivery"]),
-    customerType: z.enum(["personal", "business"]).default("personal"),
     pib: z.string().optional().default(""),
     mb: z.string().optional().default(""),
     note: z.string().optional().default(""),
@@ -93,28 +88,6 @@ const checkoutSchema = z
     extraWeightUnitPrice: z.string().optional().default("0"),
     extraWeightTotalPrice: z.string().optional().default("0"),
     totalWeight: z.string().optional().default(""),
-  })
-  .superRefine((data, ctx) => {
-    if (data.customerType === "business") {
-      const normalizedPib = data.pib?.trim().replaceAll(" ", "") ?? "";
-      const normalizedMb = data.mb?.trim().replaceAll(" ", "") ?? "";
-
-      if (!PIB_REGEX.test(normalizedPib)) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["pib"],
-          message: "PIB mora imati tačno 9 cifara.",
-        });
-      }
-
-      if (!MB_REGEX.test(normalizedMb)) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["mb"],
-          message: "Matični broj mora imati tačno 8 cifara.",
-        });
-      }
-    }
   });
 
 export async function POST(request: NextRequest) {
@@ -147,12 +120,8 @@ export async function POST(request: NextRequest) {
       given_name: firstName,
       family_name: lastName,
       phone_number: payload.phone,
-      ...(payload.customerType === "business"
-        ? {
-            pib: payload.pib.trim(),
-            mb: payload.mb.trim(),
-          }
-        : {}),
+      ...(payload.pib?.trim() ? { pib: payload.pib.trim() } : {}),
+      ...(payload.mb?.trim() ? { mb: payload.mb.trim() } : {}),
     };
 
     const paymentMethod: "personal" | "invoice" =
@@ -244,9 +213,6 @@ export async function POST(request: NextRequest) {
           deliveryRowsHtml,
         ].join("");
 
-        const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faraondiskonti.rs").replace(/\/$/, "");
-        const cenovnikHtml = `<div style="padding:20px 32px 28px;text-align:center;"><a href="${siteUrl}/cenovnik-dostave" style="font-size:14px;color:#ac0000;text-decoration:underline;">Pogledajte cenovnik dostave →</a></div>`;
-
         const ownerHtml = `<!DOCTYPE html>
 <html>
   <head>
@@ -278,6 +244,8 @@ export async function POST(request: NextRequest) {
           <p style="margin:6px 0;"><strong>Email:</strong> ${payload.email}</p>
           <p style="margin:6px 0;"><strong>Telefon:</strong> ${payload.phone}</p>
           <p style="margin:6px 0;"><strong>Adresa:</strong> ${payload.address}, ${payload.postalCode} ${payload.city}</p>
+          ${payload.pib?.trim() ? `<p style="margin:6px 0;"><strong>PIB:</strong> ${payload.pib.trim()}</p>` : ""}
+          ${payload.mb?.trim() ? `<p style="margin:6px 0;"><strong>Matični broj:</strong> ${payload.mb.trim()}</p>` : ""}
           <p style="margin:6px 0;"><strong>Napomena:</strong> ${payload.note || "-"}</p>
         </div>
         <div style="margin-bottom:24px;padding:18px 20px;border:2px solid #ac0000;border-radius:8px;background:#fffaf6;">
@@ -404,7 +372,6 @@ export async function POST(request: NextRequest) {
           </tr>
         </table>
       </div>
-      ${cenovnikHtml}
       <div style="background:#8c0000;padding:24px 32px;text-align:center;color:#fff;">
         <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srdačan pozdrav,</p>
         <p style="margin:0 0 8px;font-size:15px;font-weight:700;">Faraon diskonti</p>

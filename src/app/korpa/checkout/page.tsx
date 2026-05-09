@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  Controller,
-  FieldErrors,
-  UseFormRegister,
-  useForm,
-} from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import Button from "@/components/common/Button";
 import SectionTitle from "@/components/common/SectionTitle";
 import InputGroup from "@/components/ui/input-group";
@@ -33,17 +28,10 @@ type CheckoutFormValues = {
   address: string;
   postalCode: string;
   paymentMethod: "cash_on_delivery" | "bank_transfer";
-  customerType: "personal" | "business";
   pib: string;
   mb: string;
   note: string;
   cenovnikTermId: string;
-};
-
-type CustomerTypeSectionProps = {
-  customerType: CheckoutFormValues["customerType"];
-  register: UseFormRegister<CheckoutFormValues>;
-  errors: FieldErrors<CheckoutFormValues>;
 };
 
 type PricingOption = {
@@ -185,99 +173,6 @@ const buildCheckoutPayload = ({
   totalWeight: `${shippingBreakdown.totalWeightNumber} ${shippingBreakdown.totalWeightUnit}`,
 });
 
-const PIB_REGEX = /^\d{9}$/;
-const MB_REGEX = /^\d{8}$/;
-
-const CustomerTypeSection = ({
-  customerType,
-  register,
-  errors,
-}: CustomerTypeSectionProps) => (
-  <>
-    <div>
-      <h6 className="text-lg md:text-xl font-bold text-black pt-4 md:pt-6 mb-3 md:mb-4">
-        Tip kupca
-      </h6>
-
-      <div className="space-y-4">
-        <label
-          className={cn(
-            "flex cursor-pointer items-start gap-4 rounded-[20px] border border-transparent bg-white px-5 py-5 transition-colors",
-            customerType === "personal" && "bg-section border-black/15",
-          )}
-        >
-          <input
-            type="radio"
-            value="personal"
-            className="mt-1 h-5 w-5 accent-brand"
-            {...register("customerType")}
-          />
-          <span className="block text-md font-semibold text-black/80 md:text-xl">
-            Fizičko lice
-          </span>
-        </label>
-
-        <label
-          className={cn(
-            "flex cursor-pointer items-start gap-4 rounded-[20px] border border-transparent bg-white px-5 py-5 transition-colors",
-            customerType === "business" && "bg-section border-black/15",
-          )}
-        >
-          <input
-            type="radio"
-            value="business"
-            className="mt-1 h-5 w-5 accent-brand"
-            {...register("customerType")}
-          />
-          <span className="block text-md font-semibold text-black/80 md:text-xl">
-            Pravno lice
-          </span>
-        </label>
-      </div>
-    </div>
-
-    {customerType === "business" ? (
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
-        <InputGroup className="pl-0">
-          <InputGroup.Input
-            type="text"
-            placeholder="PIB *"
-            inputMode="numeric"
-            maxLength={9}
-            className={cn(
-              "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
-              errors.pib && "border-red-500",
-            )}
-            {...register("pib", {
-              validate: (value) =>
-                customerType !== "business" ||
-                PIB_REGEX.test(value.trim().replaceAll(" ", "")),
-            })}
-          />
-        </InputGroup>
-
-        <InputGroup className="pl-0">
-          <InputGroup.Input
-            type="text"
-            placeholder="Matični broj *"
-            inputMode="numeric"
-            maxLength={8}
-            className={cn(
-              "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
-              errors.mb && "border-red-500",
-            )}
-            {...register("mb", {
-              validate: (value) =>
-                customerType !== "business" ||
-                MB_REGEX.test(value.trim().replaceAll(" ", "")),
-            })}
-          />
-        </InputGroup>
-      </div>
-    ) : null}
-  </>
-);
-
 const CheckoutPage = () => {
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -310,7 +205,6 @@ const CheckoutPage = () => {
       address: "",
       postalCode: "",
       paymentMethod: "cash_on_delivery",
-      customerType: "personal",
       pib: "",
       mb: "",
       note: "",
@@ -319,7 +213,6 @@ const CheckoutPage = () => {
   });
 
   const paymentMethod = watch("paymentMethod");
-  const customerType = watch("customerType");
   const selectedPricingId = watch("cenovnikTermId");
 
   useEffect(() => {
@@ -599,10 +492,14 @@ const CheckoutPage = () => {
               </div>
             ) : null}
 
-            <div className="border border-black/15 rounded-[20px] p-5 md:p-8">
+            <div className="border border-black/15 rounded-[20px] p-5 md:p-8 relative">
               <h6 className="text-xl md:text-2xl font-bold text-black mb-0.5 md:mb-1">
                 Podaci za dostavu
               </h6>
+              <p className="text-xs text-black/50 absolute top-6 right-6 md:top-10 md:right-10">
+                *obavezna polja
+              </p>
+
               <p className="text-base leading-relaxed text-black/80 font-light md:text-lg mb-1 md:mb-2">
                 Molimo popunite sve neophodne podatke za dostavu Vaše
                 porudžbine.
@@ -612,7 +509,7 @@ const CheckoutPage = () => {
                   <InputGroup className="pl-0">
                     <InputGroup.Input
                       type="text"
-                      placeholder="Ime i prezime *"
+                      placeholder="Ime i prezime / Naziv preduzeća*"
                       className={cn(
                         "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
                         errors.fullName && "border-red-500",
@@ -658,6 +555,29 @@ const CheckoutPage = () => {
                 </InputGroup>
 
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+                  <InputGroup className="pl-0">
+                    <InputGroup.Input
+                      type="text"
+                      placeholder="PIB (samo za pravna lica)"
+                      inputMode="numeric"
+                      maxLength={9}
+                      className="bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base"
+                      {...register("pib")}
+                    />
+                  </InputGroup>
+                  <InputGroup className="pl-0">
+                    <InputGroup.Input
+                      type="text"
+                      placeholder="MB (samo za pravna lica)"
+                      inputMode="numeric"
+                      maxLength={8}
+                      className="bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base"
+                      {...register("mb")}
+                    />
+                  </InputGroup>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                   <div>
                     <Controller
                       name="cenovnikTermId"
@@ -671,7 +591,7 @@ const CheckoutPage = () => {
                         >
                           <SelectTrigger
                             className={cn(
-                              "bg-section h-auto w-full rounded-full border border-gray-300 p-4 px-6 text-base font-light text-black/80 shadow-none data-placeholder:text-black/40 focus:ring-1 focus:ring-ring",
+                              "bg-section h-auto w-full rounded-full border border-gray-300 p-4 px-6 text-base font-light text-black/80 shadow-none data-placeholder:text-black/40 focus:ring-1 focus:ring-black/20",
                               errors.cenovnikTermId && "border-red-500",
                             )}
                           >
@@ -715,12 +635,6 @@ const CheckoutPage = () => {
                     />
                   </InputGroup>
                 </div>
-
-                <CustomerTypeSection
-                  customerType={customerType}
-                  register={register}
-                  errors={errors}
-                />
               </div>
             </div>
 
@@ -729,10 +643,10 @@ const CheckoutPage = () => {
                 Izaberite način plaćanja
               </h6>
 
-              <div className="mt-5 space-y-5">
+              <div className="mt-3 space-y-3">
                 <label
                   className={cn(
-                    "flex cursor-pointer items-start gap-4 rounded-[20px] border border-transparent bg-white px-5 py-5 transition-colors",
+                    "flex cursor-pointer items-start gap-4 rounded-4xl border border-transparent bg-white px-5 py-5 transition-colors",
                     paymentMethod === "cash_on_delivery" &&
                       "bg-section border-black/15",
                   )}
@@ -755,7 +669,7 @@ const CheckoutPage = () => {
 
                 <label
                   className={cn(
-                    "flex cursor-pointer items-start gap-4 rounded-[20px] border border-transparent bg-white px-5 py-5 transition-colors",
+                    "flex cursor-pointer items-start gap-4 rounded-4xl border border-transparent bg-white px-5 py-5 transition-colors",
                     paymentMethod === "bank_transfer" &&
                       "border-black/15 bg-section",
                   )}

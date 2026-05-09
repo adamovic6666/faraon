@@ -12,7 +12,7 @@ const InputGroup = ({ className, children }: InputGroupProps) => {
   return (
     <div
       className={cn(
-        "input-group pl-4 transition-all relative flex items-center w-full rounded-full ",
+        "input-group pl-4 transition-all relative flex items-center w-full rounded-full overflow-hidden",
         className ?? "",
       )}
     >
@@ -28,7 +28,7 @@ const Input = React.forwardRef<HTMLInputElement, InputTextProps>(
     return (
       <input
         className={cn(
-          "bg-section input-control w-full py-2.5 pr-4 text-base text-black/80 placeholder:font-light focus-visible:outline-none  placeholder:text-black/40 focus-visible:ring-1 focus-visible:ring-ring",
+          "bg-section input-control w-full py-2.5 pr-4 text-base text-black/80 placeholder:font-light focus-visible:outline-none  placeholder:text-black/40 focus-visible:ring-1 focus-visible:ring-black/20",
           className ?? "",
         )}
         autoComplete="off"
@@ -50,7 +50,7 @@ const TextArea = React.forwardRef<
   return (
     <textarea
       className={cn(
-        "bg-section input-control w-full py-2.5 pr-4 text-base text-black/80 placeholder:font-light placeholder:text-black/40 resize-none focus-visible:outline-none focus:ring-1 focus-visible:ring-1 focus-visible:ring-ring",
+        "bg-section input-control w-full py-2.5 pr-4 text-base text-black/80 placeholder:font-light placeholder:text-black/40 resize-none focus-visible:outline-none focus:ring-1 focus-visible:ring-1 focus-visible:ring-black/20",
         className ?? "",
       )}
       autoComplete="off"
