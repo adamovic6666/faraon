@@ -704,7 +704,7 @@ export const fetchTopLevelCategories = async (): Promise<CategoryItem[]> => {
 
 export const fetchActionProducts = async (): Promise<Product[]> => {
   try {
-    const res = await fetch(buildApiUrl("akcija"), { next: { revalidate: 30 } });
+    const res = await fetch(buildApiUrl("akcija"), { cache: "no-store" });
     if (!res.ok) return [];
 
     const payload: ActionApiResponse = await res.json();
