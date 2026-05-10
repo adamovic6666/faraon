@@ -706,7 +706,9 @@ const CheckoutPage = () => {
                                 setAddressSearch(`${addr.name}, ${addr.city}`);
                                 setIsAddressDropdownOpen(false);
                                 const matched = pricingOptions.find(
-                                  (o) => Number(o.price) === addr.price,
+                                  (o) =>
+                                    o.name.toLowerCase() ===
+                                    addr.city.toLowerCase(),
                                 );
                                 if (matched) {
                                   setValue("cenovnikTermId", String(matched.id));
