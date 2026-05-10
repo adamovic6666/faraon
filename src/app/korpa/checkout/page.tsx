@@ -1,18 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import Button from "@/components/common/Button";
 import SectionTitle from "@/components/common/SectionTitle";
 import InputGroup from "@/components/ui/input-group";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { RootState } from "@/lib/store";
 import { useAppSelector } from "@/lib/hooks/redux";
 import { formatPrice } from "@/utils/format-price";
@@ -21,11 +15,18 @@ import Link from "next/link";
 import { TbBasketExclamation } from "react-icons/tb";
 import { useRouter, useSearchParams } from "next/navigation";
 
+type DeliveryAddress = {
+  id: string;
+  name: string;
+  city: string;
+  price: number;
+  neighborhood: string;
+};
+
 type CheckoutFormValues = {
   fullName: string;
   email: string;
   phone: string;
-  address: string;
   postalCode: string;
   paymentMethod: "cash_on_delivery" | "bank_transfer";
   pib: string;
@@ -61,6 +62,7 @@ type CheckoutOrderItemPayload = {
 };
 
 type CheckoutSubmitPayload = Omit<CheckoutFormValues, "cenovnikTermId"> & {
+  address: string;
   city: string;
   cenovnikTermId: number;
   orderItems: CheckoutOrderItemPayload[];
@@ -140,6 +142,7 @@ const buildOrderItems = (
 
 const buildCheckoutPayload = ({
   formData,
+  address,
   city,
   cart,
   subtotal,
@@ -149,6 +152,7 @@ const buildCheckoutPayload = ({
   fieldCode,
 }: {
   formData: CheckoutFormValues;
+  address: string;
   city: string;
   cart: NonNullable<RootState["carts"]["cart"]>;
   subtotal: number;
@@ -158,6 +162,7 @@ const buildCheckoutPayload = ({
   fieldCode: string;
 }): CheckoutSubmitPayload => ({
   ...formData,
+  address,
   city,
   cenovnikTermId: Number(formData.cenovnikTermId),
   orderItems: buildOrderItems(cart.items),
@@ -178,11 +183,21 @@ const CheckoutPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pricingOptions, setPricingOptions] = useState<PricingOption[]>([]);
   const [pricingError, setPricingError] = useState("");
-  const [isPricingLoading, setIsPricingLoading] = useState(true);
   const [shippingBreakdown, setShippingBreakdown] =
     useState<ShippingBreakdown | null>(null);
   const [isShippingLoading, setIsShippingLoading] = useState(false);
   const [shippingError, setShippingError] = useState("");
+  const [deliveryAddresses, setDeliveryAddresses] = useState<DeliveryAddress[]>(
+    [],
+  );
+  const [isAddressesLoading, setIsAddressesLoading] = useState(true);
+  const [selectedDeliveryAddress, setSelectedDeliveryAddress] =
+    useState<DeliveryAddress | null>(null);
+  const [addressSearch, setAddressSearch] = useState("");
+  const [addressNumber, setAddressNumber] = useState("");
+  const [isAddressDropdownOpen, setIsAddressDropdownOpen] = useState(false);
+  const [addressPricingError, setAddressPricingError] = useState("");
+  const addressComboboxRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -192,7 +207,6 @@ const CheckoutPage = () => {
 
   const {
     register,
-    control,
     handleSubmit,
     setValue,
     watch,
@@ -202,7 +216,6 @@ const CheckoutPage = () => {
       fullName: "",
       email: "",
       phone: "",
-      address: "",
       postalCode: "",
       paymentMethod: "cash_on_delivery",
       pib: "",
@@ -228,11 +241,23 @@ const CheckoutPage = () => {
     [pricingOptions, selectedPricingId],
   );
 
+  const filteredAddresses = useMemo(() => {
+    const trimmed = addressSearch.trim();
+    if (trimmed.length < 2) return [];
+    const lower = trimmed.toLowerCase();
+    return deliveryAddresses
+      .filter(
+        (a) =>
+          a.name.toLowerCase().includes(lower) ||
+          a.city.toLowerCase().includes(lower),
+      )
+      .slice(0, 30);
+  }, [deliveryAddresses, addressSearch]);
+
   useEffect(() => {
     let mounted = true;
 
     const loadPricing = async () => {
-      setIsPricingLoading(true);
       setPricingError("");
 
       try {
@@ -257,10 +282,6 @@ const CheckoutPage = () => {
         console.error("Pricing load error:", error);
         if (!mounted) return;
         setPricingError("Ne možemo da učitamo spisak mesta za dostavu.");
-      } finally {
-        if (mounted) {
-          setIsPricingLoading(false);
-        }
       }
     };
 
@@ -269,6 +290,54 @@ const CheckoutPage = () => {
     return () => {
       mounted = false;
     };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadAddresses = async () => {
+      setIsAddressesLoading(true);
+
+      try {
+        const response = await fetch("/api/checkout/delivery-addresses", {
+          cache: "no-store",
+        });
+
+        const data: unknown = await response.json();
+        console.log(data, "data");
+        if (!response.ok || !Array.isArray(data)) {
+          console.error("[delivery-addresses] Unexpected response:", data);
+          return;
+        }
+
+        if (!mounted) return;
+        setDeliveryAddresses(data as DeliveryAddress[]);
+      } catch (err) {
+        console.error("[delivery-addresses] Load error:", err);
+      } finally {
+        if (mounted) setIsAddressesLoading(false);
+      }
+    };
+
+    void loadAddresses();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        addressComboboxRef.current &&
+        !addressComboboxRef.current.contains(event.target as Node)
+      ) {
+        setIsAddressDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -394,6 +463,18 @@ const CheckoutPage = () => {
       return;
     }
 
+    if (!selectedDeliveryAddress) {
+      setSubmitError("Izaberite adresu za dostavu iz liste.");
+      return;
+    }
+
+    if (!addressNumber.trim()) {
+      setSubmitError("Unesite broj ulice za dostavu.");
+      return;
+    }
+
+    const deliveryAddressLine = `${selectedDeliveryAddress.name} ${addressNumber.trim()}`;
+
     setSubmitError("");
     setIsSubmitting(true);
     let checkoutTimeoutId: ReturnType<typeof setTimeout> | null = null;
@@ -401,6 +482,7 @@ const CheckoutPage = () => {
     try {
       const payload = buildCheckoutPayload({
         formData: data,
+        address: deliveryAddressLine,
         city: selectedPricing.name,
         cart,
         subtotal,
@@ -432,6 +514,35 @@ const CheckoutPage = () => {
           result.error || "Došlo je do greške prilikom slanja porudžbine.",
         );
         return;
+      }
+
+      // Send delivery order to 321
+      const deliveryPayload = {
+        addressId: selectedDeliveryAddress.id,
+        addressNumber: addressNumber.trim(),
+        customerPhoneNumber: data.phone,
+        comment: data.note || "",
+      };
+      console.log("[321 delivery] Payload:", deliveryPayload);
+      toast.info("Prosleđujem porudžbinu dostavljaču...", { duration: 4000 });
+
+      const deliveryResponse = await fetch("/api/checkout/delivery-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(deliveryPayload),
+      });
+
+      if (deliveryResponse.ok) {
+        toast.success("Porudžbina uspešno prosleđena dostavljaču (321).");
+      } else {
+        const deliveryErr = (await deliveryResponse
+          .json()
+          .catch(() => ({}))) as { error?: string };
+        console.error("[321 delivery] Error:", deliveryErr);
+        toast.error(
+          deliveryErr.error ??
+            "Porudžbina kreirana, ali greška pri prosleđivanju dostavljaču.",
+        );
       }
 
       router.push(
@@ -505,6 +616,7 @@ const CheckoutPage = () => {
                 porudžbine.
               </p>
               <div className="mt-6 space-y-4">
+                {/* Row 1: Ime i prezime | Email */}
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                   <InputGroup className="pl-0">
                     <InputGroup.Input
@@ -530,30 +642,125 @@ const CheckoutPage = () => {
                   </InputGroup>
                 </div>
 
-                <InputGroup className="pl-0">
-                  <InputGroup.Input
-                    type="text"
-                    placeholder="Broj telefona *"
-                    className={cn(
-                      "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
-                      errors.phone && "border-red-500",
-                    )}
-                    {...register("phone", { required: true })}
-                  />
-                </InputGroup>
+                {/* Row 2: Broj telefona | Ulica za dostavu */}
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+                  <InputGroup className="pl-0">
+                    <InputGroup.Input
+                      type="text"
+                      placeholder="Broj telefona *"
+                      className={cn(
+                        "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
+                        errors.phone && "border-red-500",
+                      )}
+                      {...register("phone", { required: true })}
+                    />
+                  </InputGroup>
 
-                <InputGroup className="pl-0">
-                  <InputGroup.Input
-                    type="text"
-                    placeholder="Adresa *"
-                    className={cn(
-                      "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
-                      errors.address && "border-red-500",
+                  {/* 321 delivery address combobox */}
+                  <div className="relative" ref={addressComboboxRef}>
+                    <InputGroup className="pl-0">
+                      <InputGroup.Input
+                        type="text"
+                        placeholder={
+                          isAddressesLoading
+                            ? "Učitavanje adresa..."
+                            : "Ulica za dostavu *"
+                        }
+                        autoComplete="off"
+                        disabled={isAddressesLoading}
+                        value={addressSearch}
+                        className={cn(
+                          "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
+                          !selectedDeliveryAddress &&
+                            addressSearch.length > 0 &&
+                            "border-orange-400",
+                        )}
+                        onChange={(e) => {
+                          setAddressSearch(e.target.value);
+                          setSelectedDeliveryAddress(null);
+                          setAddressPricingError("");
+                          setIsAddressDropdownOpen(true);
+                        }}
+                        onFocus={() => setIsAddressDropdownOpen(true)}
+                      />
+                    </InputGroup>
+                    {isAddressDropdownOpen && !selectedDeliveryAddress && (
+                      <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-lg">
+                        {addressSearch.trim().length < 2 ? (
+                          <p className="px-5 py-3 text-sm text-gray-400">
+                            Ukucajte najmanje 2 slova za pretragu ulice...
+                          </p>
+                        ) : filteredAddresses.length === 0 ? (
+                          <p className="px-5 py-3 text-sm text-gray-400">
+                            Nema rezultata za &ldquo;{addressSearch}&rdquo;
+                          </p>
+                        ) : (
+                          filteredAddresses.map((addr) => (
+                            <button
+                              key={addr.id}
+                              type="button"
+                              className="w-full px-5 py-3 text-left text-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setSelectedDeliveryAddress(addr);
+                                setAddressSearch(`${addr.name}, ${addr.city}`);
+                                setIsAddressDropdownOpen(false);
+                                const matched = pricingOptions.find(
+                                  (o) => Number(o.price) === addr.price,
+                                );
+                                if (matched) {
+                                  setValue("cenovnikTermId", String(matched.id));
+                                  setAddressPricingError("");
+                                } else {
+                                  setAddressPricingError(
+                                    `Nema cenovnika za kvart "${addr.neighborhood}". Kontaktirajte nas.`,
+                                  );
+                                }
+                              }}
+                            >
+                              <span className="font-medium">{addr.name}</span>
+                              <span className="ml-1 text-gray-500">
+                                {addr.city}
+                              </span>
+                            </button>
+                          ))
+                        )}
+                      </div>
                     )}
-                    {...register("address", { required: true })}
-                  />
-                </InputGroup>
+                    {addressPricingError ? (
+                      <p className="mt-1 px-2 text-xs text-red-600">
+                        {addressPricingError}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
 
+                {/* Row 3: Broj ulice | Poštanski broj */}
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+                  <InputGroup className="pl-0">
+                    <InputGroup.Input
+                      type="text"
+                      placeholder="Broj ulice *"
+                      maxLength={5}
+                      value={addressNumber}
+                      onChange={(e) => setAddressNumber(e.target.value)}
+                      className="bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base"
+                    />
+                  </InputGroup>
+                  <InputGroup className="pl-0">
+                    <InputGroup.Input
+                      type="text"
+                      placeholder="Poštanski broj *"
+                      className={cn(
+                        "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
+                        errors.postalCode && "border-red-500",
+                      )}
+                      {...register("postalCode", { required: true })}
+                    />
+                  </InputGroup>
+                </div>
+
+                {/* Row 4: PIB | MB */}
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                   <InputGroup className="pl-0">
                     <InputGroup.Input
@@ -577,64 +784,9 @@ const CheckoutPage = () => {
                   </InputGroup>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
-                  <div>
-                    <Controller
-                      name="cenovnikTermId"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                          disabled={isPricingLoading}
-                        >
-                          <SelectTrigger
-                            className={cn(
-                              "bg-section h-auto w-full rounded-full border border-gray-300 p-4 px-6 text-base font-light text-black/80 shadow-none data-placeholder:text-black/40 focus:ring-1 focus:ring-black/20",
-                              errors.cenovnikTermId && "border-red-500",
-                            )}
-                          >
-                            <SelectValue
-                              placeholder={
-                                isPricingLoading
-                                  ? "Učitavanje mesta..."
-                                  : "Mesto dostave *"
-                              }
-                            />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {pricingOptions.map((option) => (
-                              <SelectItem
-                                key={option.id}
-                                value={String(option.id)}
-                              >
-                                {option.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    />
-                    {pricingError ? (
-                      <p className="mt-1 text-xs text-red-600">
-                        {pricingError}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <InputGroup className="pl-0">
-                    <InputGroup.Input
-                      type="text"
-                      placeholder="Poštanski broj *"
-                      className={cn(
-                        "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
-                        errors.postalCode && "border-red-500",
-                      )}
-                      {...register("postalCode", { required: true })}
-                    />
-                  </InputGroup>
-                </div>
+                {pricingError ? (
+                  <p className="text-xs text-red-600">{pricingError}</p>
+                ) : null}
               </div>
             </div>
 
