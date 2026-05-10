@@ -524,26 +524,12 @@ const CheckoutPage = () => {
         comment: data.note || "",
       };
       console.log("[321 delivery] Payload:", deliveryPayload);
-      toast.info("Prosleđujem porudžbinu dostavljaču...", { duration: 4000 });
 
       const deliveryResponse = await fetch("/api/checkout/delivery-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(deliveryPayload),
       });
-
-      if (deliveryResponse.ok) {
-        toast.success("Porudžbina uspešno prosleđena dostavljaču (321).");
-      } else {
-        const deliveryErr = (await deliveryResponse
-          .json()
-          .catch(() => ({}))) as { error?: string };
-        console.error("[321 delivery] Error:", deliveryErr);
-        toast.error(
-          deliveryErr.error ??
-            "Porudžbina kreirana, ali greška pri prosleđivanju dostavljaču.",
-        );
-      }
 
       router.push(
         buildSuccessUrl({
@@ -711,7 +697,10 @@ const CheckoutPage = () => {
                                     addr.city.toLowerCase(),
                                 );
                                 if (matched) {
-                                  setValue("cenovnikTermId", String(matched.id));
+                                  setValue(
+                                    "cenovnikTermId",
+                                    String(matched.id),
+                                  );
                                   setAddressPricingError("");
                                 } else {
                                   setAddressPricingError(
