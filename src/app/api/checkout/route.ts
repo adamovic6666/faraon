@@ -253,7 +253,7 @@ export async function POST(request: NextRequest) {
           <p style="margin:0;font-weight:700;color:#1b1b1b;">${paymentLabel}</p>
           <p style="margin:8px 0 0;color:#5b544d;">${
             payload.paymentMethod === "bank_transfer"
-              ? "Iznos navedene porudžbine se plaća prevodom na račun Faraon Diskonti."
+              ? "Iznos navedene porudžbine se plaća preko računa prema predračunu #${orderNumber} u prilogu."
               : "Iznos navedene porudžbine plaćate kuriru u gotovini prilikom preuzimanja pošiljke."
           }</p>
         </div>
@@ -364,7 +364,7 @@ export async function POST(request: NextRequest) {
         </table>
         <table style="width:100%;margin-top:20px;border-collapse:collapse;">
           <tr style="border-top:2px solid #ac0000;">
-            <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;">UKUPNO ZA NAPLATU:</td>
+            <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;">UKUPNO ZA PLAĆANJE:</td>
             <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${fmtRSD(payload.total)} RSD</td>
           </tr>
           <tr>
