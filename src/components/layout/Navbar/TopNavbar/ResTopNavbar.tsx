@@ -135,7 +135,7 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
             <div className="flex items-center gap-3 pb-4">
               {socialLinks.map((item) => (
                 <SheetClose asChild key={item.id}>
-                  <Link href={item.href} aria-label={item.label}>
+                  <Link href={item.href} aria-label={item.label} target="_blank" rel="noopener noreferrer">
                     <Image
                       src={item.icon}
                       alt={item.label}

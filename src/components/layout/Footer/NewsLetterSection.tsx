@@ -20,7 +20,7 @@ const contactItems = [
   },
   {
     id: 3,
-    href: "viber://chat?number=%2B381628017376",
+    href: "https://viber.me/+381628017376",
     icon: "/images/viber.svg",
     label: "Pišite nam na Viber",
   },

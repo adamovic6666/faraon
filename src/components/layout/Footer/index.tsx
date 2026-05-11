@@ -101,6 +101,8 @@ const Footer = () => {
                     key={item.id}
                     href={item.href}
                     aria-label={item.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="transition-transform hover:-translate-y-0.5"
                   >
                     <Image
