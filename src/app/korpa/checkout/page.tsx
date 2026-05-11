@@ -522,6 +522,8 @@ const CheckoutPage = () => {
         addressNumber: addressNumber.trim(),
         customerPhoneNumber: data.phone,
         comment: data.note || "",
+        // preparationTime: 15,
+        // voucher: "yes",
       };
       console.log("[321 delivery] Payload:", deliveryPayload);
 
@@ -530,6 +532,13 @@ const CheckoutPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(deliveryPayload),
       });
+
+      if (!deliveryResponse.ok) {
+        console.warn(
+          "[321 delivery] Failed to submit delivery order:",
+          deliveryResponse.status,
+        );
+      }
 
       router.push(
         buildSuccessUrl({

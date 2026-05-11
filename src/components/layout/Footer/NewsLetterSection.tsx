@@ -8,19 +8,19 @@ import { usePathname } from "next/navigation";
 const contactItems = [
   {
     id: 1,
-    href: "tel:+381600000000",
+    href: "tel:+381628017376",
     icon: "/images/mobile.svg",
     label: "Pozovite nas",
   },
   {
     id: 2,
-    href: "https://wa.me/381600000000",
+    href: "https://wa.me/381628017376",
     icon: "/images/whatsapp.svg",
     label: "Pišite nam na WhatsApp",
   },
   {
     id: 3,
-    href: "viber://chat?number=%2B381600000000",
+    href: "viber://chat?number=%2B381628017376",
     icon: "/images/viber.svg",
     label: "Pišite nam na Viber",
   },
