@@ -28,6 +28,8 @@ type CheckoutFormValues = {
   email: string;
   phone: string;
   postalCode: string;
+  sprat: string;
+  brojStana: string;
   paymentMethod: "cash_on_delivery" | "bank_transfer";
   pib: string;
   mb: string;
@@ -217,6 +219,8 @@ const CheckoutPage = () => {
       email: "",
       phone: "",
       postalCode: "",
+      sprat: "",
+      brojStana: "",
       paymentMethod: "cash_on_delivery",
       pib: "",
       mb: "",
@@ -304,7 +308,6 @@ const CheckoutPage = () => {
         });
 
         const data: unknown = await response.json();
-        console.log(data, "data");
         if (!response.ok || !Array.isArray(data)) {
           console.error("[delivery-addresses] Unexpected response:", data);
           return;
@@ -521,11 +524,17 @@ const CheckoutPage = () => {
         addressId: selectedDeliveryAddress.id,
         addressNumber: addressNumber.trim(),
         customerPhoneNumber: data.phone,
-        comment: data.note || "",
-        // preparationTime: 15,
-        // voucher: "yes",
+        // add into the comment beside notes from checkout form ( sprat + tezina)
+        comment: [
+          data.note || null,
+          `Sprat: ${data.sprat || "/"}`,
+          `Tezina: ${shippingBreakdown.totalWeightNumber} ${shippingBreakdown.totalWeightUnit}`,
+        ]
+          .filter(Boolean)
+          .join(" | "),
+        preparationTime: 15,
+        voucher: "yes",
       };
-      console.log("[321 delivery] Payload:", deliveryPayload);
 
       const deliveryResponse = await fetch("/api/checkout/delivery-order", {
         method: "POST",
@@ -659,7 +668,7 @@ const CheckoutPage = () => {
                         placeholder={
                           isAddressesLoading
                             ? "Učitavanje adresa..."
-                            : "Ulica za dostavu *"
+                            : "Ulica *"
                         }
                         autoComplete="off"
                         disabled={isAddressesLoading}
@@ -750,17 +759,34 @@ const CheckoutPage = () => {
                   <InputGroup className="pl-0">
                     <InputGroup.Input
                       type="text"
-                      placeholder="Poštanski broj *"
-                      className={cn(
-                        "bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base",
-                        errors.postalCode && "border-red-500",
-                      )}
-                      {...register("postalCode", { required: true })}
+                      placeholder="Poštanski broj"
+                      className="bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base"
+                      {...register("postalCode")}
                     />
                   </InputGroup>
                 </div>
 
-                {/* Row 4: PIB | MB */}
+                {/* Row 4: Sprat | Broj stana */}
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+                  <InputGroup className="pl-0">
+                    <InputGroup.Input
+                      type="text"
+                      placeholder="Sprat"
+                      className="bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base"
+                      {...register("sprat")}
+                    />
+                  </InputGroup>
+                  <InputGroup className="pl-0">
+                    <InputGroup.Input
+                      type="text"
+                      placeholder="Broj stana"
+                      className="bg-section rounded-full border border-gray-300 p-4 px-6 placeholder:text-base"
+                      {...register("brojStana")}
+                    />
+                  </InputGroup>
+                </div>
+
+                {/* Row 5: PIB | MB */}
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
                   <InputGroup className="pl-0">
                     <InputGroup.Input
