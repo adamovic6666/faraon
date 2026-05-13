@@ -44,6 +44,8 @@ export async function POST(request: NextRequest) {
     voucher: "yes",
   };
 
+  console.log("[delivery-order] Sending payload to 321:", JSON.stringify(deliveryPayload, null, 2));
+
   try {
     const response = await fetch(`${DOSTAVA_API_BASE}/orders`, {
       method: "POST",
