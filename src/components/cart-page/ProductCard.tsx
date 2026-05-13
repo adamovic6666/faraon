@@ -40,8 +40,6 @@ const ProductCard = ({ data }: ProductCardProps) => {
     );
   };
 
-  console.log(data, "data");
-
   return (
     <>
       <div className="md:hidden relative">

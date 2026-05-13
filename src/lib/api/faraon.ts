@@ -391,7 +391,6 @@ export const fetchShippingRate = async ({
     }
 
     const rawJson = await response.json();
-    console.log("[fetchShippingRate] raw backend response:", JSON.stringify(rawJson, null, 2));
     const payload = rawJson as {
       data?:
         | Array<{ amount?: string; currency_code?: string }>

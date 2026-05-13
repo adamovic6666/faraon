@@ -106,7 +106,6 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = parsed.data;
-    console.log("[checkout] Incoming payload:", payload);
 
     const nameParts = payload.fullName.trim().split(/\s+/);
     const firstName = nameParts[0] || "";
@@ -148,11 +147,7 @@ export async function POST(request: NextRequest) {
       })),
     };
 
-    console.log("[checkout] Backend order payload:", backendOrderData);
-
     const result = await createOrder(backendOrderData);
-
-    console.log("[checkout] Create order response:", result);
 
     if (!result.ok) {
       return NextResponse.json(
