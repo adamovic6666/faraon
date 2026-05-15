@@ -15,6 +15,7 @@ type ProductGalleryProps = {
   galleryImages?: string[];
   showOnlyMainImage?: boolean;
   packagingLabel?: string;
+  discountPercent?: number;
 };
 
 const ProductGallery = ({
@@ -23,6 +24,7 @@ const ProductGallery = ({
   galleryImages = [],
   showOnlyMainImage = false,
   packagingLabel = "",
+  discountPercent,
 }: ProductGalleryProps) => {
   const images = useMemo(() => {
     const uniqueGallery = Array.from(
@@ -90,6 +92,11 @@ const ProductGallery = ({
           className="relative aspect-square w-full overflow-hidden rounded-2xl border border-black/15"
           onClick={() => setIsLightboxOpen(true)}
         >
+          {discountPercent ? (
+            <span className="pointer-events-none absolute left-4 top-4 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white">
+              -{discountPercent}%
+            </span>
+          ) : null}
           {packagingLabel ? (
             <span className="pointer-events-none absolute right-4 top-4 z-10 text-sm font-light tracking-[0.04em] text-black/60">
               {packagingLabel}
@@ -139,6 +146,11 @@ const ProductGallery = ({
           className="relative aspect-square flex-1 overflow-hidden rounded-2xl border border-black/15"
           onClick={() => setIsLightboxOpen(true)}
         >
+          {discountPercent ? (
+            <span className="pointer-events-none absolute left-5 top-5 z-10 rounded-full bg-brand px-3 py-1.5 text-sm font-bold text-white">
+              -{discountPercent}%
+            </span>
+          ) : null}
           {packagingLabel ? (
             <span className="pointer-events-none absolute right-5 top-5 z-10 text-base font-light tracking-[0.04em] text-black/60">
               {packagingLabel}

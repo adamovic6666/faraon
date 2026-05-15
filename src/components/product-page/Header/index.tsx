@@ -24,6 +24,11 @@ const Header = ({
         galleryImages={data?.galleryImages}
         showOnlyMainImage={showOnlyMainImage}
         packagingLabel={packagingLabel}
+        discountPercent={
+          data?.oldPrice && data.oldPrice > data.price
+            ? Math.round((1 - data.price / data.oldPrice) * 100)
+            : undefined
+        }
       />
 
       <div className="flex min-h-full flex-col md:min-h-0">

@@ -87,8 +87,17 @@ const ProductCard = ({ data }: ProductCardProps) => {
         href={productHref}
         className="relative block aspect-square w-full overflow-hidden group rounded-xl"
       >
-        {packagingLabel ? (
+        {data?.oldPrice && data.oldPrice > data.price ? (
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white">
+            -{Math.round((1 - data.price / data.oldPrice) * 100)}%
+          </span>
+        ) : packagingLabel ? (
           <span className="absolute left-3 top-3 z-10 rounded-full bg-brand/95 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-white">
+            {packagingLabel}
+          </span>
+        ) : null}
+        {data?.oldPrice && data.oldPrice > data.price && packagingLabel ? (
+          <span className="absolute right-3 top-3 z-10 rounded-full bg-brand/95 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-white">
             {packagingLabel}
           </span>
         ) : null}

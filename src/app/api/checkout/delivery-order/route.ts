@@ -41,7 +41,6 @@ export async function POST(request: NextRequest) {
     preparationTime: 15,
     customerPhoneNumber,
     comment: comment || "",
-    voucher: "yes",
   };
 
   console.log("[delivery-order] Sending payload to 321:", JSON.stringify(deliveryPayload, null, 2));

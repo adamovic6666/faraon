@@ -533,7 +533,6 @@ const CheckoutPage = () => {
           .filter(Boolean)
           .join(" | "),
         preparationTime: 15,
-        voucher: "yes",
       };
 
       const deliveryResponse = await fetch("/api/checkout/delivery-order", {

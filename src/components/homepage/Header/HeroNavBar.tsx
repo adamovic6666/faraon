@@ -109,7 +109,7 @@ const HeroNavBar = ({ categories = [] }: HeroNavBarProps) => {
                   className={cn(
                     "shrink-0",
                     linkClass,
-                    "bg-brand text-white hover:text-white mr-3 xl:mr-0 py-0.5 md:py-0.5",
+                    "bg-brand text-white hover:text-white mr-3 xl:mr-0 py-0.5 md:py-0.5 animate-blink",
                   )}
                 >
                   {akcije.label}
