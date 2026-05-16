@@ -103,14 +103,14 @@ const config: Config = {
           },
         },
         blink: {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.5" },
+          "0%, 100%": { "background-color": "#a60707", color: "white" },
+          "50%": { "background-color": "#ff0000", color: "white" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        blink: "blink 3.5s ease-in-out infinite",
+        "blink": "blink 3s linear infinite",
       },
     },
   },

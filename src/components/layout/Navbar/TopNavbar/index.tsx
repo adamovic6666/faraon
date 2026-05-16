@@ -5,27 +5,9 @@ import { NavMenu } from "../navbar.types";
 import ResTopNavbar from "./ResTopNavbar";
 import CartBtn from "./CartBtn";
 import SearchProducts from "./SearchProducts";
+import { CategoryItem } from "@/types/category.types";
 
-const data: NavMenu = [
-  {
-    id: 2,
-    type: "MenuList",
-    label: "Online prodavnica",
-    children: [
-      {
-        id: 25,
-        label: "Bezalkoholna pića",
-        url: "/prodavnica/bezalkholna-pica",
-      },
-      { id: 21, label: "Žestoka alkoholna pića", url: "/" },
-      { id: 23, label: "Piva", url: "/" },
-      { id: 22, label: "Vina", url: "/" },
-      { id: 27, label: "Vode", url: "/" },
-      { id: 26, label: "Čajevi, kafe i napici", url: "/" },
-      { id: 24, label: "Sirupi i likeri", url: "/" },
-      { id: 28, label: "Led", url: "/" },
-    ],
-  },
+const staticMenuItems: NavMenu = [
   {
     id: 3,
     type: "MenuItem",
@@ -42,7 +24,20 @@ const data: NavMenu = [
   },
 ];
 
-const TopNavbar = () => {
+const TopNavbar = ({ categories = [] }: { categories?: CategoryItem[] }) => {
+  const data: NavMenu = [
+    {
+      id: 2,
+      type: "MenuList",
+      label: "Online prodavnica",
+      children: categories.map((cat, index) => ({
+        id: cat.id ?? index + 20,
+        label: cat.name,
+        url: cat.alias,
+      })),
+    },
+    ...staticMenuItems,
+  ];
   return (
     <nav className="fixed inset-x-0 top-0 z-100 bg-white h-16">
       <div className="relative mx-auto flex h-full max-w-frame items-center justify-between px-4 xl:px-0">

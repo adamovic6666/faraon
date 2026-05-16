@@ -50,7 +50,7 @@ export default async function RootLayout({
       <body className={satoshi.className} suppressHydrationWarning>
         <HolyLoader color="#868686" />
         <Providers>
-          <TopNavbar />
+          <TopNavbar categories={categories} />
           <HeroNavBar categories={categories} />
           <div className="pt-16">{children}</div>
           <Footer />
