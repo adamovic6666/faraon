@@ -667,7 +667,7 @@ const CheckoutPage = () => {
                         placeholder={
                           isAddressesLoading
                             ? "Učitavanje adresa..."
-                            : "Ulica *"
+                            : "Naziv ulice / Naziv mesta *"
                         }
                         autoComplete="off"
                         disabled={isAddressesLoading}
@@ -748,7 +748,7 @@ const CheckoutPage = () => {
                   <InputGroup className="pl-0">
                     <InputGroup.Input
                       type="text"
-                      placeholder="Broj ulice *"
+                      placeholder="Broj / Naziv ulice i broj (okolna mesta) *"
                       maxLength={5}
                       value={addressNumber}
                       onChange={(e) => setAddressNumber(e.target.value)}
