@@ -58,14 +58,13 @@ const contactLinks = [
   },
 ];
 
-const privacyLinks = [
-  "Cenovnik dostave",
-  "Pravila korišćenja",
-  "Isporuka i načini plaćanja",
-  "Zamene, reklamacije i otkazivanje",
-  "Autorska prava",
-  "Zaštita podataka o ličnosti",
-  "Uslovi korišćenja platnih kartica",
+const infoLinks = [
+  { label: "Opšti uslovi", href: "/opsti-uslovi" },
+  { label: "Uslovi plaćanja", href: "/uslovi-placanja" },
+  { label: "Cenovnik dostave", href: "/cenovnik-dostave" },
+  { label: "Isporuka i reklamacije", href: "/isporuka-i-reklamacije" },
+  { label: "Politika privatnosti", href: "/politika-privatnosti" },
+  { label: "Obaveštenje o kolačićima", href: "/obavestenje-o-kolacicima" },
 ];
 
 const Footer = () => {
@@ -169,16 +168,16 @@ const Footer = () => {
                     "text-black text-xl font-semibold sm:text-2xl",
                   ])}
                 >
-                  Politika privatnosti
+                  Informacije
                 </h3>
               </div>
               <ul className="text-md font-light leading-7 text-black/80">
-                {privacyLinks.map((item) => (
+                {infoLinks.map((item) => (
                   <li
-                    key={item}
+                    key={item.href}
                     className="w-fit transition-colors hover:text-brand"
                   >
-                    <Link href="#">{item}</Link>
+                    <Link href={item.href}>{item.label}</Link>
                   </li>
                 ))}
               </ul>
