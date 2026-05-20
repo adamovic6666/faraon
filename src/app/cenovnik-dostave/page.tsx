@@ -66,12 +66,19 @@ export default async function CenovnikDostavePage() {
 
           <div className="mt-6 space-y-2 rounded-[16px] border border-black/10 bg-section px-6 py-4 text-sm text-black/70">
             <p>
-              <strong>Besplatna dostava</strong> za sve porudžbine iznad{" "}
-              <strong>12.000 RSD</strong>.
+              <strong>PDV:</strong> Sve cene dostave prikazane su sa uračunatim
+              PDV-om.
             </p>
             <p>
-              Za pošiljke iznad <strong>25 kg</strong> obračunava se dodatna
-              naknada po turi (25 kg).
+              <strong>Osnovna cena:</strong> Pokriva pošiljke do 25 kg težine.
+            </p>
+            <p>
+              <strong>Dodatna težina:</strong> Svakih sledećih 25 kg doplaćuje
+              se sa 200 RSD.
+            </p>
+            <p>
+              <strong>Besplatna dostava:</strong> Važi za sve porudžbine iznad
+              12.000 RSD.
             </p>
           </div>
         </div>
