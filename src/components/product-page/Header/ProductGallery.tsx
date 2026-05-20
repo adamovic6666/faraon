@@ -16,6 +16,7 @@ type ProductGalleryProps = {
   showOnlyMainImage?: boolean;
   packagingLabel?: string;
   discountPercent?: number;
+  isNew?: boolean;
 };
 
 const ProductGallery = ({
@@ -25,7 +26,22 @@ const ProductGallery = ({
   showOnlyMainImage = false,
   packagingLabel = "",
   discountPercent,
+  isNew,
 }: ProductGalleryProps) => {
+  const renderBadge = (size: "sm" | "lg") => {
+    const cls =
+      size === "lg"
+        ? "pointer-events-none absolute left-5 top-5 z-10 rounded-full bg-brand px-3 py-1.5 text-sm font-bold text-white"
+        : "pointer-events-none absolute left-4 top-4 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white";
+    if (isNew) {
+      return <span className={cls}>NOVO</span>;
+    }
+    if (discountPercent) {
+      return <span className={cls}>-{discountPercent}%</span>;
+    }
+    return null;
+  };
+
   const images = useMemo(() => {
     const uniqueGallery = Array.from(
       new Set(
@@ -92,7 +108,11 @@ const ProductGallery = ({
           className="relative aspect-square w-full overflow-hidden rounded-2xl border border-black/15"
           onClick={() => setIsLightboxOpen(true)}
         >
-          {discountPercent ? (
+          {isNew ? (
+            <span className="pointer-events-none absolute left-4 top-4 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white">
+              NOVO
+            </span>
+          ) : discountPercent ? (
             <span className="pointer-events-none absolute left-4 top-4 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white">
               -{discountPercent}%
             </span>
@@ -146,7 +166,11 @@ const ProductGallery = ({
           className="relative aspect-square flex-1 overflow-hidden rounded-2xl border border-black/15"
           onClick={() => setIsLightboxOpen(true)}
         >
-          {discountPercent ? (
+          {isNew ? (
+            <span className="pointer-events-none absolute left-5 top-5 z-10 rounded-full bg-brand px-3 py-1.5 text-sm font-bold text-white">
+              NOVO
+            </span>
+          ) : discountPercent ? (
             <span className="pointer-events-none absolute left-5 top-5 z-10 rounded-full bg-brand px-3 py-1.5 text-sm font-bold text-white">
               -{discountPercent}%
             </span>

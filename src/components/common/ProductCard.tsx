@@ -81,6 +81,37 @@ const ProductCard = ({ data, category: categoryProp }: ProductCardProps) => {
     e.preventDefault();
     setQtyInput(String(Math.max(1, getSafeQty() - 1)));
   };
+
+  const hasDiscount =
+    !data.is_new && Boolean(data?.oldPrice && data.oldPrice > data.price);
+  const showPackagingRight =
+    (data.is_new || hasDiscount) && Boolean(packagingLabel);
+
+  const renderTopLeftBadge = () => {
+    if (data.is_new) {
+      return (
+        <span className="absolute left-3 top-3 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white">
+          NOVO
+        </span>
+      );
+    }
+    if (hasDiscount) {
+      return (
+        <span className="absolute left-3 top-3 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white">
+          -{Math.round((1 - data.price / data.oldPrice!) * 100)}%
+        </span>
+      );
+    }
+    if (packagingLabel) {
+      return (
+        <span className="absolute left-3 top-3 z-10 rounded-full bg-brand/95 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-white">
+          {packagingLabel}
+        </span>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="flex flex-col rounded-[20px] border border-black/15 overflow-hidden bg-section  w-full">
       {/* Image */}
@@ -88,20 +119,12 @@ const ProductCard = ({ data, category: categoryProp }: ProductCardProps) => {
         href={productHref}
         className="relative block aspect-square w-full overflow-hidden group rounded-xl"
       >
-        {data?.oldPrice && data.oldPrice > data.price ? (
-          <span className="absolute left-3 top-3 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white">
-            -{Math.round((1 - data.price / data.oldPrice) * 100)}%
-          </span>
-        ) : packagingLabel ? (
-          <span className="absolute left-3 top-3 z-10 rounded-full bg-brand/95 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-white">
-            {packagingLabel}
-          </span>
-        ) : null}
-        {data?.oldPrice && data.oldPrice > data.price && packagingLabel ? (
+        {renderTopLeftBadge()}
+        {showPackagingRight && (
           <span className="absolute right-3 top-3 z-10 rounded-full bg-brand/95 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-white">
             {packagingLabel}
           </span>
-        ) : null}
+        )}
         <Image
           src={data.srcUrl}
           fill
@@ -124,7 +147,7 @@ const ProductCard = ({ data, category: categoryProp }: ProductCardProps) => {
         <div className="flex flex-col items-start justify-between gap-2 mt-auto">
           {/* Price */}
           <div className="flex flex-col items-start">
-            {data?.oldPrice && data.oldPrice > data.price && (
+            {!data.is_new && data?.oldPrice && data.oldPrice > data.price && (
               <span className="text-md text-black/40 mt-0.5 relative">
                 {formatPrice(data.oldPrice)}{" "}
                 <span className="text-[10px]">RSD</span>

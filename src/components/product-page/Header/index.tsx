@@ -24,8 +24,9 @@ const Header = ({
         galleryImages={data?.galleryImages}
         showOnlyMainImage={showOnlyMainImage}
         packagingLabel={packagingLabel}
+        isNew={data.is_new}
         discountPercent={
-          data?.oldPrice && data.oldPrice > data.price
+          !data.is_new && data?.oldPrice && data.oldPrice > data.price
             ? Math.round((1 - data.price / data.oldPrice) * 100)
             : undefined
         }
@@ -45,7 +46,7 @@ const Header = ({
             {formatPrice(data?.price)}
             <span className="text-sm ml-0.5 leading-none">RSD</span>
           </p>
-          {data?.oldPrice ? (
+          {!data.is_new && data?.oldPrice ? (
             <span className="relative w-fit text-lg text-black/40 leading-none md:-translate-y-0.5">
               {formatPrice(data?.oldPrice)}{" "}
               <span className="text-xs leading-none">RSD</span>

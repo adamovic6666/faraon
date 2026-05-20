@@ -15,6 +15,7 @@ type ActionApiProduct = {
   cena: string;
   tags?: string[];
   packaging?: string;
+  is_new?: boolean;
 };
 
 type ActionApiResponse = {
@@ -37,6 +38,7 @@ type CategoryApiProduct = {
   oldPrice?: string | number;
   tags?: string[];
   packaging?: string;
+  is_new?: boolean;
 };
 
 type CategoryApiResponse = {
@@ -71,6 +73,7 @@ type ProductApiResponse = {
   photo_gallery?: string[] | { thumb?: string[]; orig?: string[] };
   tags?: string[];
   packaging?: string;
+  is_new?: boolean;
 };
 
 export type PricingTerm = {
@@ -623,6 +626,7 @@ const mapActionProduct = (item: ActionApiProduct, index: number): Product => {
     slug: item.alias?.split("/").findLast(Boolean),
     tags:   item.tags,
     packaging: item.packaging,
+    is_new: item.is_new,
   };
 };
 
@@ -646,6 +650,7 @@ const mapCategoryProducts = (items: CategoryApiProduct[] = []): Product[] => {
       oldPrice,
       tags: item.tags,
       packaging: item.packaging,
+      is_new: item.is_new,
     };
   });
 };
@@ -688,6 +693,7 @@ const mapProductDetails = (payload: ProductApiResponse): Product => {
     slug: payload.alias?.split("/").findLast(Boolean) ?? payload.slug,
     tags: payload.tags,
     packaging: payload.packaging,
+    is_new: payload.is_new,
   };
 };
 
@@ -719,7 +725,7 @@ export const fetchCategoryProducts = async (
   pathname: string,
 ): Promise<{ products: Product[]; title: string; metatags: { title: string; description: string } }> => {
   try {
-    const res = await fetch(buildApiUrl(pathname), { next: { revalidate: 10 } });
+    const res = await fetch(buildApiUrl(pathname), { cache: "no-store" });
     if (!res.ok) return { products: [], title: "", metatags: { title: "", description: "" } };
 
     const payload: CategoryApiResponse = await res.json();
@@ -757,7 +763,7 @@ export const fetchProductBySlug = cache(
     endpoint.searchParams.set("p", productPath);
     endpoint.searchParams.set("cc", process.env.API_HASH ?? "");
 
-    const response = await fetch(endpoint.toString(), { redirect: "manual", next: { revalidate: 10 } });
+    const response = await fetch(endpoint.toString(), { redirect: "manual", cache: "no-store" });
 
     if (
       response.status === 301 ||

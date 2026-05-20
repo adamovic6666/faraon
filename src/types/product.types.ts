@@ -10,6 +10,7 @@ export type Product = {
   description?: string;
   tags?: string[];
   packaging?: string;
+  is_new?: boolean;
 };
 
 

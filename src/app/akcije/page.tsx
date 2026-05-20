@@ -1,7 +1,7 @@
 import CategoryProductGrid from "@/components/shop-page/CategoryProductGrid";
 import { fetchActionProducts } from "@/lib/api/faraon";
 
-export const revalidate = 10;
+export const dynamic = "force-dynamic";
 
 export default async function AkcijePage() {
   const actionProducts = await fetchActionProducts();

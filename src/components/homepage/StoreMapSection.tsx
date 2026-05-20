@@ -3,11 +3,88 @@
 import {
   APIProvider,
   Map,
-  AdvancedMarker,
+  Marker,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import { useState } from "react";
 import { storeLocations } from "@/data/store-locations";
+
+const SILVER_MAP_STYLE = [
+  { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
+  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#f5f5f5" }] },
+  {
+    featureType: "administrative.land_parcel",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#bdbdbd" }],
+  },
+  {
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [{ color: "#eeeeee" }],
+  },
+  {
+    featureType: "poi",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#757575" }],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry",
+    stylers: [{ color: "#e5e5e5" }],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#9e9e9e" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [{ color: "#ffffff" }],
+  },
+  {
+    featureType: "road.arterial",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#757575" }],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry",
+    stylers: [{ color: "#dadada" }],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#616161" }],
+  },
+  {
+    featureType: "road.local",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#9e9e9e" }],
+  },
+  {
+    featureType: "transit.line",
+    elementType: "geometry",
+    stylers: [{ color: "#e5e5e5" }],
+  },
+  {
+    featureType: "transit.station",
+    elementType: "geometry",
+    stylers: [{ color: "#eeeeee" }],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#c9c9c9" }],
+  },
+  {
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#9e9e9e" }],
+  },
+];
 
 // Create a helper component for the marker to keep the main component clean
 const StoreMarker = ({
@@ -19,7 +96,7 @@ const StoreMarker = ({
 
   return (
     <>
-      <AdvancedMarker
+      <Marker
         position={{ lat: location.lat, lng: location.lng }}
         onClick={() => setOpen(true)}
       />
@@ -53,8 +130,7 @@ const StoreMapSection = ({ isLocationPage }: { isLocationPage: boolean }) => {
             }}
             defaultCenter={{ lat: 45.257, lng: 19.836 }}
             defaultZoom={11}
-            mapId="YOUR_MAP_ID"
-            colorScheme="DARK"
+            styles={SILVER_MAP_STYLE}
           >
             {storeLocations.map((loc, i) => (
               <StoreMarker key={loc.name + i} location={loc} />

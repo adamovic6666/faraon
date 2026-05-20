@@ -170,7 +170,10 @@ const SearchProducts = ({
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         onKeyDown={(event) => {
-          if (event.key === "Enter" && query.trim().length >= MIN_QUERY_LENGTH) {
+          if (
+            event.key === "Enter" &&
+            query.trim().length >= MIN_QUERY_LENGTH
+          ) {
             setIsOpen(false);
             if (isMobileVariant) {
               setIsMobileOverlayOpen(false);

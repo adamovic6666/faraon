@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "Sve što pijete, Faraon donosi! Besplatna dostava za porudžbine preko 12,000 RSD!",
 };
 
-export const revalidate = 10;
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const [products, categories] = await Promise.all([
