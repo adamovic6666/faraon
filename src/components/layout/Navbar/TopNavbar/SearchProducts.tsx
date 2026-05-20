@@ -5,6 +5,7 @@ import { searchProducts } from "@/lib/features/products/search.server";
 import { SearchProduct } from "@/data/search-products";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const MIN_QUERY_LENGTH = 2;
@@ -49,6 +50,7 @@ const SearchProducts = ({
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isMobileVariant = variant === "mobile-overlay";
+  const router = useRouter();
 
   useEffect(() => {
     if (isMobileVariant) {
@@ -167,6 +169,15 @@ const SearchProducts = ({
         name="search"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && query.trim().length >= MIN_QUERY_LENGTH) {
+            setIsOpen(false);
+            if (isMobileVariant) {
+              setIsMobileOverlayOpen(false);
+            }
+            router.push(resultsLink);
+          }
+        }}
         onFocus={() => {
           if (query.trim().length >= MIN_QUERY_LENGTH) {
             setIsOpen(true);
