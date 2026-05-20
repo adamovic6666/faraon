@@ -50,9 +50,11 @@ function sortProducts(products: Product[], sort: string): Product[] {
 export default function CategoryProductGrid({
   products,
   title,
+  category,
 }: Readonly<{
   products: Product[];
   title: string;
+  category?: string;
 }>) {
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState("");
@@ -154,6 +156,7 @@ export default function CategoryProductGrid({
             <ProductCard
               key={product.slug ?? `${product.title}-${start + index}`}
               data={product}
+              category={category}
             />
           ))}
         </div>

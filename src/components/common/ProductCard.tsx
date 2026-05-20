@@ -12,6 +12,7 @@ import { toast } from "sonner";
 
 type ProductCardProps = {
   data: Product;
+  category?: string;
 };
 
 const formatPackagingLabel = (value?: string) => {
@@ -28,10 +29,10 @@ const formatPackagingLabel = (value?: string) => {
   return normalized.replaceAll("_", " ");
 };
 
-const ProductCard = ({ data }: ProductCardProps) => {
+const ProductCard = ({ data, category: categoryProp }: ProductCardProps) => {
   const dispatch = useAppDispatch();
   const [qtyInput, setQtyInput] = useState("1");
-  const category = data.category || "bezalkholna-pica";
+  const category = categoryProp || data.category || "zestoka-alkoholna-pica";
   const productHref = `/prodavnica/${category}/${data.slug}`;
   const packagingLabel = formatPackagingLabel(data.packaging);
   const getSafeQty = (value: string = qtyInput) => {
