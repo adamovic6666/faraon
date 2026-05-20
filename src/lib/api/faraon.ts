@@ -307,7 +307,7 @@ export const fetchPricingTerms = async (): Promise<ApiCallResult<PricingTerm[]>>
     const response = await fetch(
       `${config.baseUrl}/api/v1/pricing?cc=${encodeURIComponent(config.hash)}`,
       {
-        next: { revalidate: 300 },
+        cache: "no-store",
       },
     );
 
@@ -699,7 +699,7 @@ const mapProductDetails = (payload: ProductApiResponse): Product => {
 
 export const fetchTopLevelCategories = async (): Promise<CategoryItem[]> => {
   try {
-    const res = await fetch(buildApiUrl("all"), { next: { revalidate: 3600 } });
+    const res = await fetch(buildApiUrl("all"), { cache: "no-store" });
     if (!res.ok) return [];
     return res.json();
   } catch {

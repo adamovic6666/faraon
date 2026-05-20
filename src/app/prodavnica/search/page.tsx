@@ -2,7 +2,7 @@ import SearchResultsGrid from "@/components/shop-page/SearchResultsGrid";
 import { searchProducts } from "@/lib/features/products/search.server";
 import { Product } from "@/types/product.types";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 interface SearchPageProps {
   searchParams: Promise<{

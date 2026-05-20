@@ -36,7 +36,7 @@ export const searchProducts = async (
 
 
     const response = await fetch(url, {
-      next: { revalidate: 300 },
+      cache: "no-store",
     });
 
     if (!response.ok) {
