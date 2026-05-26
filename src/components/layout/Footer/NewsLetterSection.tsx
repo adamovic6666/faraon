@@ -41,7 +41,16 @@ const NewsLetterSection = () => {
     </>
   );
 
-  const isContactPage = pathname === "/kontakt" || pathname === "/lokacije";
+  const isContactPage = [
+    "/kontakt",
+    "/lokacije",
+    "/opsti-uslovi",
+    "/uslovi-placanja",
+    "/cenovnik-dostave",
+    "/isporuka-i-reklamacije",
+    "/politika-privatnosti",
+    "/obavestenje-o-kolacicima",
+  ].includes(pathname);
 
   return (
     <div className="relative overflow-hidden flex flex-col md:flex-row items-center md:justify-between  gap-6 md:gap-4 py-9 md:py-16 px-6 md:px-16 max-w-frame mx-auto bg-brand rounded-[20px]">

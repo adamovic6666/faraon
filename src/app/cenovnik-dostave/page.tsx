@@ -1,4 +1,3 @@
-import { fetchPricingTerms } from "@/lib/api/faraon";
 import SectionTitle from "@/components/common/SectionTitle";
 import type { Metadata } from "next";
 
@@ -8,14 +7,54 @@ export const metadata: Metadata = {
     "Pregledajte cene dostave za sva mesta u kojima Faraon diskonti vrši isporuku. Besplatna dostava za porudžbine iznad 12.000 RSD.",
 };
 
-export const revalidate = 300;
+export const dynamic = "force-static";
 
-export default async function CenovnikDostavePage() {
-  const result = await fetchPricingTerms();
-  const terms = result.ok ? result.data : [];
+const deliveryPrices = [
+  { name: "Grad Novi Sad", price: 380 },
+  { name: "Sremska Kamenica", price: 650 },
+  { name: "Veternik", price: 650 },
+  { name: "Kamenjar", price: 650 },
+  { name: "Bangladeš", price: 650 },
+  { name: "Ribarsko ostrvo", price: 650 },
+  { name: "Sajlovo", price: 600 },
+  { name: "Adice", price: 600 },
+  { name: "Petrovaradin", price: 600 },
+  { name: "Klisa", price: 600 },
+  { name: "Rumenka", price: 1000 },
+  { name: "Bački Petrovac", price: 3000 },
+  { name: "Kisač", price: 1600 },
+  { name: "Stepanovićevo", price: 2700 },
+  { name: "Gornje livade", price: 900 },
+  { name: "Veliki Rit", price: 800 },
+  { name: "Rimski šančevi", price: 900 },
+  { name: "Nemanovci", price: 1200 },
+  { name: "Pejićevi salaši", price: 1400 },
+  { name: "Bački Jarak", price: 2000 },
+  { name: "Temerin", price: 2500 },
+  { name: "Sirig", price: 2700 },
+  { name: "Čenej (centar)", price: 1600 },
+  { name: "Šangaj", price: 800 },
+  { name: "Kać", price: 1500 },
+  { name: "Budisava", price: 2000 },
+  { name: "Sremski Karlovci", price: 1400 },
+  { name: "Bukovac", price: 1000 },
+  { name: "Alibegovac", price: 800 },
+  { name: "Karagača", price: 600 },
+  { name: "Popovica", price: 1000 },
+  { name: "Ledinci", price: 1200 },
+  { name: "Stari Ledinci", price: 1400 },
+  { name: "Rakovac", price: 1500 },
+  { name: "Beočin", price: 1800 },
+  { name: "Brazilija", price: 2200 },
+  { name: "Banoštor", price: 2800 },
+  { name: "Futog", price: 1200 },
+  { name: "Begeč", price: 2000 },
+  { name: "Čardak", price: 800 },
+];
 
+export default function CenovnikDostavePage() {
   return (
-    <main className="pt-20 pb-12 md:pt-24 md:pb-16">
+    <main className="pt-20 pb-10 md:pt-24 md:pb-12">
       <div className="mx-auto max-w-frame px-4 xl:px-0">
         <SectionTitle title="Cenovnik dostave" noAnimation />
 
@@ -33,38 +72,32 @@ export default async function CenovnikDostavePage() {
                 </tr>
               </thead>
               <tbody>
-                {terms.map((term, i) => (
+                {deliveryPrices.map((item, i) => (
                   <tr
-                    key={term.id}
+                    key={item.name}
                     className={i % 2 === 0 ? "bg-white" : "bg-section"}
                   >
                     <td className="px-6 py-3 text-sm text-black/80">
-                      {term.name}
+                      {item.name}
                     </td>
                     <td className="px-6 py-3 text-sm font-semibold text-right text-black/80">
-                      {Number(term.price).toLocaleString("sr-RS", {
+                      {item.price.toLocaleString("sr-RS", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })}{" "}
-                      {term.currencyCode}
+                      RSD
                     </td>
                   </tr>
                 ))}
-                {terms.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={2}
-                      className="px-6 py-8 text-center text-sm text-black/50"
-                    >
-                      Cenovnik trenutno nije dostupan.
-                    </td>
-                  </tr>
-                )}
               </tbody>
             </table>
           </div>
 
           <div className="mt-6 space-y-2 rounded-[16px] border border-black/10 bg-section px-6 py-4 text-sm text-black/70">
+            <p>
+              <strong>Napomena:</strong> Dostava se vrši samo na lokacijama
+              navedenim u cenovniku dostave.
+            </p>
             <p>
               <strong>PDV:</strong> Sve cene dostave prikazane su sa uračunatim
               PDV-om.
