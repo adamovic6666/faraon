@@ -13,4 +13,5 @@ export type FooterLinks = {
 export type PaymentBadge = {
   id: number;
   srcUrl: string;
+  href?: string;
 };

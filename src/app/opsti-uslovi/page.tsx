@@ -47,7 +47,7 @@ export default function OpstiUsloviPage() {
             <p>Karlovački put 1, 21132 Petrovaradin</p>
             <p>Matični broj: 57102373</p>
             <p>PIB: 104032720</p>
-            <p>Telefon: 062 801 7376</p>
+            <p>Telefon: 060 22 33 400</p>
             <p>E-mail: info@faraondiskonti.rs</p>
             <p className="mt-2 text-black/60">(u daljem tekstu: „Prodavac")</p>
           </div>
