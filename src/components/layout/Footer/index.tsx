@@ -10,23 +10,28 @@ import { Separator } from "@/components/ui/separator";
 const paymentBadgesData: PaymentBadge[] = [
   {
     id: 1,
-    srcUrl: "/icons/Visa.svg",
+    srcUrl: "/icons/dina-card.png",
   },
   {
     id: 2,
-    srcUrl: "/icons/mastercard.svg",
+    srcUrl: "/icons/visa-blue.png",
   },
   {
     id: 3,
-    srcUrl: "/icons/paypal.svg",
+    srcUrl: "/icons/mc.png",
   },
   {
     id: 4,
-    srcUrl: "/icons/applePay.svg",
+    srcUrl: "/icons/visa-secure.png",
   },
   {
     id: 5,
-    srcUrl: "/icons/googlePay.svg",
+    srcUrl: "/icons/mc-id.png",
+  },
+  {
+    id: 6,
+    srcUrl: "/icons/uni.jpg",
+    href: "https://www.unicreditbank.rs",
   },
 ];
 
@@ -48,8 +53,8 @@ const socialLinks = [
 const contactLinks = [
   {
     id: 1,
-    label: "T: 062 801 7376",
-    href: "tel:+381628017376",
+    label: "T: 060 22 33 400",
+    href: "tel:+381602233400",
   },
   {
     id: 2,
@@ -186,31 +191,44 @@ const Footer = () => {
 
           <Separator className="mb-6 bg-black/10" />
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-2">
+          <div className="flex flex-col sm:flex-row justify-center md:justify-between items-center gap-4 mb-2">
             <p className="text-sm text-black/70 text-center sm:text-left font-light">
               © {currentYear} STR Diskont Pića Faraon PS
             </p>
 
-            {/* <div className="flex items-center">
-              {paymentBadgesData.map((badge, _, arr) => (
-                <span
-                  key={badge.id}
-                  className={cn([
-                    arr.length !== badge.id && "mr-3",
-                    "w-11.5 h-7.5 rounded-[5px] border-[#D6DCE5] bg-white flex items-center justify-center",
-                  ])}
-                >
+            <div className="flex items-center gap-2">
+              {paymentBadgesData.map((badge, _, arr) => {
+                const inner = (
                   <Image
                     priority
                     src={badge.srcUrl}
-                    width={33}
-                    height={100}
+                    width={48}
+                    height={48}
                     alt="Payment method"
-                    className="max-h-3.75"
+                    className="max-h-7 max-w-full object-contain"
                   />
-                </span>
-              ))}
-            </div> */}
+                );
+                const cls = cn([
+                  arr.length !== badge.id && "mr-3",
+                  "w-14 h-9 rounded-[5px] border-[#D6DCE5] bg-white flex items-center justify-center overflow-hidden p-1",
+                ]);
+                return badge.href ? (
+                  <Link
+                    key={badge.id}
+                    href={badge.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cls}
+                  >
+                    {inner}
+                  </Link>
+                ) : (
+                  <span key={badge.id} className={cls}>
+                    {inner}
+                  </span>
+                );
+              })}
+            </div>
           </div>
         </div>
         <LayoutSpacing />
