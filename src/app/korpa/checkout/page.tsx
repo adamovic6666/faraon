@@ -30,7 +30,7 @@ type CheckoutFormValues = {
   postalCode: string;
   sprat: string;
   brojStana: string;
-  paymentMethod: "cash_on_delivery" | "bank_transfer";
+  paymentMethod: "cash_on_delivery" | "bank_transfer" | "card_payment";
   pib: string;
   mb: string;
   note: string;
@@ -87,6 +87,22 @@ type CheckoutSuccessResponse = {
   paymentMethod?: CheckoutFormValues["paymentMethod"];
   warrantUrl?: string;
   warrantFileName?: string;
+};
+
+const redirectToVpos = (vposUrl: string, params: Record<string, string>) => {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = vposUrl;
+  form.style.display = "none";
+  for (const [name, value] of Object.entries(params)) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
 };
 
 const normalizeSku = (value: string | number) => {
@@ -160,7 +176,7 @@ const buildCheckoutPayload = ({
   subtotal: number;
   deliveryCost: number;
   total: number;
-  shippingBreakdown: ShippingBreakdown;
+  shippingBreakdown: ShippingBreakdown | null;
   fieldCode: string;
 }): CheckoutSubmitPayload => ({
   ...formData,
@@ -173,16 +189,30 @@ const buildCheckoutPayload = ({
   total: String(total),
   itemCount: cart.totalQuantities,
   shippingFieldCode: fieldCode,
-  shippingBasePrice: String(shippingBreakdown.shippingBasePrice),
-  extraWeightShipments: shippingBreakdown.extraWeightShipments,
-  extraWeightUnitPrice: String(shippingBreakdown.extraWeightUnitPrice),
-  extraWeightTotalPrice: String(shippingBreakdown.extraWeightTotalPrice),
-  totalWeight: `${shippingBreakdown.totalWeightNumber} ${shippingBreakdown.totalWeightUnit}`,
+  shippingBasePrice: String(
+    shippingBreakdown?.shippingBasePrice ?? deliveryCost,
+  ),
+  extraWeightShipments: shippingBreakdown?.extraWeightShipments ?? 0,
+  extraWeightUnitPrice: String(shippingBreakdown?.extraWeightUnitPrice ?? 0),
+  extraWeightTotalPrice: String(shippingBreakdown?.extraWeightTotalPrice ?? 0),
+  totalWeight: shippingBreakdown
+    ? `${shippingBreakdown.totalWeightNumber} ${shippingBreakdown.totalWeightUnit}`
+    : "0 kg",
 });
+
+const submitButtonLabel = (
+  isSubmitting: boolean,
+  paymentMethod: CheckoutFormValues["paymentMethod"],
+): string => {
+  if (isSubmitting) return "Slanje...";
+  if (paymentMethod === "card_payment") return "Plati karticom";
+  return "Potvrdi porudžbinu";
+};
 
 const CheckoutPage = () => {
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isVposRedirecting, setIsVposRedirecting] = useState(false);
   const [pricingOptions, setPricingOptions] = useState<PricingOption[]>([]);
   const [pricingError, setPricingError] = useState("");
   const [shippingBreakdown, setShippingBreakdown] =
@@ -198,6 +228,7 @@ const CheckoutPage = () => {
   const [addressSearch, setAddressSearch] = useState("");
   const [addressNumber, setAddressNumber] = useState("");
   const [isAddressDropdownOpen, setIsAddressDropdownOpen] = useState(false);
+  const [deliveryPrice321, setDeliveryPrice321] = useState<number | null>(null);
   const [addressPricingError, setAddressPricingError] = useState("");
   const addressComboboxRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -235,9 +266,20 @@ const CheckoutPage = () => {
   useEffect(() => {
     const queryPricingId = searchParams.get("cenovnikTermId")?.trim();
     if (!queryPricingId) return;
-
     setValue("cenovnikTermId", queryPricingId, { shouldDirty: false });
   }, [searchParams, setValue]);
+
+  useEffect(() => {
+    const paymentError = searchParams.get("payment_error");
+    const paymentCancelled = searchParams.get("payment_cancelled");
+    if (paymentError) {
+      setSubmitError(
+        "Plaćanje karticom nije uspelo. Molimo pokušajte ponovo ili odaberite drugi način plaćanja.",
+      );
+    } else if (paymentCancelled) {
+      setSubmitError("Plaćanje karticom je otkazano.");
+    }
+  }, [searchParams]);
 
   const selectedPricing = useMemo(
     () =>
@@ -446,7 +488,7 @@ const CheckoutPage = () => {
     };
   }, [cart, selectedPricingId]);
 
-  const deliveryCost = shippingBreakdown?.totalShippingPrice ?? null;
+  const deliveryCost = deliveryPrice321 ?? null;
   const subtotal = Math.round(adjustedTotalPrice);
   const total = cart ? subtotal + (deliveryCost ?? 0) : 0;
 
@@ -461,8 +503,8 @@ const CheckoutPage = () => {
       return;
     }
 
-    if (deliveryCost === null || isShippingLoading || !shippingBreakdown) {
-      setSubmitError("Sačekajte obračun cene dostave.");
+    if (deliveryCost === null) {
+      setSubmitError("Izaberite adresu za dostavu.");
       return;
     }
 
@@ -477,12 +519,70 @@ const CheckoutPage = () => {
     }
 
     const deliveryAddressLine = `${selectedDeliveryAddress.name} ${addressNumber.trim()}`;
+    const deliveryComment = [
+      data.note || null,
+      `Sprat: ${data.sprat || "/"}`,
+      shippingBreakdown
+        ? `Tezina: ${shippingBreakdown.totalWeightNumber} ${shippingBreakdown.totalWeightUnit}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join(" | ");
 
     setSubmitError("");
     setIsSubmitting(true);
     let checkoutTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
     try {
+      // -----------------------------------------------------------------------
+      // Card payment: redirect to VPOS
+      // -----------------------------------------------------------------------
+      if (data.paymentMethod === "card_payment") {
+        const cardPayload = {
+          ...buildCheckoutPayload({
+            formData: data,
+            address: deliveryAddressLine,
+            city: selectedPricing.name,
+            cart,
+            subtotal,
+            deliveryCost,
+            total,
+            shippingBreakdown,
+            fieldCode: selectedPricing.fieldCode,
+          }),
+          deliveryAddressId: selectedDeliveryAddress.id,
+          deliveryAddressNumber: addressNumber.trim(),
+          deliveryComment,
+        };
+
+        const response = await fetch("/api/checkout/init-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(cardPayload),
+        });
+
+        const result = (await response.json()) as {
+          vposUrl?: string;
+          params?: Record<string, string>;
+          error?: string;
+        };
+
+        if (!response.ok || !result.vposUrl || !result.params) {
+          setSubmitError(
+            result.error ||
+              "Došlo je do greške pri pokretanju plaćanja karticom.",
+          );
+          return;
+        }
+
+        setIsVposRedirecting(true);
+        redirectToVpos(result.vposUrl, result.params);
+        return;
+      }
+
+      // -----------------------------------------------------------------------
+      // Cash / bank transfer: existing flow
+      // -----------------------------------------------------------------------
       const payload = buildCheckoutPayload({
         formData: data,
         address: deliveryAddressLine,
@@ -491,7 +591,7 @@ const CheckoutPage = () => {
         subtotal,
         deliveryCost,
         total,
-        shippingBreakdown,
+        shippingBreakdown: shippingBreakdown,
         fieldCode: selectedPricing.fieldCode,
       });
 
@@ -524,15 +624,9 @@ const CheckoutPage = () => {
         addressId: selectedDeliveryAddress.id,
         addressNumber: addressNumber.trim(),
         customerPhoneNumber: data.phone,
-        // add into the comment beside notes from checkout form ( sprat + tezina)
-        comment: [
-          data.note || null,
-          `Sprat: ${data.sprat || "/"}`,
-          `Tezina: ${shippingBreakdown.totalWeightNumber} ${shippingBreakdown.totalWeightUnit}`,
-        ]
-          .filter(Boolean)
-          .join(" | "),
+        comment: deliveryComment,
         preparationTime: 15,
+        orderPrice: total,
       };
 
       const deliveryResponse = await fetch("/api/checkout/delivery-order", {
@@ -681,6 +775,7 @@ const CheckoutPage = () => {
                         onChange={(e) => {
                           setAddressSearch(e.target.value);
                           setSelectedDeliveryAddress(null);
+                          setDeliveryPrice321(null);
                           setAddressPricingError("");
                           setIsAddressDropdownOpen(true);
                         }}
@@ -706,6 +801,7 @@ const CheckoutPage = () => {
                               onMouseDown={(e) => {
                                 e.preventDefault();
                                 setSelectedDeliveryAddress(addr);
+                                setDeliveryPrice321(addr.price);
                                 setAddressSearch(`${addr.name}, ${addr.city}`);
                                 setIsAddressDropdownOpen(false);
                                 const matched = pricingOptions.find(
@@ -866,6 +962,30 @@ const CheckoutPage = () => {
                     </span>
                   </span>
                 </label>
+
+                <label
+                  className={cn(
+                    "flex cursor-pointer items-start gap-4 rounded-4xl border border-transparent bg-white px-5 py-5 transition-colors",
+                    paymentMethod === "card_payment" &&
+                      "border-black/15 bg-section",
+                  )}
+                >
+                  <input
+                    type="radio"
+                    value="card_payment"
+                    className="mt-1 h-5 w-5 accent-brand"
+                    {...register("paymentMethod")}
+                  />
+                  <span>
+                    <span className="block text-md font-semibold text-black/80 md:text-xl">
+                      Plaćanje platnom karticom
+                    </span>
+                    <span className="mt-1 block text-base font-light text-black/80">
+                      Visa, Mastercard, Dina — sigurno plaćanje putem VPOS
+                      sistema
+                    </span>
+                  </span>
+                </label>
               </div>
 
               <div className="mt-5">
@@ -878,10 +998,12 @@ const CheckoutPage = () => {
             </div>
             <button
               type="submit"
-              disabled={isSubmitting || isShippingLoading}
+              disabled={isSubmitting || isShippingLoading || isVposRedirecting}
               className="inline-flex w-fit items-center justify-center rounded-full bg-primary px-10 py-4 m-auto text-base font-medium uppercase text-black/80 transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70 md:h-15 md:text-lg"
             >
-              {isSubmitting ? "Slanje..." : "Potvrdi porudžbinu"}
+              {isVposRedirecting
+                ? "Preusmeravanje na stranicu za plaćanje..."
+                : submitButtonLabel(isSubmitting, paymentMethod)}
             </button>
           </div>
 
@@ -927,34 +1049,17 @@ const CheckoutPage = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-base md:text-lg text-black/60">
-                    {selectedPricing && !isShippingLoading
-                      ? `Dostava (${selectedPricing.name})`
+                    {selectedDeliveryAddress
+                      ? `Dostava (${selectedDeliveryAddress.city})`
                       : "Dostava"}
                   </span>
                   <span className="text-base md:text-lg font-semibold text-black/80">
-                    {isShippingLoading
-                      ? "Računanje..."
-                      : shippingBreakdown
-                        ? `${formatPrice(shippingBreakdown.shippingBasePrice)} RSD`
-                        : "Odaberite mesto"}
+                    {deliveryPrice321 === null
+                      ? "Odaberite mesto"
+                      : `${formatPrice(deliveryPrice321)} RSD`}
                   </span>
                 </div>
-                {shippingBreakdown &&
-                shippingBreakdown.extraWeightShipments > 0 ? (
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-base md:text-lg text-black/60">
-                      Dostava dodatni kg{" "}
-                      <span className="text-sm">
-                        ({shippingBreakdown.extraWeightShipments} ×{" "}
-                        {formatPrice(shippingBreakdown.extraWeightUnitPrice)}{" "}
-                        RSD)
-                      </span>
-                    </span>
-                    <span className="shrink-0 text-base md:text-lg font-semibold text-black/80">
-                      {formatPrice(shippingBreakdown.extraWeightTotalPrice)} RSD
-                    </span>
-                  </div>
-                ) : null}
+
                 {shippingBreakdown ? (
                   <div className="flex items-center justify-between">
                     <span className="text-base md:text-lg text-black/60">
@@ -965,9 +1070,6 @@ const CheckoutPage = () => {
                       {shippingBreakdown.totalWeightUnit}
                     </span>
                   </div>
-                ) : null}
-                {shippingError ? (
-                  <p className="text-xs text-red-600">{shippingError}</p>
                 ) : null}
               </div>
 

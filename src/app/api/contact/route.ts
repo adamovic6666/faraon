@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
         </div>
         <div style="float:right;width:48%;text-align:right;font-size:12px;line-height:1.65;color:#5b544d;">
           <strong style="display:block;font-size:13px;color:#1b1b1b;margin-bottom:4px;">STR Diskont pića Faraon PS</strong>
-          Karlovački put 1<br />21132 Petrovaradin<br />T: 062 801 7376<br />E: info@faraondiskonti.rs
+          Karlovački put 1<br />21132 Petrovaradin<br />T: 060 22 33 400<br />E: info@faraondiskonti.rs
         </div>
         <div style="clear:both;"></div>
       </div>
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       <div style="background:#8c0000;padding:24px 32px;text-align:center;color:#fff;">
         <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srdačan pozdrav,</p>
         <p style="margin:0 0 8px;font-size:15px;font-weight:700;">STR Diskont pića Faraon PS</p>
-        <p style="margin:0;font-size:13px;opacity:0.92;">info@faraondiskonti.rs | 062 801 7376</p>
+        <p style="margin:0;font-size:13px;opacity:0.92;">info@faraondiskonti.rs | 060 22 33 400</p>
       </div>
     </div>
   </body>

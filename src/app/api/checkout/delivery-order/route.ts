@@ -9,6 +9,7 @@ const schema = z.object({
   addressNumber: z.string().min(1).max(5),
   customerPhoneNumber: z.string().min(1),
   comment: z.string().optional().default(""),
+  orderPrice: z.number().nonnegative().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { addressId, addressNumber, customerPhoneNumber, comment } =
+  const { addressId, addressNumber, customerPhoneNumber, comment, orderPrice } =
     parsed.data;
 
   const deliveryPayload = {
@@ -41,6 +42,7 @@ export async function POST(request: NextRequest) {
     preparationTime: 15,
     customerPhoneNumber,
     comment: comment || "",
+    ...(orderPrice !== undefined && { orderPrice }),
   };
 
   console.log("[delivery-order] Sending payload to 321:", JSON.stringify(deliveryPayload, null, 2));

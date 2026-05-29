@@ -74,7 +74,7 @@ const checkoutSchema = z.object({
     postalCode: z.string().optional().default(""),
     sprat: z.string().optional().default(""),
     brojStana: z.string().optional().default(""),
-    paymentMethod: z.enum(["bank_transfer", "cash_on_delivery"]),
+    paymentMethod: z.enum(["bank_transfer", "cash_on_delivery", "card_payment"]),
     pib: z.string().optional().default(""),
     mb: z.string().optional().default(""),
     note: z.string().optional().default(""),
@@ -152,6 +152,7 @@ export async function POST(request: NextRequest) {
     const result = await createOrder(backendOrderData);
 
     if (!result.ok) {
+      console.error("[checkout] createOrder failed:", result.status, result.error, result.details);
       return NextResponse.json(
         { error: result.error, details: result.details },
         { status: result.status },
@@ -225,7 +226,7 @@ export async function POST(request: NextRequest) {
         </div>
         <div style="float:right;width:48%;text-align:right;font-size:12px;line-height:1.65;color:#5b544d;">
           <strong style="display:block;font-size:13px;color:#1b1b1b;margin-bottom:4px;">STR Diskont pića Faraon PS</strong>
-          Karlovački put 1<br />21132 Petrovaradin<br />T: 062 801 7376<br />E: info@faraondiskonti.rs<br />PIB: 104032720
+          Karlovački put 1<br />21132 Petrovaradin<br />T: 060 22 33 400<br />E: info@faraondiskonti.rs<br />PIB: 104032720
         </div>
         <div style="clear:both;"></div>
       </div>
@@ -282,7 +283,7 @@ export async function POST(request: NextRequest) {
         <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srdačan pozdrav,</p>
         <p style="margin:0 0 8px;font-size:15px;font-weight:700;">Faraon diskonti</p>
         <p style="margin:0 0 4px;font-size:13px;opacity:0.92;"><a href="https://www.faraondiskonti.rs" style="color:#fff;text-decoration:underline;">www.faraondiskonti.rs</a></p>
-        <p style="margin:0;font-size:13px;opacity:0.92;">info@faraondiskonti.rs | 062 801 7376</p>
+        <p style="margin:0;font-size:13px;opacity:0.92;">info@faraondiskonti.rs | 060 22 33 400</p>
       </div>
     </div>
   </body>
@@ -294,42 +295,48 @@ export async function POST(request: NextRequest) {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Potvrda porudžbine</title>
+    <style>
+      p{font-size:16px;line-height:1.6;margin:0;}
+      h1{font-size:26px;line-height:1.15;}
+      h2{font-size:18px;}
+      @media screen and (max-width:600px){
+        p{font-size:14px!important;}
+        h1{font-size:22px!important;}
+        h2{font-size:15px!important;}
+        .em-banner{font-size:16px!important;}
+        .em-total td{font-size:16px!important;}
+      }
+    </style>
   </head>
-  <body style="margin:0;padding:24px 12px;background:#f5f1ea;font-family:Arial,sans-serif;color:#1b1b1b;line-height:1.6;">
-    <div style="max-width:680px;margin:0 auto;background:#ffffff;border:1px solid #e5d9ca;">
-      <div style="padding:24px 30px;background:#f8f5ef;border-bottom:3px solid #ac0000;overflow:hidden;">
-        <div style="float:left;width:48%;">
-          <div style="font-size:18px;line-height:1.1;font-weight:900;letter-spacing:0.04em;color:#ac0000;text-transform:uppercase;">FARAON DISKONTI</div>
-        </div>
-        <div style="float:right;width:48%;text-align:right;font-size:12px;line-height:1.65;color:#5b544d;">
-          <strong style="display:block;font-size:13px;color:#1b1b1b;margin-bottom:4px;">STR Diskont pića Faraon PS</strong>
-          Karlovački put 1<br />21132 Petrovaradin<br />T: 062 801 7376<br />E: info@faraondiskonti.rs<br />PIB: 104032720
-        </div>
-        <div style="clear:both;"></div>
+  <body style="margin:0;padding:12px;background:#f5f1ea;font-family:Arial,sans-serif;color:#1b1b1b;line-height:1.6;">
+    <div style="max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e5d9ca;">
+      <div style="padding:16px;background:#f8f5ef;border-bottom:3px solid #ac0000;">
+        <p style="margin:0;font-size:18px;font-weight:900;letter-spacing:0.04em;color:#ac0000;text-transform:uppercase;">FARAON DISKONTI</p>
+        <p style="margin:4px 0 0;font-size:12px;line-height:1.6;color:#5b544d;">STR Diskont pića Faraon PS · Karlovački put 1 · 21132 Petrovaradin<br/>T: 060 22 33 400 · E: info@faraondiskonti.rs · PIB: 104032720</p>
       </div>
-      <div style="background:#ac0000;color:#ffffff;padding:22px 32px;text-align:center;">
-        <div style="font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;opacity:0.9;">Potvrda porudžbine</div>
-        <h1 style="margin:10px 0 0;font-size:30px;line-height:1.15;font-weight:900;">Hvala na kupovini!</h1>
+      <div style="background:#ac0000;color:#ffffff;padding:20px 16px;text-align:center;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;opacity:0.9;">Potvrda porudžbine</div>
+        <h1 style="margin:8px 0 0;font-weight:900;">Hvala na kupovini!</h1>
       </div>
-      <div style="background:#FFB200;color:#1b1b1b;padding:15px 32px;text-align:center;font-size:20px;font-weight:800;">Porudžbina #${orderNumber}</div>
-      <div style="padding:32px;">
-        <p style="margin:0 0 20px;font-size:16px;color:#1b1b1b;">Vaša porudžbina je uspešno evidentirana i uskoro ćemo Vas kontaktirati radi potvrde i dogovora oko isporuke.</p>
-        <div style="margin-bottom:24px;padding:18px 20px;border:2px solid #ac0000;border-radius:8px;background:#fffaf6;">
-          <h2 style="color:#ac0000;font-size:18px;border-bottom:2px solid #FFB200;padding-bottom:8px;margin:0 0 16px;font-weight:800;">Način plaćanja</h2>
+      <div class="em-banner" style="background:#FFB200;color:#1b1b1b;padding:14px 16px;text-align:center;font-size:18px;font-weight:800;">Porudžbina #${orderNumber}</div>
+      <div style="padding:20px 16px;">
+        <p style="margin:0 0 16px;color:#1b1b1b;">Vaša porudžbina je uspešno evidentirana i uskoro ćemo Vas kontaktirati radi potvrde i dogovora oko isporuke.</p>
+        <div style="margin-bottom:20px;padding:16px;border:2px solid #ac0000;border-radius:8px;background:#fffaf6;">
+          <h2 style="color:#ac0000;border-bottom:2px solid #FFB200;padding-bottom:8px;margin:0 0 12px;font-weight:800;">Način plaćanja</h2>
           ${payload.paymentMethod === "bank_transfer"
-            ? `<p style="margin:0;font-weight:700;color:#1b1b1b;">Plaćanje preko računa</p>
-          <p style="margin:8px 0 0;color:#5b544d;">Iznos navedene porudžbine plaćate preko računa prema predračunu #${orderNumber} u prilogu.</p>`
-            : `<p style="margin:0;font-weight:700;color:#1b1b1b;">Plaćanje pouzećem</p>
-          <p style="margin:8px 0 0;color:#5b544d;">Iznos navedene porudžbine plaćate kuriru u gotovini prilikom preuzimanja pošiljke.</p>`
+            ? `<p style="font-weight:700;color:#1b1b1b;">Plaćanje preko računa</p>
+          <p style="margin-top:8px;color:#5b544d;">Iznos navedene porudžbine plaćate preko računa prema predračunu #${orderNumber} u prilogu.</p>`
+            : `<p style="font-weight:700;color:#1b1b1b;">Plaćanje pouzećem</p>
+          <p style="margin-top:8px;color:#5b544d;">Iznos navedene porudžbine plaćate kuriru u gotovini prilikom preuzimanja pošiljke.</p>`
           }
         </div>
-        <h2 style="color:#ac0000;font-size:18px;border-bottom:2px solid #FFB200;padding-bottom:8px;margin:24px 0 16px;font-weight:800;">Vaša porudžbina</h2>
+        <h2 style="color:#ac0000;border-bottom:2px solid #FFB200;padding-bottom:8px;margin:20px 0 12px;font-weight:800;">Vaša porudžbina</h2>
         <table style="width:100%;border-collapse:collapse;margin-top:10px;">
           <thead>
             <tr style="background:#ac0000;color:#fff;">
-              <th style="padding:12px;text-align:left;font-size:14px;">Proizvod</th>
-              <th style="padding:12px;text-align:center;font-size:14px;">Količina</th>
-              <th style="padding:12px;text-align:right;font-size:14px;">Cena</th>
+              <th style="padding:10px 8px;text-align:left;font-size:13px;">Proizvod</th>
+              <th style="padding:10px 8px;text-align:center;font-size:13px;">Količina</th>
+              <th style="padding:10px 8px;text-align:right;font-size:13px;">Cena</th>
             </tr>
           </thead>
           <tbody>${(() => {
@@ -339,41 +346,42 @@ export async function POST(request: NextRequest) {
               ...payload.orderItems.map(
                 (item) =>
                   `<tr>
-              <td style="padding:12px;${cBd}font-size:14px;font-weight:700;color:#1b1b1b;">${item.name}</td>
-              <td style="padding:12px;${cBd}font-size:14px;text-align:center;color:#1b1b1b;">${item.quantity}</td>
-              <td style="padding:12px;${cBd}font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${fmtRSD(item.price)} RSD</td>
+              <td style="padding:10px 8px;${cBd}font-size:14px;font-weight:700;color:#1b1b1b;">${item.name}</td>
+              <td style="padding:10px 8px;${cBd}font-size:14px;text-align:center;color:#1b1b1b;">${item.quantity}</td>
+              <td style="padding:10px 8px;${cBd}font-size:14px;text-align:right;color:#1b1b1b;">${fmtRSD(item.price)} RSD</td>
             </tr>`,
               ),
               `<tr>
-              <td style="padding:12px;${cHasExtra ? cBd : ""}font-size:14px;font-weight:700;color:#1b1b1b;">Dostava ${payload.city}</td>
-              <td style="padding:12px;${cHasExtra ? cBd : ""}font-size:14px;text-align:center;color:#1b1b1b;">1</td>
-              <td style="padding:12px;${cHasExtra ? cBd : ""}font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${fmtRSD(payload.shippingBasePrice)} RSD</td>
+              <td style="padding:10px 8px;${cHasExtra ? cBd : ""}font-size:14px;font-weight:700;color:#1b1b1b;">Dostava ${payload.city}</td>
+              <td style="padding:10px 8px;${cHasExtra ? cBd : ""}font-size:14px;text-align:center;color:#1b1b1b;">1</td>
+              <td style="padding:10px 8px;${cHasExtra ? cBd : ""}font-size:14px;text-align:right;color:#1b1b1b;">${fmtRSD(payload.shippingBasePrice)} RSD</td>
             </tr>`,
               ...(cHasExtra
                 ? [`<tr>
-              <td style="padding:12px;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava dodatni kg (${payload.extraWeightShipments} × ${fmtRSD(payload.extraWeightUnitPrice)} RSD)</td>
-              <td style="padding:12px;font-size:14px;text-align:center;color:#1b1b1b;">${payload.extraWeightShipments}</td>
-              <td style="padding:12px;font-size:14px;text-align:right;color:#1b1b1b;white-space:nowrap;">${fmtRSD(payload.extraWeightTotalPrice)} RSD</td>
+              <td style="padding:10px 8px;font-size:14px;font-weight:700;color:#1b1b1b;">Dostava dodatni kg (${payload.extraWeightShipments} × ${fmtRSD(payload.extraWeightUnitPrice)} RSD)</td>
+              <td style="padding:10px 8px;font-size:14px;text-align:center;color:#1b1b1b;">${payload.extraWeightShipments}</td>
+              <td style="padding:10px 8px;font-size:14px;text-align:right;color:#1b1b1b;">${fmtRSD(payload.extraWeightTotalPrice)} RSD</td>
             </tr>`]
                 : []),
             ].join("");
           })()}</tbody>
         </table>
-        <table style="width:100%;margin-top:20px;border-collapse:collapse;">
+        <table class="em-total" style="width:100%;margin-top:16px;border-collapse:collapse;">
           <tr style="border-top:2px solid #ac0000;">
-            <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;">UKUPNO ZA PLAĆANJE:</td>
-            <td style="padding:15px 10px;text-align:right;font-size:21px;font-weight:800;color:#ac0000;white-space:nowrap;">${fmtRSD(payload.total)} RSD</td>
+            <td style="padding:12px 8px;text-align:right;font-size:18px;font-weight:800;color:#ac0000;">UKUPNO ZA PLAĆANJE:</td>
+            <td style="padding:12px 8px;text-align:right;font-size:18px;font-weight:800;color:#ac0000;">${fmtRSD(payload.total)} RSD</td>
           </tr>
           <tr>
-            <td colspan="2" style="padding:10px;text-align:right;font-size:12px;color:#5b544d;font-style:italic;">* PDV uračunat u cenu${payload.totalWeight ? ` · Težina pošiljke: ${payload.totalWeight}` : ""}</td>
+            <td colspan="2" style="padding:8px;text-align:right;font-size:12px;color:#5b544d;font-style:italic;">* PDV uračunat u cenu${payload.totalWeight ? ` · Težina pošiljke: ${payload.totalWeight}` : ""}</td>
           </tr>
         </table>
       </div>
-      <div style="background:#8c0000;padding:24px 32px;text-align:center;color:#fff;">
-        <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srdačan pozdrav,</p>
-        <p style="margin:0 0 8px;font-size:15px;font-weight:700;">Faraon diskonti</p>
-        <p style="margin:0 0 4px;font-size:13px;opacity:0.92;"><a href="https://www.faraondiskonti.rs" style="color:#fff;text-decoration:underline;">www.faraondiskonti.rs</a></p>
-        <p style="margin:0;font-size:13px;opacity:0.92;">info@faraondiskonti.rs | 062 801 7376</p>
+      <div style="background:#8c0000;padding:20px 16px;text-align:center;color:#fff;">
+        <p style="margin:0 0 6px;font-size:15px;font-weight:800;">Srdačan pozdrav,</p>
+        <p style="margin:0 0 6px;font-size:14px;font-weight:700;">Faraon diskonti</p>
+        <p style="margin:0 0 4px;font-size:12px;opacity:0.92;"><a href="https://www.faraondiskonti.rs" style="color:#fff;text-decoration:underline;">www.faraondiskonti.rs</a></p>
+        <p style="margin:0 0 8px;font-size:12px;opacity:0.92;">webshop@faraondiskonti.rs | 060 22 33 400</p>
+        <p style="margin:0;font-size:12px;"><a href="https://www.facebook.com/diskontfaraon/?locale=sr_RS" style="color:#fff;text-decoration:none;">Facebook</a> &nbsp;&bull;&nbsp; <a href="https://www.instagram.com/diskontpicafaraon021/" style="color:#fff;text-decoration:none;">Instagram</a></p>
       </div>
     </div>
   </body>
