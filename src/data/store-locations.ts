@@ -4,6 +4,8 @@ export type StoreLocation = {
   address: string;
   lat: number;
   lng: number;
+  /** Direct Google Maps business-page URL. When omitted, a name+address search is used. */
+  googleMapsUrl?: string;
 };
 
 export const storeLocations: StoreLocation[] = [
@@ -97,6 +99,7 @@ export const storeLocations: StoreLocation[] = [
     address: "Pap Pavla 36, Novi Sad 21000",
     lat: 45.255352027417274,
     lng: 19.836859928835537,
+    googleMapsUrl: "https://www.google.com/maps/place/Diskont+pi%C4%87a+Faraon/@45.2551972,19.6844139,18812m/data=!3m1!1e3!4m10!1m2!2m1!1sdiskont+pica+faraon!3m6!1s0x475b11cfb1f6494d:0x56c68af60d7409c9!8m2!3d45.2551972!4d19.8368599!15sChdkaXNrb250IHBpY2EgZmFyYW9ukgEMbGlxdW9yX3N0b3JlmgEjQ2haRFNVaE5NRzluUzBWSlEwRnZRMEZKUTBGblpTNUFFQVI!16s%2Fg%2F11b6fbkwkj",
   },
   {
     id: "temerinska-20",

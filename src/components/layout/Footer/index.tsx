@@ -38,13 +38,13 @@ const paymentBadgesData: PaymentBadge[] = [
 const socialLinks = [
   {
     id: 1,
-    href: "https://www.facebook.com/diskontfaraon/?locale=sr_RS",
+    href: "https://www.facebook.com/diskonti.faraon/?locale=sr_RS",
     icon: "/images/facebook.svg",
     label: "Facebook",
   },
   {
     id: 2,
-    href: "https://www.instagram.com/diskontpicafaraon021/",
+    href: "https://www.instagram.com/diskonti.faraon/",
     icon: "/images/instagram.svg",
     label: "Instagram",
   },
@@ -119,7 +119,7 @@ const Footer = () => {
                 ))}
               </div>
 
-              {/* <div className="relative overflow-hidden rounded-xl border border-black/15 bg-white p-2 max-w-34 gap-2 flex items-center justify-center flex-col">
+              <div className="relative overflow-hidden rounded-xl border border-black/15 bg-white p-2 max-w-34 gap-2 flex items-center justify-center flex-col">
                 <Image
                   src="/images/18+.webp"
                   alt="18 plus"
@@ -132,7 +132,7 @@ const Footer = () => {
                   Prekomerno konzumiranje alkoholnih pića dovodi do ozbiljnih
                   zdravstvenih rizika.
                 </p>
-              </div> */}
+              </div>
             </section>
 
             <section id="kontakt">
@@ -196,8 +196,8 @@ const Footer = () => {
               © {currentYear} STR Diskont Pića Faraon PS
             </p>
 
-            <div className="flex items-center gap-2">
-              {paymentBadgesData.map((badge, _, arr) => {
+            <div className="flex flex-wrap justify-center items-center gap-2 max-w-52 sm:max-w-none">
+              {paymentBadgesData.map((badge) => {
                 const inner = (
                   <Image
                     priority
@@ -208,10 +208,8 @@ const Footer = () => {
                     className="max-h-7 max-w-full object-contain"
                   />
                 );
-                const cls = cn([
-                  arr.length !== badge.id && "mr-3",
-                  "w-14 h-9 rounded-[5px] border-[#D6DCE5] bg-white flex items-center justify-center overflow-hidden p-1",
-                ]);
+                const cls =
+                  "w-14 h-9 rounded-[5px] border-[#D6DCE5] bg-white flex items-center justify-center overflow-hidden p-1";
                 return badge.href ? (
                   <Link
                     key={badge.id}

@@ -212,6 +212,7 @@ const submitButtonLabel = (
 const CheckoutPage = () => {
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [isVposRedirecting, setIsVposRedirecting] = useState(false);
   const [pricingOptions, setPricingOptions] = useState<PricingOption[]>([]);
   const [pricingError, setPricingError] = useState("");
@@ -488,9 +489,17 @@ const CheckoutPage = () => {
     };
   }, [cart, selectedPricingId]);
 
+  const FREE_DELIVERY_THRESHOLD = 12000;
+
   const deliveryCost = deliveryPrice321 ?? null;
   const subtotal = Math.round(adjustedTotalPrice);
-  const total = cart ? subtotal + (deliveryCost ?? 0) : 0;
+  const isFreeDelivery = subtotal >= FREE_DELIVERY_THRESHOLD;
+  const effectiveDeliveryCost = isFreeDelivery ? 0 : (deliveryCost ?? 0);
+  const extraWeightTotal =
+    !isFreeDelivery && (shippingBreakdown?.extraWeightShipments ?? 0) > 0
+      ? (shippingBreakdown?.extraWeightTotalPrice ?? 0)
+      : 0;
+  const total = cart ? subtotal + effectiveDeliveryCost + extraWeightTotal : 0;
 
   const onSubmit = async (data: CheckoutFormValues) => {
     if (!cart || cart.items.length === 0) {
@@ -545,9 +554,9 @@ const CheckoutPage = () => {
             city: selectedPricing.name,
             cart,
             subtotal,
-            deliveryCost,
+            deliveryCost: effectiveDeliveryCost,
             total,
-            shippingBreakdown,
+            shippingBreakdown: isFreeDelivery ? null : shippingBreakdown,
             fieldCode: selectedPricing.fieldCode,
           }),
           deliveryAddressId: selectedDeliveryAddress.id,
@@ -589,9 +598,9 @@ const CheckoutPage = () => {
         city: selectedPricing.name,
         cart,
         subtotal,
-        deliveryCost,
+        deliveryCost: effectiveDeliveryCost,
         total,
-        shippingBreakdown: shippingBreakdown,
+        shippingBreakdown: isFreeDelivery ? null : shippingBreakdown,
         fieldCode: selectedPricing.fieldCode,
       });
 
@@ -687,7 +696,11 @@ const CheckoutPage = () => {
   return (
     <main className="pt-20 pb-10 md:pt-24 md:pb-12">
       <div className="mx-auto max-w-frame px-4 xl:px-0">
-        <SectionTitle title="Vaša porudžbina" noAnimation />
+        <SectionTitle
+          title="Vaša porudžbina"
+          description="Dostava se vrši isključivo na teritoriji Novog Sada i okoline."
+          noAnimation
+        />
 
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -1053,23 +1066,47 @@ const CheckoutPage = () => {
                       ? `Dostava (${selectedDeliveryAddress.city})`
                       : "Dostava"}
                   </span>
-                  <span className="text-base md:text-lg font-semibold text-black/80">
-                    {deliveryPrice321 === null
-                      ? "Odaberite mesto"
-                      : `${formatPrice(deliveryPrice321)} RSD`}
-                  </span>
+                  {deliveryPrice321 === null ? (
+                    <span className="text-base md:text-lg font-semibold text-black/80">
+                      Odaberite mesto
+                    </span>
+                  ) : isFreeDelivery ? (
+                    <span className="text-base md:text-lg font-semibold text-green-600">
+                      Besplatno
+                    </span>
+                  ) : (
+                    <span className="text-base md:text-lg font-semibold text-black/80">
+                      {formatPrice(deliveryPrice321)} RSD
+                    </span>
+                  )}
                 </div>
 
-                {shippingBreakdown ? (
-                  <div className="flex items-center justify-between">
-                    <span className="text-base md:text-lg text-black/60">
-                      Težina pošiljke
-                    </span>
-                    <span className="text-base md:text-lg font-semibold text-black/80">
-                      {shippingBreakdown.totalWeightNumber}{" "}
-                      {shippingBreakdown.totalWeightUnit}
-                    </span>
-                  </div>
+                {shippingBreakdown && !isFreeDelivery ? (
+                  <>
+                    {shippingBreakdown.extraWeightShipments > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-base md:text-lg text-black/60">
+                          Dodatna težina (
+                          {shippingBreakdown.extraWeightShipments} ×{" "}
+                          {formatPrice(shippingBreakdown.extraWeightUnitPrice)}{" "}
+                          RSD)
+                        </span>
+                        <span className="text-base md:text-lg font-semibold text-black/80">
+                          {formatPrice(shippingBreakdown.extraWeightTotalPrice)}{" "}
+                          RSD
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between">
+                      <span className="text-base md:text-lg text-black/60">
+                        Težina pošiljke
+                      </span>
+                      <span className="text-base md:text-lg font-semibold text-black/80">
+                        {shippingBreakdown.totalWeightNumber}{" "}
+                        {shippingBreakdown.totalWeightUnit}
+                      </span>
+                    </div>
+                  </>
                 ) : null}
               </div>
 

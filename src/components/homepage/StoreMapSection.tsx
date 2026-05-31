@@ -93,6 +93,11 @@ const StoreMarker = ({
   location: (typeof storeLocations)[number];
 }) => {
   const [open, setOpen] = useState(false);
+  const mapsUrl =
+    location.googleMapsUrl ??
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      `${location.name} ${location.address}`,
+    )}`;
 
   return (
     <>
@@ -109,6 +114,21 @@ const StoreMarker = ({
             <strong>{location.name}</strong>
             <br />
             {location.address}
+            <br />
+            <a
+              href={mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#ac0000",
+                fontWeight: 600,
+                fontSize: "13px",
+                marginTop: "6px",
+                display: "inline-block",
+              }}
+            >
+              Otvori u Google Maps →
+            </a>
           </div>
         </InfoWindow>
       )}

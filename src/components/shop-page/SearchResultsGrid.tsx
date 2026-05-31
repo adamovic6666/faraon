@@ -16,27 +16,29 @@ import { Product } from "@/types/product.types";
 const PRODUCTS_PER_PAGE = 24;
 
 function buildPaginationTokens(currentPage: number, totalPages: number) {
-  if (totalPages <= 6) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  if (totalPages <= 5) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1) as (
+      | number
+      | string
+    )[];
   }
 
-  if (currentPage <= 3) {
-    return [1, 2, "ellipsis-right", totalPages - 1, totalPages] as const;
+  const pages = new Set<number>();
+  pages.add(1);
+  pages.add(totalPages);
+  for (let p = currentPage - 1; p <= currentPage + 1; p++) {
+    if (p >= 1 && p <= totalPages) pages.add(p);
   }
 
-  if (currentPage >= totalPages - 2) {
-    return [1, 2, "ellipsis-left", totalPages - 1, totalPages] as const;
+  const sorted = Array.from(pages).sort((a, b) => a - b);
+  const result: (number | string)[] = [];
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) {
+      result.push("ellipsis");
+    }
+    result.push(sorted[i]);
   }
-
-  return [
-    1,
-    2,
-    "ellipsis-left",
-    currentPage,
-    "ellipsis-right",
-    totalPages - 1,
-    totalPages,
-  ] as const;
+  return result;
 }
 
 export default function SearchResultsGrid({

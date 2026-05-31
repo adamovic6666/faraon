@@ -19,6 +19,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getBaseUrl } from "@/lib/vpos";
 import { getPendingOrder, clearPendingOrder } from "@/lib/vpos-pending";
 import { createOrder } from "@/lib/api/faraon";
+import { sendCardPaymentEmails } from "@/lib/checkout-emails";
 
 /**
  * SIA VPOS URLDone result code for success.
@@ -107,6 +108,14 @@ export async function GET(request: NextRequest) {
         console.info(
           `[payment-return] Order #${orderNumber} created for reqrefnum ${reqrefnum}`,
         );
+
+        // Send confirmation emails
+        await sendCardPaymentEmails({
+          orderNumber,
+          orderId,
+          vposOrderId: transactionId,
+          pending,
+        });
 
         // Send delivery order to 321
         try {

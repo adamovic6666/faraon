@@ -90,14 +90,14 @@ const ProductCard = ({ data, category: categoryProp }: ProductCardProps) => {
   const renderTopLeftBadge = () => {
     if (data.is_new) {
       return (
-        <span className="absolute left-3 top-3 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white">
+        <span className="absolute left-3 top-3 z-10 rounded-full bg-brand px-3 py-1 text-sm font-bold text-white">
           NOVO
         </span>
       );
     }
     if (hasDiscount) {
       return (
-        <span className="absolute left-3 top-3 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white">
+        <span className="absolute left-3 top-3 z-10 rounded-full bg-brand px-3 py-1 text-sm font-bold text-white">
           -{Math.round((1 - data.price / data.oldPrice!) * 100)}%
         </span>
       );

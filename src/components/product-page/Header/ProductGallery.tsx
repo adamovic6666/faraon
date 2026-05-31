@@ -32,7 +32,7 @@ const ProductGallery = ({
     const cls =
       size === "lg"
         ? "pointer-events-none absolute left-5 top-5 z-10 rounded-full bg-brand px-3 py-1.5 text-sm font-bold text-white"
-        : "pointer-events-none absolute left-4 top-4 z-10 rounded-full bg-brand px-2.5 py-1 text-xs font-bold text-white";
+        : "pointer-events-none absolute left-4 top-4 z-10 rounded-full bg-brand px-3 py-1 text-sm font-bold text-white";
     if (isNew) {
       return <span className={cls}>NOVO</span>;
     }

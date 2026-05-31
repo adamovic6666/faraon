@@ -10,16 +10,20 @@ import CookieConsent from "@/components/common/CookieConsent";
 import { fetchTopLevelCategories } from "@/lib/api/faraon";
 import GoogleAnalytics from "./_components/google-analytics/GoogleAnalytics";
 
+const siteUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://faraondiskonti.rs";
+
+const defaultTitle =
+  "Faraon diskonti | Online prodavnica pića i dostava na adresu";
+const defaultDescription =
+  "Sve što pijete, Faraon donosi! Poručite pića online i uživajte u besplatnoj dostavi za porudžbine preko 12.000 RSD. Pivo, vino, žestoka pića i bezalkoholna pića.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://faraon.rs",
-  ),
+  metadataBase: new URL(siteUrl),
   title: {
     template: "%s | Faraon diskonti",
-    default: "Faraon diskonti",
+    default: defaultTitle,
   },
-  description:
-    "Sve što pijete, Faraon donosi! Besplatna dostava za porudžbine preko 12,000 RSD!",
+  description: defaultDescription,
   icons: {
     icon: "/images/favicon.webp",
   },
@@ -27,9 +31,24 @@ export const metadata: Metadata = {
     google: "NV6vQB2yVDNPVwvxudSfvJp5Z0krUExyWp7px-K5jO4",
   },
   openGraph: {
-    title: "Faraon diskonti",
-    description:
-      "Sve što pijete, Faraon donosi! Besplatna dostava za porudžbine preko 12,000 RSD!",
+    type: "website",
+    url: siteUrl,
+    siteName: "Faraon diskonti",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: [
+      {
+        url: "/images/og.webp",
+        width: 1200,
+        height: 630,
+        alt: "Faraon diskonti",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
     images: ["/images/og.webp"],
   },
 };

@@ -381,7 +381,7 @@ export async function POST(request: NextRequest) {
         <p style="margin:0 0 6px;font-size:14px;font-weight:700;">Faraon diskonti</p>
         <p style="margin:0 0 4px;font-size:12px;opacity:0.92;"><a href="https://www.faraondiskonti.rs" style="color:#fff;text-decoration:underline;">www.faraondiskonti.rs</a></p>
         <p style="margin:0 0 8px;font-size:12px;opacity:0.92;">webshop@faraondiskonti.rs | 060 22 33 400</p>
-        <p style="margin:0;font-size:12px;"><a href="https://www.facebook.com/diskontfaraon/?locale=sr_RS" style="color:#fff;text-decoration:none;">Facebook</a> &nbsp;&bull;&nbsp; <a href="https://www.instagram.com/diskontpicafaraon021/" style="color:#fff;text-decoration:none;">Instagram</a></p>
+        <p style="margin:0;font-size:12px;"><a href="https://www.facebook.com/diskonti.faraon/?locale=sr_RS" style="color:#fff;text-decoration:none;">Facebook</a> &nbsp;&bull;&nbsp; <a href="https://www.instagram.com/diskonti.faraon/" style="color:#fff;text-decoration:none;">Instagram</a></p>
       </div>
     </div>
   </body>

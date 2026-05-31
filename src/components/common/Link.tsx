@@ -22,7 +22,7 @@ const PageLink = ({
       <NextLink
         href={href}
         className={cn(
-          "inline-block w-full rounded-full px-10 py-4 text-center transition-all md:w-52 md:px-14 md:text-lg",
+          "inline-block w-full rounded-full px-8 py-3 text-center transition-all md:w-52 md:px-14 md:py-4 md:text-lg",
           variant === "primary" &&
             "bg-primary text-black/80 hover:bg-primary/85",
           variant === "brand" && "bg-brand text-white hover:bg-brand/90",

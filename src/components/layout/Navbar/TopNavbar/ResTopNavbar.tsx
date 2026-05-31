@@ -20,13 +20,13 @@ import {
 const socialLinks = [
   {
     id: 1,
-    href: "https://www.facebook.com/diskontfaraon/?locale=sr_RS",
+    href: "https://www.facebook.com/diskonti.faraon/?locale=sr_RS",
     icon: "/images/facebook.svg",
     label: "Facebook",
   },
   {
     id: 2,
-    href: "https://www.instagram.com/diskontpicafaraon021/",
+    href: "https://www.instagram.com/diskonti.faraon/",
     icon: "/images/instagram.svg",
     label: "Instagram",
   },
@@ -135,7 +135,12 @@ const ResTopNavbar = ({ data }: { data: NavMenu }) => {
             <div className="flex items-center gap-3 pb-4">
               {socialLinks.map((item) => (
                 <SheetClose asChild key={item.id}>
-                  <Link href={item.href} aria-label={item.label} target="_blank" rel="noopener noreferrer">
+                  <Link
+                    href={item.href}
+                    aria-label={item.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Image
                       src={item.icon}
                       alt={item.label}
