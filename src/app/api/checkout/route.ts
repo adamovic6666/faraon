@@ -133,6 +133,7 @@ export async function POST(request: NextRequest) {
         payment_method: paymentMethod,
         cenovnik_term_id: payload.cenovnikTermId,
         email: payload.email,
+        notes: payload.note.trim(),
         billing_address: {
           country_code: "RS",
           address_line1: payload.address,

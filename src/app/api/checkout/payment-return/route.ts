@@ -84,6 +84,7 @@ export async function GET(request: NextRequest) {
           payment_method: "personal" as const,
           cenovnik_term_id: pending.cenovnikTermId,
           email: pending.email,
+          notes: pending.note.trim(),
           billing_address: {
             country_code: "RS",
             address_line1: pending.address,

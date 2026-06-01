@@ -104,6 +104,7 @@ export type BackendOrderPayload = {
     payment_method: "personal" | "invoice";
     cenovnik_term_id: number;
     email: string;
+    notes?: string;
     billing_address: {
       country_code: string;
       address_line1: string;
