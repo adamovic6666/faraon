@@ -490,8 +490,16 @@ const CheckoutPage = () => {
   }, [cart, selectedPricingId]);
 
   const FREE_DELIVERY_THRESHOLD = 12000;
+  /** Ovo je izmena za koju me Sova cimao 2.6. ... moram ostaviti komentar tu da bi znali zasto je to tako :) */
+  /** 321 zone prices below this amount are treated as free base delivery. */
+  const DELIVERY_321_MIN_BILLABLE = 801;
 
-  const deliveryCost = deliveryPrice321 ?? null;
+  const deliveryCost =
+    deliveryPrice321 === null
+      ? null
+      : deliveryPrice321 < DELIVERY_321_MIN_BILLABLE
+        ? 0
+        : deliveryPrice321;
   const subtotal = Math.round(adjustedTotalPrice);
   const isFreeDelivery = subtotal >= FREE_DELIVERY_THRESHOLD;
   const effectiveDeliveryCost = isFreeDelivery ? 0 : (deliveryCost ?? 0);
@@ -1070,15 +1078,15 @@ const CheckoutPage = () => {
                     <span className="text-base md:text-lg font-semibold text-black/80">
                       Odaberite mesto
                     </span>
-                  ) : isFreeDelivery ? (
+                  ) : isFreeDelivery || deliveryCost === 0 ? (
                     <span className="text-base md:text-lg font-semibold text-green-600">
                       Besplatno
                     </span>
-                  ) : (
+                  ) : deliveryCost !== null ? (
                     <span className="text-base md:text-lg font-semibold text-black/80">
-                      {formatPrice(deliveryPrice321)} RSD
+                      {formatPrice(deliveryCost)} RSD
                     </span>
-                  )}
+                  ) : null}
                 </div>
 
                 {shippingBreakdown && !isFreeDelivery ? (
