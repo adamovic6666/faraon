@@ -450,20 +450,29 @@ const CheckoutPage = () => {
           };
         };
 
-        if (!response.ok || !result.data?.total_shipping_price?.price) {
+        if (!response.ok || !result.data) {
           throw new Error(result.error || "Neuspešan obračun dostave.");
         }
 
         const d = result.data;
-        const totalPrice = Number(d.total_shipping_price!.price);
-        if (!Number.isFinite(totalPrice)) {
+        if (!d.total_weight?.weight_number && !d.total_shipping_price?.price) {
+          throw new Error(result.error || "Neuspešan obračun dostave.");
+        }
+
+        const apiTotalPrice = d.total_shipping_price?.price
+          ? Number(d.total_shipping_price.price)
+          : null;
+        if (
+          apiTotalPrice !== null &&
+          !Number.isFinite(apiTotalPrice)
+        ) {
           throw new TypeError("Neispravan iznos dostave.");
         }
 
         if (!active) return;
 
         setShippingBreakdown({
-          totalShippingPrice: Math.round(totalPrice),
+          totalShippingPrice: Math.round(apiTotalPrice ?? deliveryPrice321 ?? 0),
           shippingBasePrice: Math.round(Number(d.shipping_price?.price ?? "0")),
           totalWeightNumber: d.total_weight?.weight_number ?? "0",
           totalWeightUnit: d.total_weight?.weight_unit ?? "kg",

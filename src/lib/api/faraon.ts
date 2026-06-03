@@ -99,6 +99,51 @@ export type ShippingRate = {
   };
 };
 
+type ShippingRateBackendData = {
+  total_shipping_price?: { price?: string; currency_code?: string };
+  shipping_price?: { price?: string; currency_code?: string };
+  total_weight?: { weight_number?: string; weight_unit?: string };
+  extra_weight?: {
+    number_of_shipments?: number;
+    extra_weight_price?: { price?: string; price_total?: string; currency_code?: string };
+  };
+};
+
+const ZERO_RSD = { price: "0", currencyCode: "RSD" } as const;
+
+const mapStructuredShippingRate = (
+  data: ShippingRateBackendData,
+): ShippingRate => ({
+  totalShippingPrice: data.total_shipping_price?.price
+    ? {
+        price: data.total_shipping_price.price,
+        currencyCode: data.total_shipping_price.currency_code ?? "RSD",
+      }
+    : ZERO_RSD,
+  shippingPrice: data.shipping_price?.price
+    ? {
+        price: data.shipping_price.price,
+        currencyCode: data.shipping_price.currency_code ?? "RSD",
+      }
+    : ZERO_RSD,
+  totalWeight: {
+    weightNumber: data.total_weight?.weight_number ?? "0",
+    weightUnit: data.total_weight?.weight_unit ?? "kg",
+  },
+  extraWeight: {
+    numberOfShipments: data.extra_weight?.number_of_shipments ?? 0,
+    extraWeightPrice: {
+      price: data.extra_weight?.extra_weight_price?.price ?? "0",
+      priceTotal: data.extra_weight?.extra_weight_price?.price_total ?? "0",
+      currencyCode: data.extra_weight?.extra_weight_price?.currency_code ?? "RSD",
+    },
+  },
+});
+
+const hasStructuredShippingData = (data: ShippingRateBackendData): boolean =>
+  Boolean(data.total_shipping_price?.price) ||
+  Boolean(data.total_weight?.weight_number);
+
 export type BackendOrderPayload = {
   customer: {
     payment_method: "personal" | "invoice";
@@ -397,17 +442,7 @@ export const fetchShippingRate = async ({
 
     const rawJson = await response.json();
     const payload = rawJson as {
-      data?:
-        | Array<{ amount?: string; currency_code?: string }>
-        | {
-            total_shipping_price?: { price?: string; currency_code?: string };
-            shipping_price?: { price?: string; currency_code?: string };
-            total_weight?: { weight_number?: string; weight_unit?: string };
-            extra_weight?: {
-              number_of_shipments?: number;
-              extra_weight_price?: { price?: string; price_total?: string; currency_code?: string };
-            };
-          };
+      data?: Array<{ amount?: string; currency_code?: string }> | ShippingRateBackendData;
     };
 
     // Handle legacy array format: { data: [{ amount, currency_code }] }
@@ -434,38 +469,17 @@ export const fetchShippingRate = async ({
       };
     }
     const data = payload.data;
-    if (!data?.total_shipping_price?.price) {
+    if (!data || !hasStructuredShippingData(data)) {
       return {
         ok: false,
         status: 502,
-        error: "Cena dostave nije vraćena od backend-a.",
+        error: "Podaci o dostavi nisu vraćeni od backend-a.",
       };
     }
 
     return {
       ok: true,
-      data: {
-        totalShippingPrice: {
-          price: data.total_shipping_price.price,
-          currencyCode: data.total_shipping_price.currency_code ?? "RSD",
-        },
-        shippingPrice: {
-          price: data.shipping_price?.price ?? "0",
-          currencyCode: data.shipping_price?.currency_code ?? "RSD",
-        },
-        totalWeight: {
-          weightNumber: data.total_weight?.weight_number ?? "0",
-          weightUnit: data.total_weight?.weight_unit ?? "kg",
-        },
-        extraWeight: {
-          numberOfShipments: data.extra_weight?.number_of_shipments ?? 0,
-          extraWeightPrice: {
-            price: data.extra_weight?.extra_weight_price?.price ?? "0",
-            priceTotal: data.extra_weight?.extra_weight_price?.price_total ?? "0",
-            currencyCode: data.extra_weight?.extra_weight_price?.currency_code ?? "RSD",
-          },
-        },
-      },
+      data: mapStructuredShippingRate(data),
     };
   } catch (error) {
     console.error("Shipping rate fetch failed:", error);

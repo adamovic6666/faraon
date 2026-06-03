@@ -43,17 +43,23 @@ export async function POST(request: NextRequest) {
   }
 
   const d = result.data;
+  const hasBackendPrices = d.totalShippingPrice.price !== "0";
+
   return NextResponse.json({
     success: true,
     data: {
-      total_shipping_price: {
-        price: d.totalShippingPrice.price,
-        currency_code: d.totalShippingPrice.currencyCode,
-      },
-      shipping_price: {
-        price: d.shippingPrice.price,
-        currency_code: d.shippingPrice.currencyCode,
-      },
+      ...(hasBackendPrices
+        ? {
+            total_shipping_price: {
+              price: d.totalShippingPrice.price,
+              currency_code: d.totalShippingPrice.currencyCode,
+            },
+            shipping_price: {
+              price: d.shippingPrice.price,
+              currency_code: d.shippingPrice.currencyCode,
+            },
+          }
+        : {}),
       total_weight: {
         weight_number: d.totalWeight.weightNumber,
         weight_unit: d.totalWeight.weightUnit,
