@@ -4,52 +4,53 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Cenovnik dostave",
   description:
-    "Pregledajte cene dostave za sva mesta u kojima Faraon diskonti vrši isporuku. Besplatna dostava za porudžbine iznad 12.000 RSD.",
+    "Pregledajte cene dostave za sva mesta u kojima Faraon diskonti vrši isporuku. Najbrža dostava pića po diskontnim cenama u Novom Sadu! Pozovite!",
 };
 
 export const dynamic = "force-static";
 
 const deliveryPrices = [
-  { name: "Grad Novi Sad", price: 380 },
+  { name: "Novi Sad centar", price: 380 },
+  { name: "Sajlovo", price: 600 },
+  { name: "Adice", price: 600 },
+  { name: "Petrovaradin", price: 600 },
+  { name: "Klisa", price: 600 },
+  { name: "Karagača", price: 600 },
   { name: "Sremska Kamenica", price: 650 },
   { name: "Veternik", price: 650 },
   { name: "Kamenjar", price: 650 },
   { name: "Bangladeš", price: 650 },
   { name: "Ribarsko ostrvo", price: 650 },
-  { name: "Sajlovo", price: 600 },
-  { name: "Adice", price: 600 },
-  { name: "Petrovaradin", price: 600 },
-  { name: "Klisa", price: 600 },
-  { name: "Rumenka", price: 1000 },
-  { name: "Bački Petrovac", price: 3000 },
-  { name: "Kisač", price: 1600 },
-  { name: "Stepanovićevo", price: 2700 },
-  { name: "Gornje livade", price: 900 },
   { name: "Veliki Rit", price: 800 },
-  { name: "Rimski šančevi", price: 900 },
-  { name: "Nemanovci", price: 1200 },
-  { name: "Pejićevi salaši", price: 1400 },
-  { name: "Bački Jarak", price: 2000 },
-  { name: "Temerin", price: 2500 },
-  { name: "Sirig", price: 2700 },
-  { name: "Čenej (centar)", price: 1600 },
   { name: "Šangaj", price: 800 },
-  { name: "Kać", price: 1500 },
-  { name: "Budisava", price: 2000 },
-  { name: "Sremski Karlovci", price: 1400 },
-  { name: "Bukovac", price: 1000 },
   { name: "Alibegovac", price: 800 },
-  { name: "Karagača", price: 600 },
-  { name: "Popovica", price: 1000 },
-  { name: "Ledinci", price: 1200 },
-  { name: "Stari Ledinci", price: 1400 },
-  { name: "Rakovac", price: 1500 },
-  { name: "Beočin", price: 1800 },
-  { name: "Brazilija", price: 2200 },
-  { name: "Banoštor", price: 2800 },
-  { name: "Futog", price: 1200 },
-  { name: "Begeč", price: 2000 },
   { name: "Čardak", price: 800 },
+  { name: "Gornje livade", price: 900 },
+  { name: "Rimski šančevi", price: 900 },
+  { name: "Rumenka", price: 1000 },
+  { name: "Bukovac", price: 1000 },
+  { name: "Popovica", price: 1000 },
+  { name: "Nemanovci", price: 1200 },
+  { name: "Ledinci", price: 1200 },
+  { name: "Futog", price: 1200 },
+  { name: "Pejićevi salaši", price: 1400 },
+  { name: "Sremski Karlovci", price: 1400 },
+  { name: "Stari Ledinci", price: 1400 },
+  { name: "Kać", price: 1500 },
+  { name: "Rakovac", price: 1500 },
+  { name: "Kisač", price: 1600 },
+  { name: "Čenej (centar)", price: 1600 },
+  { name: "Beočin", price: 1800 },
+  { name: "Bački Jarak", price: 2000 },
+  { name: "Budisava", price: 2000 },
+  { name: "Begeč", price: 2000 },
+  { name: "Brazilija", price: 2200 },
+  { name: "Irig", price: 2200 },
+  { name: "Temerin", price: 2500 },
+  { name: "Stepanovićevo", price: 2700 },
+  { name: "Sirig", price: 2700 },
+  { name: "Banoštor", price: 2800 },
+  { name: "Bački Petrovac", price: 3000 },
 ];
 
 export default function CenovnikDostavePage() {
@@ -108,10 +109,6 @@ export default function CenovnikDostavePage() {
             <p>
               <strong>Dodatna težina:</strong> Svakih sledećih 25 kg doplaćuje
               se sa 200 RSD.
-            </p>
-            <p>
-              <strong>Besplatna dostava:</strong> Važi za sve porudžbine iznad
-              12.000 RSD.
             </p>
           </div>
         </div>

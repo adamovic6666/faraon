@@ -489,25 +489,14 @@ const CheckoutPage = () => {
     };
   }, [cart, selectedPricingId]);
 
-  const FREE_DELIVERY_THRESHOLD = 12000;
-  /** Ovo je izmena za koju me Sova cimao 2.6. ... moram ostaviti komentar tu da bi znali zasto je to tako :) */
-  /** 321 zone prices below this amount are treated as free base delivery. */
-  const DELIVERY_321_MIN_BILLABLE = 801;
-
-  const deliveryCost =
-    deliveryPrice321 === null
-      ? null
-      : deliveryPrice321 < DELIVERY_321_MIN_BILLABLE
-        ? 0
-        : deliveryPrice321;
+  const deliveryCost = deliveryPrice321 ?? null;
   const subtotal = Math.round(adjustedTotalPrice);
-  const isFreeDelivery = subtotal >= FREE_DELIVERY_THRESHOLD;
-  const effectiveDeliveryCost = isFreeDelivery ? 0 : (deliveryCost ?? 0);
+  const chargedDeliveryCost = deliveryCost ?? 0;
   const extraWeightTotal =
-    !isFreeDelivery && (shippingBreakdown?.extraWeightShipments ?? 0) > 0
+    (shippingBreakdown?.extraWeightShipments ?? 0) > 0
       ? (shippingBreakdown?.extraWeightTotalPrice ?? 0)
       : 0;
-  const total = cart ? subtotal + effectiveDeliveryCost + extraWeightTotal : 0;
+  const total = cart ? subtotal + chargedDeliveryCost + extraWeightTotal : 0;
 
   const onSubmit = async (data: CheckoutFormValues) => {
     if (!cart || cart.items.length === 0) {
@@ -562,9 +551,9 @@ const CheckoutPage = () => {
             city: selectedPricing.name,
             cart,
             subtotal,
-            deliveryCost: effectiveDeliveryCost,
+            deliveryCost: chargedDeliveryCost,
             total,
-            shippingBreakdown: isFreeDelivery ? null : shippingBreakdown,
+            shippingBreakdown,
             fieldCode: selectedPricing.fieldCode,
           }),
           deliveryAddressId: selectedDeliveryAddress.id,
@@ -606,9 +595,9 @@ const CheckoutPage = () => {
         city: selectedPricing.name,
         cart,
         subtotal,
-        deliveryCost: effectiveDeliveryCost,
+        deliveryCost: chargedDeliveryCost,
         total,
-        shippingBreakdown: isFreeDelivery ? null : shippingBreakdown,
+        shippingBreakdown,
         fieldCode: selectedPricing.fieldCode,
       });
 
@@ -1078,18 +1067,14 @@ const CheckoutPage = () => {
                     <span className="text-base md:text-lg font-semibold text-black/80">
                       Odaberite mesto
                     </span>
-                  ) : isFreeDelivery || deliveryCost === 0 ? (
-                    <span className="text-base md:text-lg font-semibold text-green-600">
-                      Besplatno
-                    </span>
-                  ) : deliveryCost !== null ? (
+                  ) : (
                     <span className="text-base md:text-lg font-semibold text-black/80">
-                      {formatPrice(deliveryCost)} RSD
+                      {formatPrice(deliveryPrice321)} RSD
                     </span>
-                  ) : null}
+                  )}
                 </div>
 
-                {shippingBreakdown && !isFreeDelivery ? (
+                {shippingBreakdown ? (
                   <>
                     {shippingBreakdown.extraWeightShipments > 0 && (
                       <div className="flex items-center justify-between">

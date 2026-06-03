@@ -7,8 +7,8 @@ const TopBanner = () => {
     <div className="bg-primary text-primary-foreground text-center py-2 px-2 sm:px-4 xl:px-0">
       <div className="relative max-w-frame mx-auto">
         <p className="text-xs sm:text-sm">
-          Besplatna dostava i piće u povratnoj ambalaži za porudžbine preko
-          12,000 rsd.{" "}
+          Najbrža dostava pića po diskontnim
+          cenama u Novom Sadu! Pozovite!{" "}
           <Link href="#" className="underline font-medium block sm:inline">
             Saznaj više{" "}
           </Link>

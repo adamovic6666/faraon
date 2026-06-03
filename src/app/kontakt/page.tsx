@@ -33,7 +33,6 @@ type FormData = z.infer<typeof schema>;
 
 const reasons = [
   "Pitanje u vezi sa cenom/akcijom",
-  "Uslovi besplatne isporuke",
   "Informacije o povratnoj ambalaži",
   "Ponuda za saradnju",
   "Pohvale ili primedbe",

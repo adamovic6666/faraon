@@ -15,7 +15,7 @@ const siteUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://faraondiskonti.rs";
 const defaultTitle =
   "Faraon diskonti | Online prodavnica pića i dostava na adresu";
 const defaultDescription =
-  "Sve što pijete, Faraon donosi! Poručite pića online i uživajte u besplatnoj dostavi za porudžbine preko 12.000 RSD. Pivo, vino, žestoka pića i bezalkoholna pića.";
+  "Sve što pijete, Faraon donosi! Najbrža dostava pića u Novom Sadu po diskontnim cenama!.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

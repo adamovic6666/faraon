@@ -8,19 +8,19 @@ import { usePathname } from "next/navigation";
 const contactItems = [
   {
     id: 1,
-    href: "tel:+381628017376",
+    href: "tel:+381605522500",
     icon: "/images/mobile.svg",
     label: "Pozovite nas",
   },
   {
     id: 2,
-    href: "https://wa.me/381628017376",
+    href: "https://wa.me/381605522500",
     icon: "/images/whatsapp.svg",
     label: "Pišite nam na WhatsApp",
   },
   {
     id: 3,
-    href: "https://viber.me/+381628017376",
+    href: "https://viber.me/+381605522500",
     icon: "/images/viber.svg",
     label: "Pišite nam na Viber",
   },
@@ -36,8 +36,8 @@ const NewsLetterSection = () => {
   );
   const mainPageInfo = (
     <>
-      <span className="inline">BESPLATNA DOSTAVA I POVRATNA</span>{" "}
-      <span className="inline">AMBALAŽA PREKO 12,000 RSD! POZOVITE!</span>
+      <span className="inline">NAJBRŽA DOSTAVA PIĆA PO DISKONTNIM</span>{" "}
+      <span className="inline">CENAMA U NOVOM SADU! POZOVITE!</span>
     </>
   );
 
