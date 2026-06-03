@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     absolute: "Najbolji online diskont pića u Novom Sadu | Faraon diskonti",
   },
   description:
-    "Sve što pijete, Faraon donosi! Besplatna dostava za porudžbine preko 12,000 RSD!",
+    "Sve što pijete, Faraon donosi! Najbrža dostava pića po diskontnim cenama u Novom Sadu!",
 };
 
 export const dynamic = "force-dynamic";

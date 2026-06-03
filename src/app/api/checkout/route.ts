@@ -227,7 +227,7 @@ export async function POST(request: NextRequest) {
         </div>
         <div style="float:right;width:48%;text-align:right;font-size:12px;line-height:1.65;color:#5b544d;">
           <strong style="display:block;font-size:13px;color:#1b1b1b;margin-bottom:4px;">STR Diskont pića Faraon PS</strong>
-          Karlovački put 1<br />21132 Petrovaradin<br />T: 060 22 33 400<br />E: info@faraondiskonti.rs<br />PIB: 104032720
+          Karlovački put 1<br />21132 Petrovaradin<br />T: 060 55 22 500<br />E: info@faraondiskonti.rs<br />PIB: 104032720
         </div>
         <div style="clear:both;"></div>
       </div>
@@ -284,7 +284,7 @@ export async function POST(request: NextRequest) {
         <p style="margin:0 0 8px;font-size:17px;font-weight:800;">Srdačan pozdrav,</p>
         <p style="margin:0 0 8px;font-size:15px;font-weight:700;">Faraon diskonti</p>
         <p style="margin:0 0 4px;font-size:13px;opacity:0.92;"><a href="https://www.faraondiskonti.rs" style="color:#fff;text-decoration:underline;">www.faraondiskonti.rs</a></p>
-        <p style="margin:0;font-size:13px;opacity:0.92;">info@faraondiskonti.rs | 060 22 33 400</p>
+        <p style="margin:0;font-size:13px;opacity:0.92;">info@faraondiskonti.rs | 060 55 22 500</p>
       </div>
     </div>
   </body>
@@ -313,7 +313,7 @@ export async function POST(request: NextRequest) {
     <div style="max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e5d9ca;">
       <div style="padding:16px;background:#f8f5ef;border-bottom:3px solid #ac0000;">
         <p style="margin:0;font-size:18px;font-weight:900;letter-spacing:0.04em;color:#ac0000;text-transform:uppercase;">FARAON DISKONTI</p>
-        <p style="margin:4px 0 0;font-size:12px;line-height:1.6;color:#5b544d;">STR Diskont pića Faraon PS · Karlovački put 1 · 21132 Petrovaradin<br/>T: 060 22 33 400 · E: info@faraondiskonti.rs · PIB: 104032720</p>
+        <p style="margin:4px 0 0;font-size:12px;line-height:1.6;color:#5b544d;">STR Diskont pića Faraon PS · Karlovački put 1 · 21132 Petrovaradin<br/>T: 060 55 22 500 · E: info@faraondiskonti.rs · PIB: 104032720</p>
       </div>
       <div style="background:#ac0000;color:#ffffff;padding:20px 16px;text-align:center;">
         <div style="font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;opacity:0.9;">Potvrda porudžbine</div>
@@ -381,7 +381,7 @@ export async function POST(request: NextRequest) {
         <p style="margin:0 0 6px;font-size:15px;font-weight:800;">Srdačan pozdrav,</p>
         <p style="margin:0 0 6px;font-size:14px;font-weight:700;">Faraon diskonti</p>
         <p style="margin:0 0 4px;font-size:12px;opacity:0.92;"><a href="https://www.faraondiskonti.rs" style="color:#fff;text-decoration:underline;">www.faraondiskonti.rs</a></p>
-        <p style="margin:0 0 8px;font-size:12px;opacity:0.92;">webshop@faraondiskonti.rs | 060 22 33 400</p>
+        <p style="margin:0 0 8px;font-size:12px;opacity:0.92;">webshop@faraondiskonti.rs | 060 55 22 500</p>
         <p style="margin:0;font-size:12px;"><a href="https://www.facebook.com/diskonti.faraon/?locale=sr_RS" style="color:#fff;text-decoration:none;">Facebook</a> &nbsp;&bull;&nbsp; <a href="https://www.instagram.com/diskonti.faraon/" style="color:#fff;text-decoration:none;">Instagram</a></p>
       </div>
     </div>

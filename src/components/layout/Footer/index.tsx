@@ -53,8 +53,8 @@ const socialLinks = [
 const contactLinks = [
   {
     id: 1,
-    label: "T: 060 22 33 400",
-    href: "tel:+381602233400",
+    label: "T: 060 55 22 500",
+    href: "tel:+381605522500",
   },
   {
     id: 2,
