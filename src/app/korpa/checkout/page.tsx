@@ -35,6 +35,7 @@ type CheckoutFormValues = {
   mb: string;
   note: string;
   cenovnikTermId: string;
+  shippingPrice: string;
 };
 
 type PricingOption = {
@@ -63,10 +64,14 @@ type CheckoutOrderItemPayload = {
   total: string;
 };
 
-type CheckoutSubmitPayload = Omit<CheckoutFormValues, "cenovnikTermId"> & {
+type CheckoutSubmitPayload = Omit<
+  CheckoutFormValues,
+  "cenovnikTermId" | "shippingPrice"
+> & {
   address: string;
   city: string;
   cenovnikTermId: number;
+  shippingPrice: number;
   orderItems: CheckoutOrderItemPayload[];
   subtotal: string;
   deliveryCost: string;
@@ -183,6 +188,7 @@ const buildCheckoutPayload = ({
   address,
   city,
   cenovnikTermId: Number(formData.cenovnikTermId),
+  shippingPrice: Number(formData.shippingPrice),
   orderItems: buildOrderItems(cart.items),
   subtotal: String(subtotal),
   deliveryCost: String(deliveryCost),
@@ -258,6 +264,7 @@ const CheckoutPage = () => {
       mb: "",
       note: "",
       cenovnikTermId: "",
+      shippingPrice: "",
     },
   });
 
@@ -786,6 +793,7 @@ const CheckoutPage = () => {
                           setAddressSearch(e.target.value);
                           setSelectedDeliveryAddress(null);
                           setDeliveryPrice321(null);
+                          setValue("shippingPrice", "");
                           setAddressPricingError("");
                           setIsAddressDropdownOpen(true);
                         }}
@@ -812,6 +820,7 @@ const CheckoutPage = () => {
                                 e.preventDefault();
                                 setSelectedDeliveryAddress(addr);
                                 setDeliveryPrice321(addr.price);
+                                setValue("shippingPrice", String(addr.price));
                                 setAddressSearch(`${addr.name}, ${addr.city}`);
                                 setIsAddressDropdownOpen(false);
                                 const matched = pricingOptions.find(

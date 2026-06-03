@@ -79,6 +79,7 @@ const checkoutSchema = z.object({
     mb: z.string().optional().default(""),
     note: z.string().optional().default(""),
     cenovnikTermId: z.number().int().positive(),
+    shippingPrice: z.number().min(0),
     orderItems: z.array(orderItemSchema).min(1),
     subtotal: z.string().min(1),
     deliveryCost: z.string().min(1),
@@ -132,6 +133,7 @@ export async function POST(request: NextRequest) {
       customer: {
         payment_method: paymentMethod,
         cenovnik_term_id: payload.cenovnikTermId,
+        shipping_price: payload.shippingPrice,
         email: payload.email,
         notes: payload.note.trim(),
         billing_address: {

@@ -29,6 +29,7 @@ const initPaymentSchema = z.object({
   mb: z.string().optional().default(""),
   note: z.string().optional().default(""),
   cenovnikTermId: z.number().int().positive(),
+  shippingPrice: z.number().min(0),
   orderItems: z.array(orderItemSchema).min(1),
   subtotal: z.string().min(1),
   deliveryCost: z.string().min(1),

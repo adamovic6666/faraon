@@ -28,6 +28,7 @@ export type PendingVposOrder = {
   mb: string;
   note: string;
   cenovnikTermId: number;
+  shippingPrice: number;
   orderItems: {
     name: string;
     productCode: string;

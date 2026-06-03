@@ -83,6 +83,7 @@ export async function GET(request: NextRequest) {
         customer: {
           payment_method: "personal" as const,
           cenovnik_term_id: pending.cenovnikTermId,
+          shipping_price: pending.shippingPrice,
           email: pending.email,
           notes: pending.note.trim(),
           billing_address: {
