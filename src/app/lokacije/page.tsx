@@ -22,7 +22,7 @@ const LokacijePage = () => {
           className="text-black/80 text-md sm:text-lg leading-relaxed pt-2 font-light max-w-160"
         >
           Sigurno smo blizu tebe – sa mrežom od 23 diskonta, obezbedili smo
-          najbolju ponudu i cene pića u svakom delu Novog Sada. Pogledaj mapu
+          najbolju ponudu i najpovoljnije cene pića u svakom delu Novog Sada. Pogledaj mapu
           ispod i pronađi najkraći put do kupovine koja se isplati.
         </motion.p>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/common/ProductCard";
 import SortSelect from "@/components/shop-page/SortSelect";
 import {
@@ -12,9 +13,18 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { cn } from "@/lib/utils";
 import { Product } from "@/types/product.types";
 
 const PRODUCTS_PER_PAGE = 24;
+
+const tagButtonClass = (isSelected: boolean) =>
+  cn(
+    "shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.06em] transition-colors",
+    isSelected
+      ? "border-brand bg-brand text-white"
+      : "border-black/20 bg-white text-black/70 hover:bg-black/3",
+  );
 
 function buildPaginationTokens(currentPage: number, totalPages: number) {
   if (totalPages <= 5) {
@@ -47,6 +57,118 @@ function sortProducts(products: Product[], sort: string): Product[] {
   if (sort === "niza-cena") return list.sort((a, b) => a.price - b.price);
   if (sort === "visa-cena") return list.sort((a, b) => b.price - a.price);
   return list;
+}
+
+function TagFilterBar({
+  tags,
+  selectedTag,
+  onTagChange,
+}: Readonly<{
+  tags: string[];
+  selectedTag: string;
+  onTagChange: (value: string) => void;
+}>) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showScrollHintLeft, setShowScrollHintLeft] = useState(false);
+  const [showScrollHintRight, setShowScrollHintRight] = useState(false);
+
+  const updateScrollHintRight = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const hasOverflow = el.scrollWidth > el.clientWidth + 1;
+    const scrollLeft = Math.round(el.scrollLeft);
+    const atEnd =
+      Math.ceil(scrollLeft + el.clientWidth) >= el.scrollWidth - 1;
+
+    setShowScrollHintRight(hasOverflow && !atEnd);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const hasOverflow = el.scrollWidth > el.clientWidth + 1;
+    const scrollLeft = Math.round(el.scrollLeft);
+
+    setShowScrollHintLeft(hasOverflow && scrollLeft > 4);
+    updateScrollHintRight();
+  }, [updateScrollHintRight]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    el.scrollLeft = 0;
+    setShowScrollHintLeft(false);
+
+    const measureRight = () => {
+      setShowScrollHintLeft(false);
+      updateScrollHintRight();
+    };
+
+    const observer = new ResizeObserver(measureRight);
+    observer.observe(el);
+
+    const rafId = requestAnimationFrame(measureRight);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(rafId);
+    };
+  }, [tags, updateScrollHintRight]);
+
+  return (
+    <div className="relative mb-6">
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="overflow-x-auto w-full scrollbar-none scroll-smooth md:overflow-visible"
+        role="group"
+        aria-label="Filter po oznakama"
+      >
+        <div className="flex w-max flex-nowrap items-center gap-2 pr-10 md:w-full md:flex-wrap md:pr-0">
+          <button
+            type="button"
+            onClick={() => onTagChange("")}
+            className={tagButtonClass(selectedTag === "")}
+          >
+            Sve
+          </button>
+          {tags.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => onTagChange(tag)}
+              className={tagButtonClass(selectedTag === tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showScrollHintLeft ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 flex w-12 items-center justify-start md:hidden"
+        >
+          <div className="absolute inset-0 bg-linear-to-r from-background via-background/90 to-transparent" />
+          <ChevronLeft className="relative ml-0.5 size-4 shrink-0 text-black/40" />
+        </div>
+      ) : null}
+
+      {showScrollHintRight ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 flex w-10 items-center justify-end md:hidden"
+        >
+          <div className="absolute inset-0 bg-linear-to-l from-background via-background/90 to-transparent" />
+          <ChevronRight className="relative mr-0.5 size-4 shrink-0 text-black/40" />
+        </div>
+      ) : null}
+    </div>
+  );
 }
 
 export default function CategoryProductGrid({
@@ -132,25 +254,11 @@ export default function CategoryProductGrid({
         )}
       </div>
       {availableTags.length > 0 ? (
-        <div className="mb-6 flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => handleTagChange("")}
-            className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.06em] transition-colors ${selectedTag === "" ? "border-brand bg-brand text-white" : "border-black/20 bg-white text-black/70 hover:bg-black/3"}`}
-          >
-            Sve
-          </button>
-          {availableTags.map((tag) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => handleTagChange(tag)}
-              className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.06em] transition-colors ${selectedTag === tag ? "border-brand bg-brand text-white" : "border-black/20 bg-white text-black/70 hover:bg-black/3"}`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        <TagFilterBar
+          tags={availableTags}
+          selectedTag={selectedTag}
+          onTagChange={handleTagChange}
+        />
       ) : null}
       {hasProducts ? (
         <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
