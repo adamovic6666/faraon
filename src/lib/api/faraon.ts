@@ -322,7 +322,9 @@ const toNumber = (value?: string | number) => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
-const resolveProductId = (...candidates: Array<string | number | undefined>) => {
+export const resolveProductId = (
+  ...candidates: Array<string | number | undefined>
+) => {
   const first = candidates.find((candidate) => {
     if (candidate === undefined || candidate === null) return false;
     return String(candidate).trim().length > 0;

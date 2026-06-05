@@ -436,7 +436,6 @@ const CheckoutPage = () => {
         const result = (await response.json()) as {
           error?: string;
           data?: {
-            total_shipping_price?: { price?: string; currency_code?: string };
             shipping_price?: { price?: string; currency_code?: string };
             total_weight?: { weight_number?: string; weight_unit?: string };
             extra_weight?: {
@@ -455,25 +454,15 @@ const CheckoutPage = () => {
         }
 
         const d = result.data;
-        if (!d.total_weight?.weight_number && !d.total_shipping_price?.price) {
-          throw new Error(result.error || "Neuspešan obračun dostave.");
-        }
-
-        const apiTotalPrice = d.total_shipping_price?.price
-          ? Number(d.total_shipping_price.price)
-          : null;
-        if (
-          apiTotalPrice !== null &&
-          !Number.isFinite(apiTotalPrice)
-        ) {
-          throw new TypeError("Neispravan iznos dostave.");
+        if (!d.total_weight?.weight_number) {
+          throw new Error(result.error || "Neuspešan obračun težine.");
         }
 
         if (!active) return;
 
         setShippingBreakdown({
-          totalShippingPrice: Math.round(apiTotalPrice ?? deliveryPrice321 ?? 0),
-          shippingBasePrice: Math.round(Number(d.shipping_price?.price ?? "0")),
+          totalShippingPrice: Math.round(deliveryPrice321 ?? 0),
+          shippingBasePrice: Math.round(deliveryPrice321 ?? 0),
           totalWeightNumber: d.total_weight?.weight_number ?? "0",
           totalWeightUnit: d.total_weight?.weight_unit ?? "kg",
           extraWeightShipments: d.extra_weight?.number_of_shipments ?? 0,

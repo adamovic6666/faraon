@@ -7,7 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const categories = await fetchTopLevelCategories();
 
   const categoryUrls: MetadataRoute.Sitemap = categories.map((cat) => ({
-    url: `${BASE_URL}/prodavnica/${cat.alias}`,
+    url: `${BASE_URL}${cat.alias}`,
     lastModified: new Date(),
     changeFrequency: "daily",
     priority: 0.8,

@@ -1,5 +1,7 @@
 import SearchResultsGrid from "@/components/shop-page/SearchResultsGrid";
+import type { SearchProduct } from "@/data/search-products";
 import { searchProducts } from "@/lib/features/products/search.server";
+import { resolveProductId } from "@/lib/api/faraon";
 import { Product } from "@/types/product.types";
 
 export const dynamic = "force-dynamic";
@@ -41,7 +43,7 @@ const toNumber = (value?: string | number) => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
-async function mapSearchResultToProduct(result: any): Promise<Product> {
+function mapSearchResultToProduct(result: SearchProduct): Product {
   // Extract slug and category from URL
   let slug = "";
   let category = "";
@@ -70,26 +72,32 @@ async function mapSearchResultToProduct(result: any): Promise<Product> {
 
   // Fallback to explicit fields
   if (!slug) {
-    slug = result.slug || result.alias?.split("/").findLast(Boolean) || "";
+    slug = result.slug || "";
   }
   if (!category) {
-    category = result.category || result.categories || "";
+    category = result.category || "";
   }
 
   // Extract main image
-  const mainImage = result.main_photo || result.image || result.imageUrl || "";
+  const mainImage = result.main_photo || result.imageUrl || "";
 
   // Extract prices
 
   const basePrice = toNumber(
-    result.cena ?? result.base_price ?? result.price ?? 0,
+    result.cena ?? 0,
   );
-  const salePrice = toNumber(result.akcijska_cena ?? result.sale_price ?? 0);
+  const salePrice = toNumber(result.akcijska_cena ?? 0);
   const price = salePrice > 0 ? salePrice : basePrice;
   const oldPrice = basePrice > price && price > 0 ? basePrice : undefined;
 
   return {
-    id: String(result.sku ?? result.product_id ?? result.id ?? slug ?? "1"),
+    id: resolveProductId(
+      result.product_code,
+      result.sku,
+      result.product_id,
+      result.id,
+      slug,
+    ),
     title: result.title || "",
     srcUrl: normalizeImageUrl(mainImage),
     price,
@@ -112,9 +120,7 @@ export default async function SearchPage({
 
   if (query.length >= 2) {
     const searchResults = await searchProducts(query);
-    products = await Promise.all(
-      searchResults.map((result) => mapSearchResultToProduct(result)),
-    );
+    products = searchResults.map((result) => mapSearchResultToProduct(result));
   }
 
   return (
