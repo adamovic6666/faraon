@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Stranica nije pronađena | Faraon",
+  title: "Stranica nije pronađena | Faraon diskonti",
   description: "Tražena stranica ne postoji ili je premeštena.",
   robots: {
     index: false,

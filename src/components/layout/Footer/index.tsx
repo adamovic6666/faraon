@@ -38,13 +38,13 @@ const paymentBadgesData: PaymentBadge[] = [
 const socialLinks = [
   {
     id: 1,
-    href: "https://www.facebook.com/diskonti.faraon/?locale=sr_RS",
+    href: "https://www.facebook.com/faraondiskonti.rs/?locale=sr_RS",
     icon: "/images/facebook.svg",
     label: "Facebook",
   },
   {
     id: 2,
-    href: "https://www.instagram.com/diskonti.faraon/",
+    href: "https://www.instagram.com/faraondiskonti.rs/",
     icon: "/images/instagram.svg",
     label: "Instagram",
   },

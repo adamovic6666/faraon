@@ -20,7 +20,7 @@ const defaultDescription =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    template: "%s | Faraon diskonti",
+    template: "%s",
     default: defaultTitle,
   },
   description: defaultDescription,
