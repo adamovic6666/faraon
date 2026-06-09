@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-static";
 
 const deliveryPrices = [
-  { name: "Novi Sad centar", price: 380 },
+  { name: "Novi Sad", price: 380 },
   { name: "Sajlovo", price: 600 },
   { name: "Adice", price: 600 },
   { name: "Petrovaradin", price: 600 },
@@ -95,6 +95,10 @@ export default function CenovnikDostavePage() {
           </div>
 
           <div className="mt-6 space-y-2 rounded-[16px] border border-black/10 bg-section px-6 py-4 text-sm text-black/70">
+            <p>
+              <strong>Besplatna dostava:</strong> Važi za porudžbine preko 12.000 rsd
+              u Novom Sadu, uz prethodno zakazivanje putem telefona.
+            </p>
             <p>
               <strong>Napomena:</strong> Dostava se vrši samo na lokacijama
               navedenim u cenovniku dostave.

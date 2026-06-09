@@ -36,8 +36,8 @@ const NewsLetterSection = () => {
   );
   const mainPageInfo = (
     <>
-      <span className="inline">NAJBRŽA DOSTAVA PIĆA PO DISKONTNIM</span>{" "}
-      <span className="inline">CENAMA U NOVOM SADU! POZOVITE!</span>
+      <span className="inline">BESPLATNA DOSTAVA U NOVOM SADU PREKO</span>{" "}
+      <span className="inline">12.000 RSD! SAMO UZ POZIV: 060 55 22 500!</span>
     </>
   );
 
